@@ -1,0 +1,285 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MODELDATA DIALOGEX 0, 0, 173, 226
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        XCORD,23,47,40,14,ES_AUTOHSCROLL | WS_GROUP | NOT WS_TABSTOP
+    EDITTEXT        YCORD,66,47,40,14,ES_AUTOHSCROLL | WS_GROUP | NOT WS_TABSTOP
+    EDITTEXT        ZCORD,109,47,40,14,ES_AUTOHSCROLL | WS_GROUP | NOT WS_TABSTOP
+    EDITTEXT        XROT,23,90,40,14,ES_AUTOHSCROLL | WS_GROUP | NOT WS_TABSTOP
+    EDITTEXT        YROT,65,90,40,14,ES_AUTOHSCROLL | WS_GROUP | NOT WS_TABSTOP
+    EDITTEXT        ZROT,109,90,40,14,ES_AUTOHSCROLL | WS_GROUP | NOT WS_TABSTOP
+    EDITTEXT        XSCALE,23,155,40,14,ES_AUTOHSCROLL | WS_GROUP | NOT WS_TABSTOP
+    EDITTEXT        YSCALE,65,155,40,14,ES_AUTOHSCROLL | WS_GROUP | NOT WS_TABSTOP
+    EDITTEXT        ZSCALE,109,155,40,14,ES_AUTOHSCROLL | WS_GROUP | NOT WS_TABSTOP
+    CONTROL         "Box",DRAW_BOX,"Button",BS_AUTOCHECKBOX,20,181,28,10
+    CONTROL         "Normals",DRAW_NORMAL,"Button",BS_AUTOCHECKBOX,51,181,41,10
+    CONTROL         "vertex Normals",DRAW_VNORMAL,"Button",BS_AUTOCHECKBOX,102,181,55,10
+    DEFPUSHBUTTON   "OK",IDOK,62,205,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,116,205,50,14
+    LTEXT           "x",IDC_STATIC,41,39,8,8
+    LTEXT           "y",IDC_STATIC,84,39,8,8
+    LTEXT           "z",IDC_STATIC,127,39,8,8
+    LTEXT           "x",IDC_STATIC,41,82,8,8
+    LTEXT           "y",IDC_STATIC,83,82,8,8
+    LTEXT           "z",IDC_STATIC,127,82,8,8
+    GROUPBOX        "World coordinates",IDC_STATIC,7,27,158,40
+    GROUPBOX        "Rotation parameters",IDC_STATIC,7,71,158,57
+    LTEXT           "Scope:",IDC_STATIC,25,110,23,8
+    LTEXT           "MODEL NAME",MODEL_NAME_MAIN,7,7,83,16
+    COMBOBOX        ROTATION_SELECT,55,109,68,30,CBS_DROPDOWN | CBS_SORT | WS_TABSTOP
+    GROUPBOX        "Scale parameters",IDC_STATIC,7,138,158,40
+    LTEXT           "x",IDC_STATIC,41,147,8,8
+    LTEXT           "y",IDC_STATIC,83,147,8,8
+    LTEXT           "z",IDC_STATIC,127,147,8,8
+END
+
+IDD_DIALOG1 DIALOGEX 0, 0, 309, 177
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,198,156,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,252,156,50,14
+END
+
+IDD_Prespective DIALOGEX 0, 0, 165, 151
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Prespective View"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_fovy,65,20,40,14,ES_AUTOHSCROLL | WS_GROUP
+    EDITTEXT        IDC_aspect,65,41,40,14,ES_AUTOHSCROLL | WS_GROUP
+    EDITTEXT        IDC_znear,65,64,40,14,ES_AUTOHSCROLL | WS_GROUP
+    EDITTEXT        IDC_zfar,65,87,40,14,ES_AUTOHSCROLL | WS_GROUP
+    DEFPUSHBUTTON   "OK",IDOK,7,130,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,70,130,50,14
+    LTEXT           "fovy",IDC_STATIC,25,23,16,8
+    LTEXT           "aspect",IDC_STATIC,25,44,22,8
+    LTEXT           "z near",IDC_STATIC,25,67,21,8
+    LTEXT           "z far",IDC_STATIC,25,90,16,8
+END
+
+IDD_ADDCAMERA DIALOGEX 0, 0, 217, 141
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "d"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_eye_x,33,38,40,14,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_eye_y,33,60,40,14,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_eye_z,33,84,40,14,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_at_x,98,38,40,14,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_at_y,98,60,40,14,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_at_z,98,84,40,14,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_up_x,161,38,40,14,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_up_y,161,60,40,14,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_up_z,161,84,40,14,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,57,120,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,111,120,50,14
+    LTEXT           "Eye",IDC_STATIC,36,20,13,8
+    LTEXT           "At",IDC_STATIC,109,19,8,8
+    LTEXT           "Up",IDC_STATIC,173,19,10,8
+    LTEXT           "X",IDC_STATIC,19,39,8,8
+    LTEXT           "Y",IDC_STATIC,19,63,8,8
+    LTEXT           "Z",IDC_STATIC,19,87,8,8
+    LTEXT           "X",IDC_STATIC,85,40,8,8
+    LTEXT           "Y",IDC_STATIC,85,65,8,8
+    LTEXT           "Z",IDC_STATIC,85,89,8,8
+    LTEXT           "X",IDC_STATIC,148,38,8,8
+    LTEXT           "Y",IDC_STATIC,148,63,8,8
+    LTEXT           "Z",IDC_STATIC,148,87,8,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_MODELDATA, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 166
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 219
+    END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 302
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 170
+    END
+
+    IDD_Prespective, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 158
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 144
+    END
+
+    IDD_ADDCAMERA, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 210
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 134
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_MODELDATA DLGINIT
+BEGIN
+    ROTATION_SELECT, 0x403, 6, 0
+0x6f4d, 0x6564, 0x006c, 
+    ROTATION_SELECT, 0x403, 6, 0
+0x6f57, 0x6c72, 0x0064, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "CG_skel_w_MFC"
+    IDS_STRING104           "Model properties"
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Hebrew (Israel) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_HEB)
+LANGUAGE LANG_HEBREW, SUBLANG_DEFAULT
+#pragma code_page(1255)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_frustum DIALOGEX 0, 0, 159, 221
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Frustum"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    EDITTEXT        ID_left,68,19,40,14,ES_AUTOHSCROLL
+    EDITTEXT        ID_right,68,44,40,14,ES_AUTOHSCROLL
+    EDITTEXT        ID_up,68,96,40,14,ES_AUTOHSCROLL
+    EDITTEXT        ID_down,68,68,40,14,ES_AUTOHSCROLL
+    EDITTEXT        ID_znear,68,123,40,14,ES_AUTOHSCROLL
+    EDITTEXT        ID_zfar,68,148,40,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,19,200,50,14
+    LTEXT           "left",IDC_STATIC,39,23,12,8
+    PUSHBUTTON      "Cancel",IDCANCEL,84,200,50,14
+    LTEXT           "right",IDC_STATIC,37,47,16,8
+    LTEXT           "up",IDC_STATIC,39,100,9,8
+    LTEXT           "down",IDC_STATIC,37,73,18,8
+    LTEXT           "Znear",IDC_STATIC,37,126,20,8
+    LTEXT           "zfar",IDC_STATIC,38,151,14,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_frustum, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 152
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 214
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Hebrew (Israel) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
