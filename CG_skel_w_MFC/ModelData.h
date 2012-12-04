@@ -50,6 +50,7 @@ public:
 
 	vec3 readAndClearScale();
 	mat4 readAndClearRotation();
+	mat4 readAndClearRotation(bool& rotated);
 	void rotateModel(mat4 rotation);
 	CButton draw_box;
 	CButton draw_normals;

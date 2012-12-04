@@ -107,16 +107,27 @@ void CModelData::OnShowWindow(BOOL bShow, UINT nStatus) {
 }
 
 mat4 CModelData::readAndClearRotation() {
+	bool bla;
+	return readAndClearRotation(bla);
+}
+
+mat4 CModelData::readAndClearRotation(bool& rotated) {
 	char buffer[5];
+	int angleX, angleY, angleZ;
 	mat4 rotx, roty, rotz;
 
 	xrot.GetWindowTextA(buffer, 5);
-	rotx = RotateX(atof(buffer));
+	angleX = atoi(buffer);
 	yrot.GetWindowTextA(buffer, 5);
-	roty = RotateY(atof(buffer));
+	angleY = atoi(buffer);
 	zrot.GetWindowTextA(buffer, 5);
-	rotz = RotateZ(atof(buffer));
+	angleZ = atoi(buffer);
 
+	rotx = RotateX(angleX);
+	roty = RotateY(angleY);
+	rotz = RotateZ(angleZ);
+
+	rotated = (bool) (angleX + angleY + angleZ);
 
 	xrot.SetWindowTextA(_T("0"));
 	yrot.SetWindowTextA(_T("0"));
@@ -126,11 +137,19 @@ mat4 CModelData::readAndClearRotation() {
 }
 
 void CModelData::rotateModel(mat4 rotation) {
-	if(m_scene->isModelFrame()) {// Apply rotation to model frame origin
-		m_model->setObjectTransform(m_model->getObjectTransform()*rotation);
-	} else { // Apply rotation around world frame origin
-		m_model->setObjectTransform(rotation*m_model->getObjectTransform());
+
+	mat4 oTransform = m_model->getObjectTransform();
+	oTransform = oTransform * rotation; // always rotate in respect to self
+		
+	if(!m_scene->isModelFrame()) { // Apply rotation around world frame origin
+		oTransform = transpose(oTransform);
+		vec4 eye = oTransform[3];				// Get the translation
+		eye = rotation * eye;					// rotate the translation
+		oTransform[3] = eye;					// plant it back
+		oTransform = transpose(oTransform);		
 	}
+
+	m_model->setObjectTransform(oTransform);
 }
 
 void CModelData::OnBnClickedOk()
@@ -146,7 +165,8 @@ void CModelData::OnBnClickedOk()
 	static_cast<MeshModel*>(m_model)->setVertexNormal(draw_vnormals.GetCheck()==BST_CHECKED);
 	static_cast<MeshModel*>(m_model)->setNormal(draw_normals.GetCheck()==BST_CHECKED);
 	// Deal with rotation
-	rotateModel(readAndClearRotation());
+	bool dontTranslate;
+	rotateModel(readAndClearRotation(dontTranslate));
 	// Load New Center coords
 	xcord.GetWindowTextA(buffer, 5);
 	newX = atoi(buffer);
@@ -158,14 +178,20 @@ void CModelData::OnBnClickedOk()
 	vec3 scaler = readAndClearScale();
 	// Calculate difference of center coords
 	vec3 objCenter = m_model->getModelCenter();
-	mat4 objTransform = m_model->getObjectTransform();
+//	mat4 objTransform = m_model->getObjectTransform();
+	
 	objCenter.x = -(objCenter.x-newX);
 	objCenter.y = -(objCenter.y-newY);
 	objCenter.z = -(objCenter.z-newZ);
 	
 	// Set center coords and scale
 	static_cast<MeshModel*>(m_model)->scale(scaler);
-	m_scene->draw(Translate(objCenter));
+	
+	mat4 moveModel;
+	if(!dontTranslate) // When rotating element the data from the input box is invalid
+		moveModel = Translate(objCenter); 
+
+	m_scene->draw(moveModel);
 	//CDialogEx::OnOK();
 }
 
@@ -189,5 +215,7 @@ void CModelData::OnCbnSelchangeSelect()
 	else 
 		m_scene->worldFrame();
 //		m_scene->activateCamera();
+
 	UpdateData(true);
+
 }

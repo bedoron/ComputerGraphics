@@ -480,7 +480,7 @@ int my_main( int argc, char **argv )
 	glutInit( &argc, argv );
 	glutInitDisplayMode( GLUT_RGBA| GLUT_DOUBLE);
 	glutInitWindowSize( MAIN_WIDTH, MAIN_HEIGHT);
-	glutInitContextVersion( 3,0 );
+	glutInitContextVersion( 3,1 );
 	glutInitContextProfile( GLUT_CORE_PROFILE );
 	glutCreateWindow( "CG" );
 	glewExperimental = GL_TRUE;
