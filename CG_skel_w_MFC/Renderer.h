@@ -66,6 +66,7 @@ public:
 	void DrawFace(const Face& _face);
 	void SetCameraTransform(const mat4& cTransform);
 	void SetProjection(const mat4& projection);
+	mat4 getObjectMatrices() { return _oTransform; };
 	void SetObjectMatrices(const mat4& oTransform);
 	void SetObjectMatrices(const mat4& oTransform, const mat3& nTransform);
 	void SwapBuffers();

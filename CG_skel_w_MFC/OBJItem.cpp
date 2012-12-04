@@ -52,8 +52,12 @@ vec3& OBJItem::getNormalByNumber(int id)
 void OBJItem::draw(Renderer& renderer)
 {
 	//draw bounding box
-	if(drawBox)
-		CubeModel(minX,maxX,minY,maxY,minZ,maxZ).draw(renderer);
+	if(drawBox) {
+		CubeModel stupidCube = CubeModel(minX,maxX,minY,maxY,minZ,maxZ);
+		stupidCube.setObjectTransform(renderer.getObjectMatrices());
+		stupidCube.draw(renderer);
+	}
+
 			
 	for(std::vector<Face>::iterator it = faces.begin() ;it != faces.end(); ++it) 
 	{
