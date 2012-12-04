@@ -9,7 +9,7 @@
 #include "ModelData.h"
 #include "Frustum.h"
 #include "PresModel.h"
-#include "CameraPlaneControl.h"
+
 
 using std::exception;
 using std::cerr;
@@ -60,7 +60,7 @@ CModelData model_win;
 Frustum dlg_frustum;
 PresModel dlg_pres;
 AddCamera dlg_addcamera;
-CameraPlaneControl dlg_planeControl;
+
 
 int last_x,last_y;
 int pressedX,pressedY;
@@ -300,12 +300,7 @@ void mainMenu(int id)
 			scene->draw();
 		break;
 		}
-	case CAMERA_PLANE_CONTROL:
-		{
-			cerr << "Show plane Yaw, Pitch and Roll control \n";
-			break;
-		}
-	
+
 	}
 	initMenu();
 }
@@ -385,7 +380,7 @@ void cameraMenuHandler(int id) {
 		dlg_addcamera.setMode(false);
 		dlg_addcamera.ShowWindow(SW_SHOW);
 		dlg_addcamera.refreshCameraData();
-		dlg_planeControl.ShowWindow(SW_SHOW);
+		
 		break;
 	}
 	initMenu();
@@ -454,7 +449,7 @@ int menuDraw(bool destroy) {
 	glutAddSubMenu("Camera", subMenus[2]);
 	glutAddSubMenu("View",subMenus[3]);
 	// Add current menu elements
-	glutAddMenuEntry("Plane Control", CAMERA_PLANE_CONTROL);
+	
 	glutAddMenuEntry("clear models",Main_Clear);
 	glutAddMenuEntry("Select Move Interval",Main_Move_Interval);
 	if(scene->getRenderCamera())
@@ -502,14 +497,14 @@ int my_main( int argc, char **argv )
 	model_win.Create(CModelData::IDD);
 	dlg_pres.Create(PresModel::IDD);
 	dlg_addcamera.Create(AddCamera::IDD);
-	dlg_planeControl.Create(CameraPlaneControl::IDD);
+	
 
 	renderer = new Renderer(MAIN_WIDTH,MAIN_HEIGHT);
 	scene = new Scene(renderer, model_win);
 	dlg_frustum.setScene(scene);
 	dlg_pres.setScene(scene);
 	dlg_addcamera.setScene(scene);
-	dlg_planeControl.setScene(scene);
+	
 	//----------------------------------------------------------------------------
 	// Initialize Callbacks
 

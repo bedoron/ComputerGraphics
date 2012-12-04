@@ -158,6 +158,14 @@
     <None Include="fshader.glsl" />
     <None Include="vshader.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\freeglut\freeglut.vcxproj">
+      <Project>{7ffb8bd3-9807-4b3b-867f-cdbd36bc48a1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\glew\glew.vcxproj">
+      <Project>{e354a711-c2d4-4492-a756-1000564dccb8}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
