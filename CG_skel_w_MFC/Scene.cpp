@@ -296,21 +296,21 @@ void Scene::setRenderer(int width , int height)
 	int oldHeight = m_renderer->getHeight();
 	GLfloat dx = width-oldWidth;
 	GLfloat dy = height - oldHeight;
-	GLfloat dxPercent = (GLfloat)(abs(dx*100/oldWidth));
-	GLfloat dyPercent = (GLfloat)(abs(dy*100/oldHeight));
-	GLfloat newAspect = (GLfloat)width/height;
+	GLfloat dxPercent = (GLfloat)(abs(((GLfloat)dx)/((GLfloat)oldWidth)));
+	GLfloat dyPercent = (GLfloat)(abs(((GLfloat)dy)/((GLfloat)oldHeight)));
+	GLfloat newAspect = (GLfloat)((GLfloat)width)/((GLfloat)height);
 	delete(m_renderer);
 	m_renderer = new Renderer(width,height);
-	if(dx>0)
+	if(dx>0) // X got bigger
 	{
-		GLfloat deltaViewX = (_right-_left)*dxPercent/100;
+		GLfloat deltaViewX = (_right-_left)*dxPercent;
 		GLfloat halfDeltaViewX = deltaViewX/2;
 		_left -= halfDeltaViewX;
 		_right += halfDeltaViewX;
 	}
 	if (dx < 0)
 	{
-		GLfloat deltaViewX = (_right-_left)*dxPercent/100;
+		GLfloat deltaViewX = (_right-_left)*dxPercent;
 		GLfloat halfDeltaViewX = deltaViewX/2;
 		_left += halfDeltaViewX;
 		_right -= halfDeltaViewX;
@@ -318,7 +318,7 @@ void Scene::setRenderer(int width , int height)
 	if (dy > 0)
 	{
 		GLfloat oldViewY = _top-_bottom;
-		GLfloat deltaViewY = ( _top-_bottom)*dyPercent/100;
+		GLfloat deltaViewY = ( _top-_bottom)*dyPercent;
 		GLfloat halfDeltaViewY = deltaViewY/2;
 		_bottom -= halfDeltaViewY;
 		_top += halfDeltaViewY;
@@ -327,7 +327,7 @@ void Scene::setRenderer(int width , int height)
 	if (dy < 0)
 	{
 		GLfloat oldViewY = _top-_bottom;
-		GLfloat deltaViewY = ( _top-_bottom)*dyPercent/100;
+		GLfloat deltaViewY = ( _top-_bottom)*dyPercent;
 		GLfloat halfDeltaViewY = deltaViewY/2;
 		_bottom += halfDeltaViewY;
 		_top -= halfDeltaViewY;
@@ -346,7 +346,7 @@ void Scene::setRenderer(int width , int height)
 		}
 	case prespective:
 		{
-			setPrespective(_fovy,_aspect,_znear,_zfar);
+			setPrespective(_fovy,newAspect,_znear,_zfar);
 			break;
 		}
 	}
