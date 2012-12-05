@@ -53,6 +53,7 @@ Scene::Scene():models(),cameras(), axes(new AxesModel()), activeEntity(WORLD_ACT
 Scene::Scene(Renderer *renderer) : m_renderer(renderer),names(),m_activeModel(-1),size(0),models(),cameras(),
 	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0)
 {
+	moveInterval=1;
 	initDefaultCamera();
 };
 
@@ -61,6 +62,7 @@ Scene::Scene(Renderer *renderer, CModelData& win) : m_renderer(renderer),names()
 {
 	model_win->setScene(this);
 	initDefaultCamera();
+	moveInterval=1;
 };
 
 void Scene::refreshModelWindow() {

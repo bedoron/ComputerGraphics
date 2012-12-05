@@ -112,6 +112,7 @@
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="MeshModel.cpp" />
     <ClCompile Include="ModelData.cpp" />
+    <ClCompile Include="MoveInterval.cpp" />
     <ClCompile Include="OBJItem.cpp" />
     <ClCompile Include="PresModel.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="mat.h" />
     <ClInclude Include="MeshModel.h" />
     <ClInclude Include="ModelData.h" />
+    <ClInclude Include="MoveInterval.h" />
     <ClInclude Include="OBJItem.h" />
     <ClInclude Include="PresModel.h" />
     <ClInclude Include="Renderable.h" />

@@ -73,7 +73,7 @@ public:
 	int activeLight;
 	int activeCamera;
 	int getModelCount();
-	
+	GLfloat moveInterval;
 	void pointCameraAt();
 	void setRenderer(int width , int height);
 	void activateModel()	{ activeEntity =  MODEL_ACTIVE; }
@@ -101,4 +101,6 @@ public:
 	bool getRenderCamera() {return _renderCamera; }
 	Camera* getActiveCamera(){return m_activeCamera;}
 	void addCube();
+	void setMoveInterval(GLfloat val){moveInterval=val;}
+	GLfloat getMoveInterval(){return moveInterval;}
 };

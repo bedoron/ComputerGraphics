@@ -9,7 +9,7 @@
 #include "ModelData.h"
 #include "Frustum.h"
 #include "PresModel.h"
-
+#include "MoveInterval.h"
 
 using std::exception;
 using std::cerr;
@@ -60,7 +60,7 @@ CModelData model_win;
 Frustum dlg_frustum;
 PresModel dlg_pres;
 AddCamera dlg_addcamera;
-
+MoveInterval dlg_interval;
 
 int last_x,last_y;
 int pressedX,pressedY;
@@ -134,22 +134,22 @@ void keyboardSpecial(int key,int x,int y)
 	switch ( key )
 	{
 	case GLUT_KEY_RIGHT:	
-		translatetion*=Translate(vec4(1*moveInterval,0,0,0));
+		translatetion*=Translate(vec4(1*scene->getMoveInterval(),0,0,0));
 		break;
 	case GLUT_KEY_LEFT:	
-			translatetion*=Translate(vec4(-1*moveInterval,0,0,0));
+			translatetion*=Translate(vec4(-1*scene->getMoveInterval(),0,0,0));
 		break;
 	case GLUT_KEY_DOWN:	
 		if(glutGetModifiers() == GLUT_ACTIVE_ALT)
-			translatetion*=Translate(vec4(0,0,-1*moveInterval,0));
+			translatetion*=Translate(vec4(0,0,-1*scene->getMoveInterval(),0));
 		else
-			translatetion*=Translate(vec4(0,-1*moveInterval,0,0));
+			translatetion*=Translate(vec4(0,-1*scene->getMoveInterval(),0,0));
 		break;
 	case GLUT_KEY_UP:
 		if(glutGetModifiers() == GLUT_ACTIVE_ALT)
-			translatetion*=Translate(vec4(0,0,1*moveInterval,0));
+			translatetion*=Translate(vec4(0,0,1*scene->getMoveInterval(),0));
 		else
-			translatetion*=Translate(vec4(0,1*moveInterval,0,0));
+			translatetion*=Translate(vec4(0,1*scene->getMoveInterval(),0,0));
 		break;
 	case 033:
 		exit( EXIT_SUCCESS );
@@ -327,11 +327,7 @@ void mainMenu(int id)
 		}
 	case Main_Move_Interval:
 		{
-			CCmdDialog dlg;
-			if(dlg.DoModal()==IDOK)
-			{
-				moveInterval = atof(dlg.GetCmd().c_str());
-			}
+			dlg_interval.ShowWindow(SW_SHOW); 
 			break;
 		}
 	case RenderCameras:
@@ -549,6 +545,8 @@ int my_main( int argc, char **argv )
 	dlg_frustum.setScene(scene);
 	dlg_pres.setScene(scene);
 	dlg_addcamera.setScene(scene);
+	dlg_interval.Create(MoveInterval::IDD);
+	dlg_interval.setScene(scene);
 	
 	//----------------------------------------------------------------------------
 	// Initialize Callbacks

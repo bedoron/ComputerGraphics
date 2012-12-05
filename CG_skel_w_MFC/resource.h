@@ -15,6 +15,7 @@
 #define IDD_ADDCAMERA                   109
 #define IDD_DIALOG2                     110
 #define IDD_PLANE_CONTROL               111
+#define IDD_MOVEINTERVAL                112
 #define IDMODELNAME                     1000
 #define XCORD                           1001
 #define IDMODELNAME2                    1002
@@ -63,6 +64,7 @@
 #define IDC_at_z                        1047
 #define ROLL                            1047
 #define IDC_CAMERA_NAME                 1048
+#define IDC_INT                         1050
 #define IDC_up_x                        1051
 #define IDC_up_y                        1052
 #define IDC_up_z                        1053
@@ -73,7 +75,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112
 #define _APS_NEXT_COMMAND_VALUE         40002
-#define _APS_NEXT_CONTROL_VALUE         1049
-#define _APS_NEXT_SYMED_VALUE           111
+#define _APS_NEXT_CONTROL_VALUE         1051
+#define _APS_NEXT_SYMED_VALUE           113
 #endif
 #endif

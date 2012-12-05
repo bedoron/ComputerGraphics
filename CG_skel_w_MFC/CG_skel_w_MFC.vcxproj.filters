@@ -81,6 +81,9 @@
     <ClCompile Include="AddCamera.cpp">
       <Filter>MFC</Filter>
     </ClCompile>
+    <ClCompile Include="MoveInterval.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CG_skel_w_MFC.h">
@@ -159,6 +162,9 @@
       <Filter>MFC</Filter>
     </ClInclude>
     <ClInclude Include="AddCamera.h">
+      <Filter>MFC</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveInterval.h">
       <Filter>MFC</Filter>
     </ClInclude>
   </ItemGroup>
