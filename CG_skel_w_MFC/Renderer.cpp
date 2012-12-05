@@ -220,6 +220,7 @@ void Renderer::drawLineByVectors(vec3 from ,vec3 to,bool normal)
 
 void Renderer::drawAxis(mat4 axisMove)
 {
+	SetObjectMatrices(mat4(1));
 	vec4 zeroPoint= Mvp * _cTransform * axisMove * vec4(0,0,0,1);
 	vec4 axisX = Mvp * _cTransform * axisMove * vec4(100,0,0,1);
 	vec4 axisY = Mvp * _cTransform * axisMove * vec4(0,100,0,1);
