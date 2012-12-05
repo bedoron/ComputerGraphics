@@ -36,7 +36,7 @@ using std::cerr;
 
 #define MAXIMUM_MENUS 8
 
-
+enum Mouse_Mode{m_Model,m_camera};
 enum MENU_ELEMENTS {
 OBJECTS_NAMESPACE_BEGIN = 0,
 OBJECTS_NAMESPACE_END = 999,
@@ -55,7 +55,7 @@ Main_Ortho,Main_prespective,RenderCameras,AddCube
 void renderBitmapString(float x,float y, string text);
 Scene *scene;
 Renderer *renderer;
-
+int mouseMode = m_Model;
 CModelData model_win;
 Frustum dlg_frustum;
 PresModel dlg_pres;
@@ -105,6 +105,14 @@ void keyboard( unsigned char key, int x, int y )
 		scene->pointCameraAt();		
 		break;
 	}
+	case 'c':
+		mouseMode=m_camera;
+		cerr << "camera is using mouse\n";
+		break;
+	case 'm':
+		mouseMode=m_Model;
+		cerr << "model is using mouse\n";
+		break;
 	}
 	
 	if(key>='1' && key <= '9')
@@ -122,31 +130,49 @@ void keyboard( unsigned char key, int x, int y )
 }
 void keyboardSpecial(int key,int x,int y)
 {
-	
+	mat4 translatetion(1);
 	switch ( key )
 	{
 	case GLUT_KEY_RIGHT:	
-		scene->draw(Translate(vec4(1*moveInterval,0,0,0)));
+		translatetion*=Translate(vec4(1*moveInterval,0,0,0));
 		break;
 	case GLUT_KEY_LEFT:	
-		scene->draw(Translate(vec4(-1*moveInterval,0,0,0)));
+			translatetion*=Translate(vec4(-1*moveInterval,0,0,0));
 		break;
 	case GLUT_KEY_DOWN:	
 		if(glutGetModifiers() == GLUT_ACTIVE_ALT)
-			scene->draw(Translate(vec4(0,0,-1*moveInterval,0)));
+			translatetion*=Translate(vec4(0,0,-1*moveInterval,0));
 		else
-			scene->draw(Translate(vec4(0,-1*moveInterval,0,0)));
+			translatetion*=Translate(vec4(0,-1*moveInterval,0,0));
 		break;
 	case GLUT_KEY_UP:
 		if(glutGetModifiers() == GLUT_ACTIVE_ALT)
-			scene->draw(Translate(vec4(0,0,1*moveInterval,0)));
+			translatetion*=Translate(vec4(0,0,1*moveInterval,0));
 		else
-			scene->draw(Translate(vec4(0,1*moveInterval,0,0)));
+			translatetion*=Translate(vec4(0,1*moveInterval,0,0));
 		break;
 	case 033:
 		exit( EXIT_SUCCESS );
 		break;
+
 	}
+	switch (mouseMode)
+	{
+	case m_Model:
+		{
+			scene->draw(translatetion);
+			break;
+		}
+	case m_camera:
+		{
+			vec4 newEye = translatetion * scene->getActiveCamera()->getEye();
+			scene->getActiveCamera()->LookAt(newEye,scene->getActiveCamera()->getAt(),scene->getActiveCamera()->getUp());
+			scene->draw();
+			break;
+		}
+	}
+
+	
 	ctrlPressed = false;
 }
 void mouse(int button, int state, int x, int y)
@@ -214,8 +240,8 @@ void motion(int x, int y)
 	float zw = SIGN(cw.z);
 #undef SIGN
 
-	cout << "sinu " << sinu << ", sinv " << sinv << ", sinw " << sinw << "\n";
-	cout << "Zu " << cu.z << ", Zv "  << cv.z << ", Zw " << cw.z << "\n";
+	//cout << "sinu " << sinu << ", sinv " << sinv << ", sinw " << sinw << "\n";
+	//cout << "Zu " << cu.z << ", Zv "  << cv.z << ", Zw " << cw.z << "\n";
 
 
 	// Find maximum
@@ -236,10 +262,29 @@ void motion(int x, int y)
 	else if(m==sinw) {
 		rotation = RotateZ(stepping*zw);
 	}
-
-	objBase = objBase * rotation;
-	model->setObjectTransform(objBase);
-	scene->draw(mat4());
+	switch ( mouseMode)
+	{
+	case m_Model:
+		{
+			objBase = objBase * rotation;
+			model->setObjectTransform(objBase);
+			scene->draw(mat4());
+			break;
+		}
+	case m_camera:
+		{
+			vec4 eye = scene->getActiveCamera()->getEye() - scene->getActiveCamera()->getAt();
+			vec4 newEye =RotateY(-dx/3)*RotateX(-dy/3)*eye;
+			newEye += scene->getActiveCamera()->getAt();
+			scene->getActiveCamera()->LookAt(newEye,scene->getActiveCamera()->getAt(),scene->getActiveCamera()->getUp());
+			scene->draw();
+			cerr << "dx is: " << dx/3 << "\n";
+			cerr << "dy is: " << dy/3 << "\n";
+			break;
+		}
+	}
+	
+	
 }
 
 void mainMenu(int id)

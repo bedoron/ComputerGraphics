@@ -23,7 +23,7 @@ readShaderSource(const char* shaderFile)
 
     buf[size] = '\0';
     fclose(fp);
-	std::cerr << buf <<"\n";
+	
     return buf;
 }
 
