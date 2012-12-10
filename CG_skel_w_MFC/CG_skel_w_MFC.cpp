@@ -10,7 +10,8 @@
 #include "Frustum.h"
 #include "PresModel.h"
 #include "MoveInterval.h"
-
+#include "Vertex.h"
+#include "AvlTree.h"
 using std::exception;
 using std::cerr;
 

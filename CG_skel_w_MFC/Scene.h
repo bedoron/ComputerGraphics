@@ -6,7 +6,7 @@
 #include "Renderer.h"
 #include "Utils.h"
 #include "Camera.h"
-
+#include "Light.h"
 using namespace std;
 enum ActiveEntity_t { WORLD_ACTIVE, MODEL_ACTIVE, CAMERA_ACTIVE };
 class CModelData;
@@ -24,16 +24,14 @@ public:
 	const string& setName(const string &newName) { name = newName; return name; };
 };
 
-
-class Light {
-
-};
+//
 
 class Scene {
 
 	vector<Model*> models;
 	vector<Light*> lights;
 	vector<Camera*> cameras;
+	Light* m_activeLight;
 	Camera*	m_activeCamera;
 	Renderer *m_renderer;
 	OBJItem item;
@@ -57,7 +55,7 @@ public:
 	Scene(Renderer *renderer, CModelData& win);
 
 	void initDefaultCamera();
-
+	void initDefaultLight();
 	void loadOBJModel(string fileName,string id);
 
 	void drawDebug(vec4 eye = vec4(2,5,-10,1)); //

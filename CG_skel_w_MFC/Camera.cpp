@@ -5,13 +5,13 @@ using std::stringstream;
 
 Camera::Camera(const vec3 &position): m_position(position)
 {
-
+	arrow = Utils::getInstance().parseOBJ("arrow.obj");
 	
 }
 
 Camera::Camera(): m_position(vec3(0,0,0)) 
 {
-	
+	arrow = Utils::getInstance().parseOBJ("arrow.obj");
 }
 
 Camera::~Camera(void) {
@@ -94,6 +94,15 @@ void Camera::draw(Renderer& renderer)
 	renderer.drawLineByVectors(eye3+vec3(-0.05,0,0),eye3+vec3(0.05,0,0),(unsigned int)MAGENTA);
 	renderer.drawLineByVectors(eye3+vec3(0,-0.05,0),eye3+vec3(0,0.05,0),(unsigned int)MAGENTA);
 	renderer.drawLineByVectors(eye3+vec3(0,0,-0.05),eye3+vec3(0,0,0.05),(unsigned int)MAGENTA);
+	//vec4 tmp= _eye-_at;
+	//vec3 direction=normalize(vec3(tmp.x,tmp.y,tmp.z));
+	//mat4 objectTransfor(1);
+	//objectTransfor *= RotateEuler(0,0,dot(direction,vec3(1,0,0)+M_PI/2));
+	//objectTransfor *= RotateEuler(dot(direction,vec3(0,1,0)),0,0);
+	//objectTransfor *= RotateEuler(0,0,dot(direction,vec3(0,0,1)));
+	//objectTransfor *= Translate(eye3);
+	//renderer.SetObjectMatrices(objectTransfor);
+	arrow.draw(renderer);
 }
 
 

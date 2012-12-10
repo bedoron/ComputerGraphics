@@ -4,12 +4,20 @@
 #include "InitShader.h"
 #include "GL\freeglut.h"
 #include <math.h>
+#include "Utils.h"
 //#include "Line.h"
 
 #define INDEX(width,x,y,c) ((x+y*width)*3+c)
+#define INDEXOF(width,x,y) (x+y*width)
 #define LINE(p1,p2,color) Line(*this, p1,p2, color)
 #define DLINE(p1,p2,color) LINE(p1,p2,color).draw()
-
+void Renderer::resetZBuffer()
+{
+	for (int i = 0; i < m_width*m_height; i++)
+	{
+		m_zbuffer[i]=-10000;
+	}
+}
 Renderer::Renderer() :m_width(MAIN_WIDTH), m_height(MAIN_HEIGHT),drawNormal(false),drawBound(false)
 {
 	InitOpenGLRendering();
@@ -41,6 +49,7 @@ void Renderer::CreateBuffers(int width, int height)
 	m_height=height;	
 	CreateOpenGLBuffer(); //Do not remove this line.
 	m_outBuffer = new float[3*m_width*m_height];
+	m_zbuffer = new float[m_width*m_height];
 
 }
 
@@ -59,10 +68,28 @@ void Renderer::SetDemoBuffer()
 	}	
 }
 
-void Renderer::plot(int x, int y, int color) {
-	m_outBuffer[INDEX(m_width,x,y,0)]= color & 0x0000ff;
-	m_outBuffer[INDEX(m_width,x,y,1)]= (color >> 8) & 0x0000ff;
-	m_outBuffer[INDEX(m_width,x,y,2)]= (color >> 16) & 0x0000ff;
+bool Renderer::plot(Face f, int x, int y, int color) 
+{
+	bool flag = true;
+	GLfloat zcordinate = Utils::interpolateFace(f,x,y);
+	mat3 faceNormal= f.getNormalLine();
+	vec3 normal=normalize(faceNormal[1]-faceNormal[0]);
+	GLfloat light1= dot(activeLight->getDirection(),normal);
+	//color = color*light1;
+	if(x<m_width && x>0 && y>0 && y<m_height)
+	{
+		if(m_zbuffer[INDEXOF(m_width,x,y)]<zcordinate)
+		{
+			m_outBuffer[INDEX(m_width,x,y,2)]=   color			& 0x0000ff;
+			m_outBuffer[INDEX(m_width,x,y,1)]= ( color >> 8)		& 0x0000ff;
+			m_outBuffer[INDEX(m_width,x,y,0)]= ( color >> 16)	& 0x0000ff; 
+		
+			m_zbuffer[INDEXOF(m_width,x,y)]=zcordinate;
+		}
+		else
+			flag= false;
+	}
+	return flag;
 }
 
 float *Renderer::getOutBuffer() {
@@ -177,15 +204,38 @@ mat4 Renderer::getProjection()
 	return _projection;
 }
 
-void Renderer::DrawFace(const Face& face) {
-
+bool Renderer::DrawTriangle( vec3 _v1, vec3 _v2, vec3 _v3,unsigned int color)
+{
+	bool flag= true;
+	vec3 v1 = calculateMvpPCTransformation(_v1);
+	vec3 v2 = calculateMvpPCTransformation(_v2);
+	vec3 v3 = calculateMvpPCTransformation(_v3);
+	Face tmp(v1,v2,v3);
+	int maxX = (v1.x<v2.x)?(v2.x<v3.x?v3.x:v2.x):(v1.x<v3.x?v3.x:v1.x);
+	int maxY = (v1.y<v2.y)?(v2.y<v3.y?v3.y:v2.y):(v1.y<v3.y?v3.y:v1.y);
+	int minX = (v1.x>v2.x)?(v2.x>v3.x?v3.x:v2.x):(v1.x>v3.x?v3.x:v1.x);
+	int minY = (v1.y>v2.y)?(v2.y>v3.y?v3.y:v2.y):(v1.y>v3.y?v3.y:v1.y);
+	for (int i = minY; i <= maxY; i++)
+	{
+		for (int j = minX; j <= maxX; j++)
+		{
+			vec3 bCordinated = Utils::getInstance().getBarycentricCoordinates(v1,v2,v3,vec3(j,i,0));
+			if(bCordinated.x >= 0 && bCordinated.x <= 1 && bCordinated.y >= 0 && bCordinated.y <= 1
+				&& bCordinated.z >= 0 && bCordinated.z <= 1)
+			{
+				if(!plot(tmp,j,i,color))
+					flag = false;
+			}
+		}
+	}
+	return flag;
 }
 
-vec2 Renderer::calculateMvpPCTransformation(vec4 worldPoint) {
-	vec4 transformed = Mvp * _projection * _cTransform * worldPoint;
+vec3 Renderer::calculateMvpPCTransformation(vec4 worldPoint) {
+	vec4 transformed = Mvp * _projection * _cTransform *_oTransform* worldPoint;
 	if(transformed.w)
-		return vec2(transformed.x/transformed.w, transformed.y/transformed.w);
-	return vec2(transformed.x, transformed.y);
+		return vec3(transformed.x/transformed.w, transformed.y/transformed.w,transformed.z/transformed.w);
+	return vec3(transformed.x, transformed.y,transformed.z);
 }
 
 vec2 Renderer::calculateTransformation(vec4 relativePoint) { // USE THIS FUNCTION!
@@ -195,17 +245,8 @@ vec2 Renderer::calculateTransformation(vec4 relativePoint) { // USE THIS FUNCTIO
 	return vec2(transformed.x, transformed.y);
 }
 
-void Renderer::drawLineByVectors(vec3 from ,vec3 to,unsigned int color) {
-	//std::cerr << "Mvp is\n" << Mvp << "\n"
-/*
-	mat4 tmp=_projection * _cTransform *_oTransform;
-	vec4 v1(tmp * from);
-	vec4 v2(tmp * to);
-	v1 = Mvp *v1/v1.w;
-	v2 = Mvp *v2/v2.w;
-	vec2 vOut1(v1.x,v1.y);
-	vec2 vOut2(v2.x,v2.y);
-*/
+void Renderer::drawLineByVectors( vec3 from ,vec3 to,unsigned int color) {
+
 	vec2 vOut1 = calculateTransformation(from);
 	vec2 vOut2 = calculateTransformation(to);
 	if(vOut1.x<m_width && vOut1.x>0 &&vOut1.y>0 &&vOut1.y<m_height
@@ -252,7 +293,11 @@ void Renderer::ClearColorBuffer()
 {
 	for(int x = 0 ;x<m_width ;x++)
 		for(int y = 0 ; y < m_height ;y++)
-			plot(x,y,BLACK);
+		{	
+			m_outBuffer[INDEX(m_width,x,y,2)]=  BLACK			& 0x0000ff;
+			m_outBuffer[INDEX(m_width,x,y,1)]= (BLACK >> 8)		& 0x0000ff;
+			m_outBuffer[INDEX(m_width,x,y,0)]= (BLACK >> 16)	& 0x0000ff;
+		}
 	//SwapBuffers();
 }
 Renderer::Line::Line(vec2 p1, vec2 p2, int color): _p1(p1), _p2(p2), horizontal(false), vertical(false), m_outBuffer(0), m_color(color) {

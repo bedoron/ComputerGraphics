@@ -84,6 +84,9 @@
     <ClCompile Include="MoveInterval.cpp">
       <Filter>MFC</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CG_skel_w_MFC.h">
@@ -166,6 +169,12 @@
     </ClInclude>
     <ClInclude Include="MoveInterval.h">
       <Filter>MFC</Filter>
+    </ClInclude>
+    <ClInclude Include="AvlTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

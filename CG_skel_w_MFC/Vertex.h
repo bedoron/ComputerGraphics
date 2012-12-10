@@ -1,14 +1,20 @@
 #pragma once
-#include "vec.h"
+#include <vector>
+#include "Face.h"
 class Vertex
 {
 private:
-	GLfloat _x,_y,_z;
+	int _id;
+	std::vector<int> faces;
 public:
-	Vertex(float x,float y,float z);
+	Vertex(int id);
 	~Vertex(void);
-	float getX();
-	float getY();
-	float getZ();
+	void addFace(int id);
+	std::vector<int>& getFaces();
+	friend bool operator<(const Vertex& v1, const Vertex& v2);
+	friend bool operator>(const Vertex& v1, const Vertex& v2);
+	bool operator==(Vertex& v) const;
+	bool operator!=(Vertex& v) const;
+	friend std::ostream& operator<<(std::ostream& os, const Vertex& p);
 };
 

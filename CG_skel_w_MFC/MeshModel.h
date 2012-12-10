@@ -16,6 +16,7 @@ protected :
 	mat4 _world_transform;
 	mat3 _normal_transform;
 	OBJItem objItem;
+	unsigned int _color;
 
 public:
 	
@@ -36,4 +37,5 @@ public:
 	void setNormal(bool normal) { objItem.setNormal(normal);}
 	bool getVertexNormal() {return objItem.getVertexNormal();}
 	bool getDrawBox() { return objItem.getDrawBox(); }
+	void setColor(unsigned int color){_color = color;}
 };

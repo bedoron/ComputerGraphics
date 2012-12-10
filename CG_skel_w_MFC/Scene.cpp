@@ -42,19 +42,27 @@ void Scene::initDefaultCamera() {
 	currentView = prespective;
 	setActiveCamera(1);
 }
-
+void Scene::initDefaultLight()
+{
+	m_activeLight = new Light();
+	m_activeLight->setLocation(vec3(10,10,0));
+	m_activeLight->setDirection(vec3(-1,-1,0));
+	m_renderer->setLight(m_activeLight);
+}
 Scene::Scene():models(),cameras(), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0)
 {
 //	axes= new AxesModel(); 
 //	activeEntity = WORLD_ACTIVE;
 //	model_win = 0;
 	initDefaultCamera();
+	initDefaultLight();
 }
 Scene::Scene(Renderer *renderer) : m_renderer(renderer),names(),m_activeModel(-1),size(0),models(),cameras(),
 	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0)
 {
 	moveInterval=1;
 	initDefaultCamera();
+	initDefaultLight();
 };
 
 Scene::Scene(Renderer *renderer, CModelData& win) : m_renderer(renderer),names(),m_activeModel(-1),size(0),models(),cameras(),
@@ -62,6 +70,7 @@ Scene::Scene(Renderer *renderer, CModelData& win) : m_renderer(renderer),names()
 {
 	model_win->setScene(this);
 	initDefaultCamera();
+	initDefaultLight();
 	moveInterval=1;
 };
 
@@ -125,10 +134,10 @@ void Scene::draw(mat4 translation)
 		oTransform =translation *  oTransform ; 
 		models[m_activeModel]->setObjectTransform(oTransform);
 	}
-
+	m_renderer->resetZBuffer();
 	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	m_renderer->SetProjection(m_activeCamera->getProjection());
-
+	
 	m_renderer->ClearColorBuffer();
 	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  //2
 	{
@@ -303,6 +312,7 @@ void Scene::setRenderer(int width , int height)
 	GLfloat newAspect = (GLfloat)((GLfloat)width)/((GLfloat)height);
 	delete(m_renderer);
 	m_renderer = new Renderer(width,height);
+	m_renderer->setLight(m_activeLight);
 	if(dx>0) // X got bigger
 	{
 		GLfloat deltaViewX = (_right-_left)*dxPercent;

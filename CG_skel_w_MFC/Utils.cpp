@@ -72,12 +72,12 @@ OBJItem Utils::parseOBJ(string filename) {
 			{
 				if(vn1==0 &&vn2==0 && vn3==0)
 				{
-					Face newFace(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v2),objitem.getVertexByNumber(v3));
+					Face newFace(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v2),objitem.getVertexByNumber(v3),vec3(v1,v2,v3));
 					objitem.addFace(newFace);
 				}
 				else
 				{
-					Face newFace(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v2),objitem.getVertexByNumber(v3)
+					Face newFace(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v2),objitem.getVertexByNumber(v3),vec3(v1,v2,v3)
 						,objitem.getNormalByNumber(vn1),objitem.getNormalByNumber(vn2),objitem.getNormalByNumber(vn3));
 					objitem.addFace(newFace);
 				}
@@ -99,9 +99,31 @@ OBJItem Utils::parseOBJ(string filename) {
 	return objitem;
 }
 
+GLfloat Utils::interpolateFace(Face face,GLfloat x, GLfloat y)
+{
+	vec3 _v1 = face.getVecX();
+	vec3 _v2 = face.getVecY();
+	vec3 _v3 = face.getVecZ();
+	vec3 v1 = vec3(_v1.x,_v1.y,0);
+	vec3 v2 = vec3(_v2.x,_v2.y,0);
+	vec3 v3 = vec3(_v3.x,_v3.y,0);
+	vec3 p(x,y,0);
+	vec3 n = normalize(cross(v2-v1,v3-v1));
+	GLfloat area = dot(n,cross(v2-v1,v3-v1));
+	GLfloat a1 = dot(n,cross(v2-p,v3-p))/area;
+	GLfloat a2 = dot(n,cross(v1-p,v3-p))/area;
+	GLfloat a3 = 1 - a1 - a2;
+	return dot(vec3(a1,a2,a3),vec3(_v1.z,_v2.z,_v3.z));
+}
 
-
-
-
+vec3 Utils::getBarycentricCoordinates(vec3 v1,vec3 v2,vec3 v3,vec3 point)
+{
+	vec3 n = normalize(cross(v2-v1,v3-v1));
+	GLfloat area = dot(n,cross(v2-v1,v3-v1));
+	GLfloat a1 = dot(n,cross(v1-point,v2-point))/area;
+	GLfloat a2 = dot(n,cross(v2-point,v3-point))/area;
+	GLfloat a3 = dot(n,cross(v3-point,v1-point))/area;
+	return vec3(a1,a2,a3);
+}
 
 

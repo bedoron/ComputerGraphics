@@ -2,7 +2,7 @@
 #include "Face.h"
 #include "Renderer.h"
 
-Face::Face(vec3 x,vec3 y,vec3 z,vec3 vn1,vec3 vn2,vec3 vn3):_x(x),_y(y),_z(z),normalLine(),_vn1(vn1),_vn2(vn2),_vn3(vn3)
+Face::Face(vec3 x,vec3 y,vec3 z,vec3 vertices,vec3 vn1,vec3 vn2,vec3 vn3):_x(x),_y(y),_z(z),_vertices(vertices) ,normalLine(),_vn1(vn1),_vn2(vn2),_vn3(vn3)
 {
 	vec3 normal = normalize(cross(x-y,x-z)) ;
 	vec3 center = (x+y+z)/3;
@@ -43,3 +43,13 @@ mat3 Face::getNormalLine()
 	return normalLine;
 }
 
+vec3 Face::getVertices()
+{
+	return _vertices;
+}
+GLfloat Face::getFaceArea()
+{
+	vec3 v1= _y -_x; 
+	vec3 v2= _z -_x; 
+	return abs(length(cross(v1,v2)));
+}

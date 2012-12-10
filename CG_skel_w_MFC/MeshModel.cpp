@@ -73,6 +73,7 @@ MeshModel::~MeshModel(void)
 void MeshModel::draw(Renderer& renderer)
 {
 	renderer.SetObjectMatrices(_world_transform);
+	objItem.setColor(_color);
 	objItem.draw(renderer);
 }
 void MeshModel::setObjectTransform(mat4 worldTransform)

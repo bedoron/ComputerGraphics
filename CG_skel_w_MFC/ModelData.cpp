@@ -41,6 +41,8 @@ void CModelData::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, DRAW_BOX, draw_box);
 	DDX_Control(pDX, DRAW_NORMAL, draw_normals);
 	DDX_Control(pDX, DRAW_VNORMAL, draw_vnormals);
+	DDX_Control(pDX, IDC_color, _color);
+	
 }
 
 
@@ -164,6 +166,9 @@ void CModelData::OnBnClickedOk()
 	static_cast<MeshModel*>(m_model)->setDrawBox(draw_box.GetCheck()==BST_CHECKED);
 	static_cast<MeshModel*>(m_model)->setVertexNormal(draw_vnormals.GetCheck()==BST_CHECKED);
 	static_cast<MeshModel*>(m_model)->setNormal(draw_normals.GetCheck()==BST_CHECKED);
+	char colorBuffer[10];
+	_color.GetWindowTextA(colorBuffer, 5);
+	static_cast<MeshModel*>(m_model)->setColor((unsigned int) atoi(colorBuffer));
 	// Deal with rotation
 	bool dontTranslate;
 	rotateModel(readAndClearRotation(dontTranslate));

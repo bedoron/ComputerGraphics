@@ -742,7 +742,15 @@ inline mat4 RotateZ(const GLfloat theta)
 	c[0][1] = -c[1][0];
 	return c;
 }
-
+inline mat4 RotateEuler(GLfloat alpha,GLfloat beta,GLfloat gamma)
+{
+	mat4 c;
+	c[0][0]=cos(gamma)*cos(beta);	c[0][1] =sin(gamma)*cos(alpha)+cos(gamma)*sin(beta)*sin(alpha);	c[0][2] = sin(gamma)*sin(alpha)-cos(gamma)*sin(beta)*cos(alpha);c[0][3]=0;
+	c[1][0]=-sin(gamma)*cos(beta);	c[1][1] =cos(gamma)*cos(alpha)-sin(gamma)*sin(beta)*sin(alpha);	c[1][2] = cos(gamma)*sin(alpha)+sin(gamma)*sin(beta)*cos(alpha);c[1][3]=0;
+	c[2][0]=sin(beta);				c[2][1] =-cos(beta)*sin(alpha);									c[2][2] = cos(beta)*cos(alpha);									c[2][3]=0;
+	c[3][0]=0;						c[3][1] =0;														c[3][2] = 0	;													c[3][3]=1;
+	return c;
+}
 //----------------------------------------------------------------------------
 //
 //  Translation matrix generators

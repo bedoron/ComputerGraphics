@@ -4,6 +4,7 @@
 #include "mat.h"
 #include "GL/glew.h"
 #include "Face.h"
+#include "Light.h"
 
 #define BLACK		0x000000
 #define RED			0xff0000
@@ -26,12 +27,9 @@ class Renderer
 	mat4 _projection;
 	mat4 _cTransform;
 	mat4 _oTransform;
-
 	mat4 _composition;
-
-
 	mat4 Mvp;
-
+	Light* activeLight;
 
 	void CreateBuffers(int width, int height);
 	void CreateLocalBuffer();
@@ -48,7 +46,6 @@ class Renderer
 	bool drawBound;
 
 	void initMvp();
-
 	class Line; // This is a forward decleration
 protected:
 	float *getOutBuffer();
@@ -57,18 +54,20 @@ public:
 	Renderer();
 	Renderer(int width, int height);
 	~Renderer(void);
+	
 	bool isDrawNormal();
 	void setDrawnormal(bool _drawNormal);
 	bool isDrawBound();
 	void setDrawBound(bool _drawBound);
 	void Init();
 	void DrawTriangles(const vector<vec3>* vertices, const vector<vec3>* normals=NULL);
-	void DrawFace(const Face& _face);
+	bool DrawTriangle( vec3 v1, vec3 v2, vec3 v3,unsigned int color);
 	void SetCameraTransform(const mat4& cTransform);
 	void SetProjection(const mat4& projection);
 	mat4 getObjectMatrices() { return _oTransform; };
 	void SetObjectMatrices(const mat4& oTransform);
 	void SetObjectMatrices(const mat4& oTransform, const mat3& nTransform);
+	void setLight(Light* newLight){activeLight = newLight;}
 	void SwapBuffers();
 	void ClearColorBuffer();
 	void ClearDepthBuffer();
@@ -76,7 +75,7 @@ public:
 	void drawLineByVectors(vec3 from ,vec3 to,bool normal = false);
 	void drawLineByVectors(vec3 from ,vec3 to,unsigned int color = 0xffffff);
 	//TODO draw triangle
-	void plot(int x, int y, int color); /* plot a single point */
+	bool plot(Face f,int x, int y, int color); /* plot a single point */
 	int getWidth() const; /* Return screen's width */
 	int getHeight() const; /* Returns screen's  height */
 	void addLine(Line& newLine);
@@ -84,7 +83,9 @@ public:
 	mat4 getProjection();
 	void drawAxis(mat4 axis = Translate(0,0,0));
 	vec2 calculateTransformation(vec4 relativePoint);
-	vec2 calculateMvpPCTransformation(vec4 worldPoint); // Debug method
+	vec3 calculateMvpPCTransformation(vec4 worldPoint); // Debug method
+	void resetZBuffer();
+	bool checkZBuffer();
 };
 
 #define delta_threshold 0.001

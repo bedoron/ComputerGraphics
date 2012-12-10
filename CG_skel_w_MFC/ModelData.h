@@ -28,6 +28,7 @@ public:
 	CEdit yrot;
 	CEdit zrot;
 	CEdit scale;
+	CEdit _color;
 	afx_msg void OnDestroy();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	Model* m_model;

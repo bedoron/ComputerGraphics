@@ -109,6 +109,7 @@
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="InitShader.cpp" />
     <ClCompile Include="InputDialog.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="MeshModel.cpp" />
     <ClCompile Include="ModelData.cpp" />
@@ -126,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddCamera.h" />
+    <ClInclude Include="AvlTree.h" />
     <ClInclude Include="AxesModel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CG_skel_w_MFC.h" />
@@ -135,6 +137,7 @@
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="InitShader.h" />
     <ClInclude Include="InputDialog.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="mat.h" />
     <ClInclude Include="MeshModel.h" />

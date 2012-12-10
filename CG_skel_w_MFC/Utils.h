@@ -24,5 +24,9 @@ public:
 	static Utils &getInstance();
 	~Utils();
 	OBJItem parseOBJ(string filename) throw(ObjParserException, ObjParserFileNotFound);
+	static GLfloat interpolateFace(Face face,GLfloat x, GLfloat y);
+	vec3 getBarycentricCoordinates(Face face,GLfloat x, GLfloat y);
+	vec3 getBarycentricCoordinates(vec3 v1,vec3 v2,vec3 v3,vec3 p);
+
 };
 

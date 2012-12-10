@@ -3,6 +3,8 @@
 #include "Face.h"
 #include <exception>
 #include "Renderer.h"
+#include "AvlTree.h"
+#include "Vertex.h"
 using std::out_of_range;
 using namespace std;
 
@@ -22,6 +24,9 @@ private:
 	bool drawBox;
 	bool drawVertexNormal;
 	bool drawNormal;
+	bool drawFaces;
+	AvlTree<Vertex> verticesTree;
+	unsigned int _color;
 public:
 	OBJItem(void);
 	OBJItem(const OBJItem& item);
@@ -49,5 +54,7 @@ public:
 	bool getVertexNormal() { return drawVertexNormal;}
 	void setDrawBox(bool val) { drawBox = val; };
 	void setDrawVertexNormal(bool val) { drawVertexNormal = val; };
+	vec3 getCalculatedNormal(int vertex);
+	void setColor(unsigned int color){_color = color;}
 };
 

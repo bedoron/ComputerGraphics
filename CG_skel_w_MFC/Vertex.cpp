@@ -1,22 +1,33 @@
 #include "stdafx.h"
 #include "Vertex.h"
 
-
-Vertex::Vertex(float x,float y,float z):_x(x),_y(y),_z(z)
+Vertex::~Vertex()
 {
 }
-Vertex::~Vertex(void)
+Vertex::Vertex(int id):_id(id),faces()
 {
 }
-GLfloat Vertex::getX()
+bool Vertex::operator==(Vertex& v) const
 {
-	return _x;
+	return _id == v._id;
 }
-GLfloat Vertex::getY()
+bool Vertex::operator!=(Vertex& v) const
 {
-	return _y;
+	return _id != v._id;
 }
-GLfloat Vertex::getZ()
+bool operator<(const Vertex& v1, const Vertex& v2)
 {
-	return _z;
+	return v1._id<v2._id;
+}
+bool operator>(const Vertex& v1, const Vertex& v2)
+{
+	return v1._id>v2._id;
+}
+void Vertex::addFace(int id)
+{
+	faces.push_back(id);
+}
+std::vector<int>& Vertex::getFaces()
+{
+	return faces;
 }

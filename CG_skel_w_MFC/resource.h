@@ -68,6 +68,8 @@
 #define IDC_up_x                        1051
 #define IDC_up_y                        1052
 #define IDC_up_z                        1053
+#define IDC_EDIT1                       1053
+#define IDC_color                       1053
 
 // Next default values for new objects
 // 
@@ -75,7 +77,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112
 #define _APS_NEXT_COMMAND_VALUE         40002
-#define _APS_NEXT_CONTROL_VALUE         1051
+#define _APS_NEXT_CONTROL_VALUE         1054
 #define _APS_NEXT_SYMED_VALUE           113
 #endif
 #endif
