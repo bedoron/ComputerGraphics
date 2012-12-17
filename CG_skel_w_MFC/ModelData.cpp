@@ -50,7 +50,11 @@ void CModelData::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, ambiantX, _ambX);
 	DDX_Control(pDX, ambiantY, _ambY);
 	DDX_Control(pDX, ambiantZ, _ambZ);
+	DDX_Control(pDX, SpecularX, _spcX);
+	DDX_Control(pDX, SpecularY, _spcY);
+	DDX_Control(pDX, SpecularZ, _spcZ);
 	DDX_Control(pDX, IDC_shine, _shine);
+	DDX_Control(pDX, IDC_clc_nrml, _calcNrml);
 }
 
 
@@ -190,9 +194,13 @@ void CModelData::OnBnClickedOk()
 	_ambY.GetWindowTextA(colorBufferY, 5);
 	_ambZ.GetWindowTextA(colorBufferZ, 5);
 	static_cast<MeshModel*>(m_model)->setKAbmbiant(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
-
+	_spcX.GetWindowTextA(colorBufferX, 5);
+	_spcY.GetWindowTextA(colorBufferY, 5);
+	_spcZ.GetWindowTextA(colorBufferZ, 5);
+	static_cast<MeshModel*>(m_model)->setKspecular(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
 	_shine.GetWindowTextA(colorBufferX,5);
 	static_cast<MeshModel*>(m_model)->setShininess(atof(colorBufferX));
+	static_cast<MeshModel*>(m_model)->setVNormal(_calcNrml.GetCheck()==BST_CHECKED);
 	// Deal with rotation
 	bool dontTranslate;
 	rotateModel(readAndClearRotation(dontTranslate));
@@ -259,5 +267,9 @@ void CModelData::initColors()
 	_ambX.SetWindowTextA(_T("1"));
 	_ambY.SetWindowTextA(_T("1"));
 	_ambZ.SetWindowTextA(_T("1"));
+	_spcX.SetWindowTextA(_T("1"));
+	_spcY.SetWindowTextA(_T("1"));
+	_spcZ.SetWindowTextA(_T("1"));
 	_shine.SetWindowTextA(_T("18"));
+	_calcNrml.SetCheck(true);
 }

@@ -27,6 +27,7 @@ private:
 	bool drawFaces;
 	AvlTree<Vertex>* verticesTree;
 	vec3 _color;
+	bool calcNormals;
 public:
 	OBJItem(void);
 	OBJItem(const OBJItem& item);
@@ -56,5 +57,6 @@ public:
 	void setDrawVertexNormal(bool val) { drawVertexNormal = val; };
 	vec3 getCalculatedNormal(int vertex);
 	void setColor(vec3 color){_color = color;}
+	void setCalcNormals(bool val){calcNormals = val;}
 };
 

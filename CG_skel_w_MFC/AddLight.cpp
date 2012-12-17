@@ -61,6 +61,7 @@ void AddLight::OnBnClickedRdAm()
 	locationX.EnableWindow(false);
 	locationY.EnableWindow(false);
 	locationZ.EnableWindow(false);
+	Angle.EnableWindow(false);
 	type= L_AMBIANT;
 }
 
@@ -73,6 +74,7 @@ void AddLight::OnBnClickedRdPrl()
 	DirectionX.EnableWindow(true);
 	DirectionY.EnableWindow(true);
 	DirectionZ.EnableWindow(true);
+	Angle.EnableWindow(false);
 	type= L_PARALEL;
 }
 
@@ -85,6 +87,7 @@ void AddLight::OnBnClickedRdpnt()
 	DirectionX.EnableWindow(true);
 	DirectionY.EnableWindow(true);
 	DirectionZ.EnableWindow(true);
+	Angle.EnableWindow(true);
 	type= L_POINT;
 }
 int AddLight::getLightType()

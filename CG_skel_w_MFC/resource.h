@@ -41,7 +41,11 @@
 #define IDC_BUTTON1                     1015
 #define ambiantZ                        1015
 #define IDMODELNAME7                    1016
+#define SpecularX                       1016
 #define IDMODELNAME8                    1017
+#define SpecularY                       1017
+#define ambiantZ2                       1018
+#define SpecularZ                       1018
 #define FRAME_MODEL                     1022
 #define SCALER                          1024
 #define SET_DATA                        1025
@@ -91,8 +95,8 @@
 #define IDC_IntencityG                  1067
 #define IDC_IntencityR                  1068
 #define IDC_angle                       1069
-#define IDC_EDIT1                       1071
 #define IDC_shine                       1071
+#define IDC_clc_nrml                    1072
 
 // Next default values for new objects
 // 
@@ -100,7 +104,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112
 #define _APS_NEXT_COMMAND_VALUE         40002
-#define _APS_NEXT_CONTROL_VALUE         1072
+#define _APS_NEXT_CONTROL_VALUE         1073
 #define _APS_NEXT_SYMED_VALUE           114
 #endif
 #endif

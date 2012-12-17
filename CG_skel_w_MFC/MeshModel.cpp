@@ -62,7 +62,7 @@ vec2 vec2fFromStream(std::istream & aStream)
 }
 
 MeshModel::MeshModel(OBJItem modelItem):objItem(modelItem),_world_transform(mat4()),_color(vec3(255,255,255)),
-	_kAmbiant(vec3(1,1,1)),_kDiffuze(vec3(1,1,1)),_kspecular(vec3(1,1,1))
+	_kAmbiant(vec3(1,1,1)),_kDiffuze(vec3(1,1,1)),_kspecular(vec3(1,1,1)),shine(18)
 {
 	
 }
@@ -79,6 +79,7 @@ void MeshModel::draw(Renderer& renderer)
 	renderer.setKDiffuze(_kDiffuze);
 	renderer.setKspecular(_kspecular);
 	renderer.setShine(shine);
+	objItem.setCalcNormals(useNormals);
 	objItem.draw(renderer);
 }
 void MeshModel::setObjectTransform(mat4 worldTransform)

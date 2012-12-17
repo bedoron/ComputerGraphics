@@ -3,7 +3,7 @@
 #include "CubeModel.h"
 
 OBJItem::OBJItem(void):vertices(),faces(),normals(),minX(5),minY(5),minZ(5)
-	,maxX(0),maxY(0),maxZ(0), drawBox(false), drawVertexNormal(false), drawNormal(false),_color(WHITE)
+	,maxX(0),maxY(0),maxZ(0), drawBox(false), drawVertexNormal(false), drawNormal(false),_color(WHITE),calcNormals(true)
 {
 	verticesTree = new AvlTree<Vertex>();
 }
@@ -13,7 +13,7 @@ OBJItem::~OBJItem(void)
 }
 OBJItem::OBJItem(const OBJItem& item):vertices(item.vertices),faces(item.faces),normals(item.normals)
 	,minX(item.minX),minY(item.minY),minZ(item.minZ),maxX(item.maxX),maxY(item.maxY),maxZ(item.maxZ),
-	drawBox(false), drawVertexNormal(false), drawNormal(false),_color(item._color),verticesTree(item.verticesTree)
+	drawBox(false), drawVertexNormal(false), drawNormal(false),_color(item._color),verticesTree(item.verticesTree),calcNormals(true)
 {
 }
 void OBJItem::addVertex(vec3& vertex)
@@ -79,10 +79,12 @@ void OBJItem::draw(Renderer& renderer)
 		{
 			Face curentface(*it);
 			vec3 currentVerticies = curentface.getVertices();
-			curentface.setVN1(getCalculatedNormal(currentVerticies.x));
-			curentface.setVN2(getCalculatedNormal(currentVerticies.y));
-			curentface.setVN3(getCalculatedNormal(currentVerticies.z));
-
+			if(calcNormals)
+			{
+				curentface.setVN1(getCalculatedNormal(currentVerticies.x));
+				curentface.setVN2(getCalculatedNormal(currentVerticies.y));
+				curentface.setVN3(getCalculatedNormal(currentVerticies.z));
+			}
 			//draw triangle
 			if(renderer.DrawTriangle(curentface,_color) && false)
 			{

@@ -30,7 +30,7 @@ public:
 	void setObjectTransform(mat4 worldTransform);
 	mat4 getObjectTransform();
 	vec3 getModelCenter();
-
+	bool useNormals;
 	void scale(const vec3& scaler);
 	void rotate(const vec3& rotors);
 
@@ -45,4 +45,5 @@ public:
 	void setKDiffuze(vec3 kdiffuze){_kDiffuze=kdiffuze;}
 	void setKspecular(vec3 kspecular){_kspecular=kspecular;}
 	void setShininess(GLfloat s){shine = s;}
+	void setVNormal(bool nrml){useNormals = nrml;}
 };

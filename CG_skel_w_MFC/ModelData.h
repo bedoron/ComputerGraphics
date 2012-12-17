@@ -37,7 +37,11 @@ public:
 	CEdit _ambX;
 	CEdit _ambY;
 	CEdit _ambZ;
+	CEdit _spcX;
+	CEdit _spcY;
+	CEdit _spcZ;
 	CEdit _shine;
+	CButton _calcNrml;
 
 	afx_msg void OnDestroy();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
