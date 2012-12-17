@@ -5,6 +5,7 @@
 OBJItem::OBJItem(void):vertices(),faces(),normals(),minX(5),minY(5),minZ(5)
 	,maxX(0),maxY(0),maxZ(0), drawBox(false), drawVertexNormal(false), drawNormal(false),_color(WHITE)
 {
+	verticesTree = new AvlTree<Vertex>();
 }
 
 OBJItem::~OBJItem(void)
@@ -12,7 +13,7 @@ OBJItem::~OBJItem(void)
 }
 OBJItem::OBJItem(const OBJItem& item):vertices(item.vertices),faces(item.faces),normals(item.normals)
 	,minX(item.minX),minY(item.minY),minZ(item.minZ),maxX(item.maxX),maxY(item.maxY),maxZ(item.maxZ),
-	drawBox(false), drawVertexNormal(false), drawNormal(false)
+	drawBox(false), drawVertexNormal(false), drawNormal(false),_color(item._color),verticesTree(item.verticesTree)
 {
 }
 void OBJItem::addVertex(vec3& vertex)
@@ -32,7 +33,7 @@ void OBJItem::addVertex(vec3& vertex)
 	
 	vertices.push_back(vertex);
 	Vertex v(vertices.size());
-	verticesTree.insert(v);
+	verticesTree->insert(v);
 }
 void OBJItem::addFace(Face& face)
 {
@@ -45,9 +46,9 @@ void OBJItem::addFace(Face& face)
 	Vertex ver2(v2);
 	Vertex ver3(v3);
 	int currentFace = faces.size();
-	verticesTree.find(&ver1)->addFace(currentFace);
-	verticesTree.find(&ver2)->addFace(currentFace);
-	verticesTree.find(&ver3)->addFace(currentFace);
+	verticesTree->find(&ver1)->addFace(currentFace);
+	verticesTree->find(&ver2)->addFace(currentFace);
+	verticesTree->find(&ver3)->addFace(currentFace);
 }
 void OBJItem::addNormal(vec3& normal)
 {
@@ -77,8 +78,13 @@ void OBJItem::draw(Renderer& renderer)
 		try
 		{
 			Face curentface(*it);
+			vec3 currentVerticies = curentface.getVertices();
+			curentface.setVN1(getCalculatedNormal(currentVerticies.x));
+			curentface.setVN2(getCalculatedNormal(currentVerticies.y));
+			curentface.setVN3(getCalculatedNormal(currentVerticies.z));
+
 			//draw triangle
-			if(renderer.DrawTriangle((*it).getVecX() ,(*it).getVecY(),(*it).getVecZ(),_color))
+			if(renderer.DrawTriangle(curentface,_color) && false)
 			{
 				renderer.drawLineByVectors((*it).getVecX() ,(*it).getVecY() ,(unsigned int) RED);
 				renderer.drawLineByVectors((*it).getVecY() ,(*it).getVecZ() ,(unsigned int) RED);
@@ -89,9 +95,9 @@ void OBJItem::draw(Renderer& renderer)
 				renderer.drawLineByVectors((*it).getNormalLine()[0] ,(*it).getNormalLine()[1] ,(unsigned int)BLUE);
 			if(drawVertexNormal)
 			{
-				renderer.drawLineByVectors((*it).getVecX(),(*it).getVecX()+(*it).getVnX(),(unsigned int)GREEN);
-				renderer.drawLineByVectors((*it).getVecY(),(*it).getVecY()+(*it).getVnY(),(unsigned int)GREEN);
-				renderer.drawLineByVectors((*it).getVecX(),(*it).getVecZ()+(*it).getVnZ(),(unsigned int)GREEN);
+				renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecX()+curentface.getVnX(),(unsigned int)GREEN);
+				renderer.drawLineByVectors(curentface.getVecY(),curentface.getVecY()+curentface.getVnY(),(unsigned int)GREEN);
+				renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecZ()+curentface.getVnZ(),(unsigned int)GREEN);
 			}
 		}
 		catch(exception& e)
@@ -130,16 +136,16 @@ vec3 OBJItem::getCalculatedNormal(int id)
 	Vertex v (id);
 	GLfloat totalArea=0.0;
 	vec3 out(0,0,0);
-	vector<int>& vfaces = verticesTree.find(&v)->getFaces();
+	vector<int>& vfaces = verticesTree->find(&v)->getFaces();
 	for(vector<int>::iterator it = vfaces.begin() ; it != vfaces.end();++it)
 	{
-		totalArea +=  faces[*it].getFaceArea();
+		totalArea +=  faces[*it-1].getFaceArea();
 	}
 	for(vector<int>::iterator it = vfaces.begin() ; it != vfaces.end();++it)
 	{
-		mat3 normal= faces[*it].getNormalLine();
+		mat3 normal= faces[*it-1].getNormalLine();
 		vec3 normalVecor= normal[1]-normal[0];
-		out += normalVecor * faces[*it].getFaceArea()/totalArea;
+		out += normalVecor * faces[*it-1].getFaceArea()/totalArea;
 	}
 	return out;
 }

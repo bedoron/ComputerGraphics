@@ -68,7 +68,8 @@ public:
 	GLfloat getSize();
 	Model* setActiveModel(int id);
 	Model* getActiveModel();
-	int activeLight;
+	
+	Light* activeLight;
 	int activeCamera;
 	int getModelCount();
 	GLfloat moveInterval;
@@ -101,4 +102,7 @@ public:
 	void addCube();
 	void setMoveInterval(GLfloat val){moveInterval=val;}
 	GLfloat getMoveInterval(){return moveInterval;}
+	void addLight(Light* newLight);
+	void changeLightDirection(mat4 rotation);
+	void changeLightLocation(mat4 rotation);
 };

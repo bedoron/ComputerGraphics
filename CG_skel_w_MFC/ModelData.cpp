@@ -41,8 +41,16 @@ void CModelData::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, DRAW_BOX, draw_box);
 	DDX_Control(pDX, DRAW_NORMAL, draw_normals);
 	DDX_Control(pDX, DRAW_VNORMAL, draw_vnormals);
-	DDX_Control(pDX, IDC_color, _color);
-	
+	DDX_Control(pDX, IDC_color_Blue, _colorX);
+	DDX_Control(pDX, IDC_color_green, _colorY);
+	DDX_Control(pDX, IDC_color_red, _colorZ);
+	DDX_Control(pDX, diffuzeX, _diffX);
+	DDX_Control(pDX, diffuzeY, _diffY);
+	DDX_Control(pDX, diffuzeZ, _diffZ);
+	DDX_Control(pDX, ambiantX, _ambX);
+	DDX_Control(pDX, ambiantY, _ambY);
+	DDX_Control(pDX, ambiantZ, _ambZ);
+	DDX_Control(pDX, IDC_shine, _shine);
 }
 
 
@@ -166,9 +174,25 @@ void CModelData::OnBnClickedOk()
 	static_cast<MeshModel*>(m_model)->setDrawBox(draw_box.GetCheck()==BST_CHECKED);
 	static_cast<MeshModel*>(m_model)->setVertexNormal(draw_vnormals.GetCheck()==BST_CHECKED);
 	static_cast<MeshModel*>(m_model)->setNormal(draw_normals.GetCheck()==BST_CHECKED);
-	char colorBuffer[10];
-	_color.GetWindowTextA(colorBuffer, 5);
-	static_cast<MeshModel*>(m_model)->setColor((unsigned int) atoi(colorBuffer));
+
+	char colorBufferX[5];
+	_colorX.GetWindowTextA(colorBufferX, 5);
+	char colorBufferY[5];
+	_colorY.GetWindowTextA(colorBufferY, 5);
+	char colorBufferZ[5];
+	_colorZ.GetWindowTextA(colorBufferZ, 5);
+	static_cast<MeshModel*>(m_model)->setColor(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+	_diffX.GetWindowTextA(colorBufferX, 5);
+	_diffY.GetWindowTextA(colorBufferY, 5);
+	_diffZ.GetWindowTextA(colorBufferZ, 5);
+	static_cast<MeshModel*>(m_model)->setKDiffuze(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+	_ambX.GetWindowTextA(colorBufferX, 5);
+	_ambY.GetWindowTextA(colorBufferY, 5);
+	_ambZ.GetWindowTextA(colorBufferZ, 5);
+	static_cast<MeshModel*>(m_model)->setKAbmbiant(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+
+	_shine.GetWindowTextA(colorBufferX,5);
+	static_cast<MeshModel*>(m_model)->setShininess(atof(colorBufferX));
 	// Deal with rotation
 	bool dontTranslate;
 	rotateModel(readAndClearRotation(dontTranslate));
@@ -223,4 +247,17 @@ void CModelData::OnCbnSelchangeSelect()
 
 	UpdateData(true);
 
+}
+void CModelData::initColors()
+{
+	_colorX.SetWindowTextA(_T("255"));
+	_colorY.SetWindowTextA(_T("255"));
+	_colorZ.SetWindowTextA(_T("255"));
+	_diffX.SetWindowTextA(_T("1"));
+	_diffY.SetWindowTextA(_T("1"));
+	_diffZ.SetWindowTextA(_T("1"));
+	_ambX.SetWindowTextA(_T("1"));
+	_ambY.SetWindowTextA(_T("1"));
+	_ambZ.SetWindowTextA(_T("1"));
+	_shine.SetWindowTextA(_T("18"));
 }

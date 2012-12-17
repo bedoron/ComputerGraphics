@@ -33,7 +33,7 @@ Utils &Utils::getInstance() {
 OBJItem Utils::parseOBJ(string filename) {
 	OBJItem objitem;
 	ifstream objfile;
-	
+
 	objfile.open(filename);
 
 	if(!objfile.is_open())
@@ -86,8 +86,8 @@ OBJItem Utils::parseOBJ(string filename) {
 			{
 				e.what();
 			}
-			
-		
+
+
 		}
 		else if(action == "vn") {
 			float i,j,k = 0;
@@ -115,15 +115,17 @@ GLfloat Utils::interpolateFace(Face face,GLfloat x, GLfloat y)
 	GLfloat a3 = 1 - a1 - a2;
 	return dot(vec3(a1,a2,a3),vec3(_v1.z,_v2.z,_v3.z));
 }
-
-vec3 Utils::getBarycentricCoordinates(vec3 v1,vec3 v2,vec3 v3,vec3 point)
+vec3 Utils::getBarycentricCoordinates(Face face,GLfloat x, GLfloat y, GLfloat z)
 {
+	vec3 v1 = face.getVecX();
+	vec3 v2 = face.getVecY();
+	vec3 v3 = face.getVecZ();
+	vec3 point(x,y,z);
 	vec3 n = normalize(cross(v2-v1,v3-v1));
 	GLfloat area = dot(n,cross(v2-v1,v3-v1));
 	GLfloat a1 = dot(n,cross(v1-point,v2-point))/area;
 	GLfloat a2 = dot(n,cross(v2-point,v3-point))/area;
 	GLfloat a3 = dot(n,cross(v3-point,v1-point))/area;
 	return vec3(a1,a2,a3);
+
 }
-
-

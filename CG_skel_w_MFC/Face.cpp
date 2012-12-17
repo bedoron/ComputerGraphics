@@ -4,10 +4,10 @@
 
 Face::Face(vec3 x,vec3 y,vec3 z,vec3 vertices,vec3 vn1,vec3 vn2,vec3 vn3):_x(x),_y(y),_z(z),_vertices(vertices) ,normalLine(),_vn1(vn1),_vn2(vn2),_vn3(vn3)
 {
-	vec3 normal = normalize(cross(x-y,x-z)) ;
+	_normalVec= normalize(cross(x-y,x-z)) ;
 	vec3 center = (x+y+z)/3;
 	normalLine[0]=center;
-	normalLine[1] = center + normal;
+	normalLine[1] = center + _normalVec;
 }
 
 
@@ -52,4 +52,18 @@ GLfloat Face::getFaceArea()
 	vec3 v1= _y -_x; 
 	vec3 v2= _z -_x; 
 	return abs(length(cross(v1,v2)));
+}
+vec3 Face::getNormal()
+{
+	return _normalVec;
+}
+Face Face::transformFace(Renderer& renderer)
+{
+	vec3 newX = renderer.calculateMvpPCTransformation(_x,false);
+	vec3 newY = renderer.calculateMvpPCTransformation(_y,false);
+	vec3 newZ = renderer.calculateMvpPCTransformation(_z,false);
+	vec3 newvn1 = renderer.calculateMvpPCTransformation(_x+_vn1,false);
+	vec3 newvn2 = renderer.calculateMvpPCTransformation(_y+_vn2,false);
+	vec3 newvn3 = renderer.calculateMvpPCTransformation(_z+_vn3,false);
+	return Face(newX,newY,newZ,_vertices,newvn1-newX,newvn2-newY,newvn3-newZ);
 }

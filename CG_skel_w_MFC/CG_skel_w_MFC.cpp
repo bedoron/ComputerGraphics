@@ -12,6 +12,7 @@
 #include "MoveInterval.h"
 #include "Vertex.h"
 #include "AvlTree.h"
+#include "AddLight.h"
 using std::exception;
 using std::cerr;
 
@@ -37,7 +38,7 @@ using std::cerr;
 
 #define MAXIMUM_MENUS 8
 
-enum Mouse_Mode{m_Model,m_camera};
+enum Mouse_Mode{m_Model,m_camera,m_light};
 enum MENU_ELEMENTS {
 OBJECTS_NAMESPACE_BEGIN = 0,
 OBJECTS_NAMESPACE_END = 999,
@@ -47,7 +48,7 @@ OBJECTS_OVERFLOW_BUFFER = 2500, /* if you got here you suck */
 FILE_OPEN, MAIN_DEMO , MAIN_ABOUT , Main_BOUNDS 
 , Main_Clear , Main_selectM , Main_Move_Interval, MAIN_DEBUG, OBJECT_REMOVE_ACTIVE, 
 CAMERA_ADD, CAMERA_REMOVE_ACTIVE,CAMERA_SELECT_MODEL_AT, SELECT_OPERATION_FRAME,Main_Frustum,
-Main_Ortho,Main_prespective,RenderCameras,AddCube
+Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight
 };
 
 
@@ -62,7 +63,7 @@ Frustum dlg_frustum;
 PresModel dlg_pres;
 AddCamera dlg_addcamera;
 MoveInterval dlg_interval;
-
+AddLight dlg_light;
 int last_x,last_y;
 int pressedX,pressedY;
 bool lb_down,rb_down,mb_down;
@@ -113,6 +114,10 @@ void keyboard( unsigned char key, int x, int y )
 	case 'm':
 		mouseMode=m_Model;
 		cerr << "model is using mouse\n";
+		break;
+	case 'l':
+		mouseMode = m_light;
+		cerr << "light is using mouse\n";
 		break;
 	}
 	
@@ -168,6 +173,12 @@ void keyboardSpecial(int key,int x,int y)
 		{
 			vec4 newEye = translatetion * scene->getActiveCamera()->getEye();
 			scene->getActiveCamera()->LookAt(newEye,scene->getActiveCamera()->getAt(),scene->getActiveCamera()->getUp());
+			scene->draw();
+			break;
+		}
+	case m_light:
+		{
+			scene->changeLightLocation(translatetion);
 			scene->draw();
 			break;
 		}
@@ -283,6 +294,12 @@ void motion(int x, int y)
 			cerr << "dy is: " << dy/3 << "\n";
 			break;
 		}
+	case m_light:
+		{
+			scene->changeLightDirection(RotateX(dx/3)*RotateY(dy/3));
+			break;
+		}
+
 	}
 	
 	
@@ -342,7 +359,12 @@ void mainMenu(int id)
 			scene->draw();
 		break;
 		}
+	case addLight:
+		{
+			dlg_light.ShowWindow(SW_SHOW);
 
+			break;
+		}
 	}
 	initMenu();
 }
@@ -500,7 +522,7 @@ int menuDraw(bool destroy) {
 		glutAddMenuEntry("Render cameras",RenderCameras);
 	glutAddMenuEntry("Look at active model (f)",CAMERA_SELECT_MODEL_AT);
 	glutAddMenuEntry("Add Cube",AddCube);
-	
+	glutAddMenuEntry("Add Light",addLight);
 	glutAddMenuEntry("About",MAIN_ABOUT);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	
 
@@ -543,12 +565,14 @@ int my_main( int argc, char **argv )
 
 	renderer = new Renderer(MAIN_WIDTH,MAIN_HEIGHT);
 	scene = new Scene(renderer, model_win);
+	model_win.initColors();
 	dlg_frustum.setScene(scene);
 	dlg_pres.setScene(scene);
 	dlg_addcamera.setScene(scene);
 	dlg_interval.Create(MoveInterval::IDD);
 	dlg_interval.setScene(scene);
-	
+	dlg_light.Create(AddLight::IDD);
+	dlg_light.setScene(scene);
 	//----------------------------------------------------------------------------
 	// Initialize Callbacks
 

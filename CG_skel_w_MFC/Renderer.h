@@ -5,6 +5,7 @@
 #include "GL/glew.h"
 #include "Face.h"
 #include "Light.h"
+class Camera;
 
 #define BLACK		0x000000
 #define RED			0xff0000
@@ -30,10 +31,17 @@ class Renderer
 	mat4 _composition;
 	mat4 Mvp;
 	Light* activeLight;
-
+	vector<Light*> lights;
 	void CreateBuffers(int width, int height);
 	void CreateLocalBuffer();
-
+	bool drawNormal;
+	bool drawBound;
+	Camera* activeCamera;
+	void initMvp();
+	vec3 _kDiffuze;
+	vec3 _kAmbiant;
+	vec3 _kspecular;
+	GLfloat _shine;
 	//////////////////////////////
 	// openGL stuff. Don't touch.
 
@@ -42,10 +50,8 @@ class Renderer
 	void CreateOpenGLBuffer();
 	void InitOpenGLRendering();
 	//////////////////////////////
-	bool drawNormal;
-	bool drawBound;
+	
 
-	void initMvp();
 	class Line; // This is a forward decleration
 protected:
 	float *getOutBuffer();
@@ -61,7 +67,7 @@ public:
 	void setDrawBound(bool _drawBound);
 	void Init();
 	void DrawTriangles(const vector<vec3>* vertices, const vector<vec3>* normals=NULL);
-	bool DrawTriangle( vec3 v1, vec3 v2, vec3 v3,unsigned int color);
+	bool DrawTriangle( Face face,vec3 color);
 	void SetCameraTransform(const mat4& cTransform);
 	void SetProjection(const mat4& projection);
 	mat4 getObjectMatrices() { return _oTransform; };
@@ -75,7 +81,7 @@ public:
 	void drawLineByVectors(vec3 from ,vec3 to,bool normal = false);
 	void drawLineByVectors(vec3 from ,vec3 to,unsigned int color = 0xffffff);
 	//TODO draw triangle
-	bool plot(Face f,int x, int y, int color); /* plot a single point */
+	bool plot(Face worldFace,Face frameFace,int x, int y, vec3 color,vec3 normal); /* plot a single point */
 	int getWidth() const; /* Return screen's width */
 	int getHeight() const; /* Returns screen's  height */
 	void addLine(Line& newLine);
@@ -83,9 +89,18 @@ public:
 	mat4 getProjection();
 	void drawAxis(mat4 axis = Translate(0,0,0));
 	vec2 calculateTransformation(vec4 relativePoint);
-	vec3 calculateMvpPCTransformation(vec4 worldPoint); // Debug method
+	vec3 calculateMvpPCTransformation(vec4 worldPoint,bool mode=true);
 	void resetZBuffer();
 	bool checkZBuffer();
+	vec3 getLightFactorForPoint(GLfloat x,GLfloat y,GLfloat z,vec3 normal,Face& f);
+	void addLight(Light* l){lights.push_back(l);}
+	void addLights(vector<Light*> oldlights){lights = oldlights;}
+	vector<Light*> getLights(){return lights;}
+	void setActiveCamera(Camera* cam){activeCamera = cam;}
+	void setKAbmbiant(vec3 kambiant){_kAmbiant=kambiant;}
+	void setKDiffuze(vec3 kdiffuze){_kDiffuze=kdiffuze;}
+	void setKspecular(vec3 kspecular){_kspecular=kspecular;}
+	void setShine(GLfloat shine){_shine = shine;}
 };
 
 #define delta_threshold 0.001

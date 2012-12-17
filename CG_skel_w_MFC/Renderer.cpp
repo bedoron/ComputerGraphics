@@ -6,7 +6,7 @@
 #include <math.h>
 #include "Utils.h"
 //#include "Line.h"
-
+#include "Camera.h"
 #define INDEX(width,x,y,c) ((x+y*width)*3+c)
 #define INDEXOF(width,x,y) (x+y*width)
 #define LINE(p1,p2,color) Line(*this, p1,p2, color)
@@ -18,13 +18,13 @@ void Renderer::resetZBuffer()
 		m_zbuffer[i]=-10000;
 	}
 }
-Renderer::Renderer() :m_width(MAIN_WIDTH), m_height(MAIN_HEIGHT),drawNormal(false),drawBound(false)
+Renderer::Renderer() :m_width(MAIN_WIDTH), m_height(MAIN_HEIGHT),drawNormal(false),drawBound(false),lights()
 {
 	InitOpenGLRendering();
 	CreateBuffers(MAIN_WIDTH,MAIN_HEIGHT);
 	initMvp();
 }
-Renderer::Renderer(int width, int height) :m_width(width), m_height(m_height),drawNormal(true),drawBound(true)
+Renderer::Renderer(int width, int height) :m_width(width), m_height(m_height),drawNormal(true),drawBound(true),lights()
 {
 	InitOpenGLRendering();
 	CreateBuffers(width,height);
@@ -68,29 +68,6 @@ void Renderer::SetDemoBuffer()
 	}	
 }
 
-bool Renderer::plot(Face f, int x, int y, int color) 
-{
-	bool flag = true;
-	GLfloat zcordinate = Utils::interpolateFace(f,x,y);
-	mat3 faceNormal= f.getNormalLine();
-	vec3 normal=normalize(faceNormal[1]-faceNormal[0]);
-	GLfloat light1= dot(activeLight->getDirection(),normal);
-	//color = color*light1;
-	if(x<m_width && x>0 && y>0 && y<m_height)
-	{
-		if(m_zbuffer[INDEXOF(m_width,x,y)]<zcordinate)
-		{
-			m_outBuffer[INDEX(m_width,x,y,2)]=   color			& 0x0000ff;
-			m_outBuffer[INDEX(m_width,x,y,1)]= ( color >> 8)		& 0x0000ff;
-			m_outBuffer[INDEX(m_width,x,y,0)]= ( color >> 16)	& 0x0000ff; 
-		
-			m_zbuffer[INDEXOF(m_width,x,y)]=zcordinate;
-		}
-		else
-			flag= false;
-	}
-	return flag;
-}
 
 float *Renderer::getOutBuffer() {
 	return m_outBuffer;
@@ -204,35 +181,87 @@ mat4 Renderer::getProjection()
 	return _projection;
 }
 
-bool Renderer::DrawTriangle( vec3 _v1, vec3 _v2, vec3 _v3,unsigned int color)
+bool Renderer::DrawTriangle( Face face,vec3 color)
 {
+	vec3 _v1 = face.getVecX();
+	vec3 _v2 = face.getVecY();
+	vec3 _v3 = face.getVecZ();
 	bool flag= true;
+	Face newFace =face.transformFace(*this);
 	vec3 v1 = calculateMvpPCTransformation(_v1);
 	vec3 v2 = calculateMvpPCTransformation(_v2);
 	vec3 v3 = calculateMvpPCTransformation(_v3);
-	Face tmp(v1,v2,v3);
+	vec3 tmpNormal = newFace.getNormal();			// normal for flat shading
+	GLfloat faceDirection=  dot(normalize(activeCamera->getEye()-activeCamera->getAt()),tmpNormal);
 	int maxX = (v1.x<v2.x)?(v2.x<v3.x?v3.x:v2.x):(v1.x<v3.x?v3.x:v1.x);
+	maxX = maxX < m_width ? maxX : m_width;
 	int maxY = (v1.y<v2.y)?(v2.y<v3.y?v3.y:v2.y):(v1.y<v3.y?v3.y:v1.y);
+	maxY = maxY < m_height ? maxY : m_height;
 	int minX = (v1.x>v2.x)?(v2.x>v3.x?v3.x:v2.x):(v1.x>v3.x?v3.x:v1.x);
+	minX = minX > 0 ? minX : 0;
 	int minY = (v1.y>v2.y)?(v2.y>v3.y?v3.y:v2.y):(v1.y>v3.y?v3.y:v1.y);
+	minY = minY > 0 ? minY : 0;
+	if(faceDirection>0)	
 	for (int i = minY; i <= maxY; i++)
 	{
 		for (int j = minX; j <= maxX; j++)
 		{
-			vec3 bCordinated = Utils::getInstance().getBarycentricCoordinates(v1,v2,v3,vec3(j,i,0));
+			Face frameFace(v1,v2,v3);
+			GLfloat z = Utils::interpolateFace(frameFace,j,i);
+			vec3 bCordinated = Utils::getInstance().getBarycentricCoordinates(frameFace,j,i,z);
 			if(bCordinated.x >= 0 && bCordinated.x <= 1 && bCordinated.y >= 0 && bCordinated.y <= 1
 				&& bCordinated.z >= 0 && bCordinated.z <= 1)
 			{
-				if(!plot(tmp,j,i,color))
-					flag = false;
+				vec3 interpolatedNormal  = bCordinated.y * face.getVnX() + bCordinated.z * face.getVnY() + 
+					bCordinated.x * face.getVnZ();
+				plot(face,frameFace,j,i,color,normalize(interpolatedNormal) );
+					
 			}
 		}
 	}
 	return flag;
 }
 
-vec3 Renderer::calculateMvpPCTransformation(vec4 worldPoint) {
-	vec4 transformed = Mvp * _projection * _cTransform *_oTransform* worldPoint;
+bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 normal) 
+{
+	bool flag = true;
+	vec3 baryCordinate = Utils::getInstance().getBarycentricCoordinates(frameFace,x,y,Utils::interpolateFace(frameFace,x,y));
+	GLfloat zcordinate = Utils::interpolateFace(frameFace,x,y);
+	vec3 worldCordinated = worldFace.getVecX()* baryCordinate.y+worldFace.getVecY()* baryCordinate.z +worldFace.getVecZ()* baryCordinate.x;
+	if(x<m_width && x>0 && y>0 && y<m_height)
+	{
+		if(m_zbuffer[INDEXOF(m_width,x,y)]<zcordinate)
+		{
+			vec3 light = getLightFactorForPoint(worldCordinated.x,worldCordinated.y,worldCordinated.z, normal,worldFace);
+			color /=255.0;
+			m_outBuffer[INDEX(m_width,x,y,2)]= color.x * light.x;
+			m_outBuffer[INDEX(m_width,x,y,1)]= color.y * light.y;
+			m_outBuffer[INDEX(m_width,x,y,0)]= color.z * light.z;
+
+			m_zbuffer[INDEXOF(m_width,x,y)]=zcordinate;
+		}
+		else
+			flag= false;
+	}
+	return flag;
+}
+vec3 Renderer::getLightFactorForPoint(GLfloat x,GLfloat y,GLfloat z,vec3 normal,Face& f)
+{
+	vec3 point(x,y,z);
+	vec3 light = (0.0,0.0,0.0);
+	for (vector<Light*>::iterator it = lights.begin();it!= lights.end();++it)
+	{
+		light += (*it)->getLight(normal,_kAmbiant,_kDiffuze,_kspecular,vec3(x,y,z), _cTransform,f,activeCamera->getEye()-activeCamera->getAt(),_shine);
+	}
+	return light;
+}
+vec3 Renderer::calculateMvpPCTransformation(vec4 worldPoint,bool mode) 
+{
+	vec4 transformed;
+	 if(mode)
+		 transformed = Mvp * _projection * _cTransform *_oTransform* worldPoint;
+	 else
+		 transformed =  _projection * _cTransform *_oTransform* worldPoint;
 	if(transformed.w)
 		return vec3(transformed.x/transformed.w, transformed.y/transformed.w,transformed.z/transformed.w);
 	return vec3(transformed.x, transformed.y,transformed.z);
@@ -300,6 +329,7 @@ void Renderer::ClearColorBuffer()
 		}
 	//SwapBuffers();
 }
+
 Renderer::Line::Line(vec2 p1, vec2 p2, int color): _p1(p1), _p2(p2), horizontal(false), vertical(false), m_outBuffer(0), m_color(color) {
 	//calculateSlope(_p1, _p2, true);
 	calculateSlope();

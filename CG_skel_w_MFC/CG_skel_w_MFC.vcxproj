@@ -101,6 +101,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AddCamera.cpp" />
+    <ClCompile Include="AddLight.cpp" />
     <ClCompile Include="AxesModel.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CG_skel_w_MFC.cpp" />
@@ -127,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddCamera.h" />
+    <ClInclude Include="AddLight.h" />
     <ClInclude Include="AvlTree.h" />
     <ClInclude Include="AxesModel.h" />
     <ClInclude Include="Camera.h" />

@@ -16,23 +16,30 @@
 #define IDD_DIALOG2                     110
 #define IDD_PLANE_CONTROL               111
 #define IDD_MOVEINTERVAL                112
+#define IDD_ADDLIGHT                    113
 #define IDMODELNAME                     1000
 #define XCORD                           1001
 #define IDMODELNAME2                    1002
+#define diffuzeX                        1002
 #define YCORD                           1003
 #define ZCORD                           1004
 #define IDMODELNAME3                    1005
+#define diffuzeY                        1005
 #define XROT                            1006
 #define YROT                            1007
 #define ZROT                            1008
 #define FRAME_WORLD                     1009
+#define diffuzeZ                        1009
 #define XSCALE                          1010
 #define IDMODELNAME4                    1011
 #define YSCALE                          1011
 #define IDMODELNAME5                    1012
 #define ZSCALE                          1012
+#define ambiantX                        1013
 #define IDMODELNAME6                    1014
+#define ambiantY                        1014
 #define IDC_BUTTON1                     1015
+#define ambiantZ                        1015
 #define IDMODELNAME7                    1016
 #define IDMODELNAME8                    1017
 #define FRAME_MODEL                     1022
@@ -68,8 +75,24 @@
 #define IDC_up_x                        1051
 #define IDC_up_y                        1052
 #define IDC_up_z                        1053
-#define IDC_EDIT1                       1053
-#define IDC_color                       1053
+#define IDC_color_Blue                  1053
+#define IDC_color_green                 1054
+#define IDC_color_red                   1056
+#define IDC_RD_AM                       1056
+#define IDC_RD_PRL                      1057
+#define IDC_RD_pnt                      1058
+#define IDC_DirectionX                  1060
+#define IDC_DirectionY                  1061
+#define IDC_DirectionZ                  1062
+#define IDC_LocationX                   1063
+#define IDC_LocationY                   1064
+#define IDC_LocationZ                   1065
+#define IDC_IntencityB                  1066
+#define IDC_IntencityG                  1067
+#define IDC_IntencityR                  1068
+#define IDC_angle                       1069
+#define IDC_EDIT1                       1071
+#define IDC_shine                       1071
 
 // Next default values for new objects
 // 
@@ -77,7 +100,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112
 #define _APS_NEXT_COMMAND_VALUE         40002
-#define _APS_NEXT_CONTROL_VALUE         1054
-#define _APS_NEXT_SYMED_VALUE           113
+#define _APS_NEXT_CONTROL_VALUE         1072
+#define _APS_NEXT_SYMED_VALUE           114
 #endif
 #endif

@@ -28,7 +28,17 @@ public:
 	CEdit yrot;
 	CEdit zrot;
 	CEdit scale;
-	CEdit _color;
+	CEdit _colorX;
+	CEdit _colorY;
+	CEdit _colorZ;
+	CEdit _diffX;
+	CEdit _diffY;
+	CEdit _diffZ;
+	CEdit _ambX;
+	CEdit _ambY;
+	CEdit _ambZ;
+	CEdit _shine;
+
 	afx_msg void OnDestroy();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	Model* m_model;
@@ -58,4 +68,5 @@ public:
 	CButton draw_vnormals;
 
 	void refreshModelData();
+	void initColors();
 };

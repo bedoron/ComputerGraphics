@@ -44,12 +44,22 @@ void Scene::initDefaultCamera() {
 }
 void Scene::initDefaultLight()
 {
-	m_activeLight = new Light();
-	m_activeLight->setLocation(vec3(10,10,0));
-	m_activeLight->setDirection(vec3(-1,-1,0));
-	m_renderer->setLight(m_activeLight);
+	/*m_activeLight = new Light();
+	m_activeLight->setLocation(vec3(10,10,10));
+	m_activeLight->setDirection(vec3(1,1,0));
+	m_activeLight->setLightType(L_PARALEL);
+	m_activeLight->setIntencity(vec3(5,44,122));
+	lights.push_back(m_activeLight);
+	Light* ambiant = new Light();
+	ambiant->setIntencity(vec3(50,50,50));
+	ambiant->setLightType(L_AMBIANT);
+	lights.push_back(ambiant);
+	m_renderer->addLight(ambiant);
+	m_renderer->addLight(m_activeLight);
+	activeLight=m_activeLight;*/
+	
 }
-Scene::Scene():models(),cameras(), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0)
+Scene::Scene():models(),cameras(), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0),lights()
 {
 //	axes= new AxesModel(); 
 //	activeEntity = WORLD_ACTIVE;
@@ -58,7 +68,7 @@ Scene::Scene():models(),cameras(), axes(new AxesModel()), activeEntity(WORLD_ACT
 	initDefaultLight();
 }
 Scene::Scene(Renderer *renderer) : m_renderer(renderer),names(),m_activeModel(-1),size(0),models(),cameras(),
-	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0)
+	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0),lights()
 {
 	moveInterval=1;
 	initDefaultCamera();
@@ -66,7 +76,7 @@ Scene::Scene(Renderer *renderer) : m_renderer(renderer),names(),m_activeModel(-1
 };
 
 Scene::Scene(Renderer *renderer, CModelData& win) : m_renderer(renderer),names(),m_activeModel(-1),size(0),models(),cameras(),
-	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(&win)
+	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(&win),lights()
 {
 	model_win->setScene(this);
 	initDefaultCamera();
@@ -139,11 +149,12 @@ void Scene::draw(mat4 translation)
 	m_renderer->SetProjection(m_activeCamera->getProjection());
 	
 	m_renderer->ClearColorBuffer();
+	m_renderer->drawAxis();
 	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  //2
 	{
 		(*it)->draw(*m_renderer);
 	}
-	m_renderer->drawAxis();
+	
 	/*m_renderer->SetObjectMatrices(axes->getObjectTransform());
 	axes->draw(*m_renderer);*/
 	if (_renderCamera)
@@ -216,7 +227,7 @@ bool Scene::setActiveCamera(int num)
 	std::cerr << "camera number "<< num << " was selected\n";
 	m_renderer->SetCameraTransform(cameras[activeCamera]->getInverseTransformation());
 	m_renderer->SetProjection(cameras[activeCamera]->getProjection());
-	
+	m_renderer->setActiveCamera(m_activeCamera);
 	activateCamera();
 	draw(mat4(1));
 	return true;
@@ -310,9 +321,11 @@ void Scene::setRenderer(int width , int height)
 	GLfloat dxPercent = (GLfloat)(abs(((GLfloat)dx)/((GLfloat)oldWidth)));
 	GLfloat dyPercent = (GLfloat)(abs(((GLfloat)dy)/((GLfloat)oldHeight)));
 	GLfloat newAspect = (GLfloat)((GLfloat)width)/((GLfloat)height);
+	
 	delete(m_renderer);
 	m_renderer = new Renderer(width,height);
-	m_renderer->setLight(m_activeLight);
+	m_renderer->addLights(lights);
+	m_renderer->setActiveCamera(m_activeCamera);
 	if(dx>0) // X got bigger
 	{
 		GLfloat deltaViewX = (_right-_left)*dxPercent;
@@ -399,4 +412,24 @@ void Scene::addCube()
 	models.push_back(cube);
 	names.push_back("Cube");
 	setActiveModel(models.size()-1);
+}
+void Scene::addLight(Light* newLight)
+{
+	lights.push_back(newLight);
+	m_renderer->addLights(lights);
+	activeLight = newLight;
+	draw();
+}
+void Scene::changeLightDirection(mat4 rotation)
+{
+	vec4 newDirection = rotation*activeLight->getDirection();
+	activeLight->setDirection(vec3(newDirection.x,newDirection.y,newDirection.z));
+	cerr << " light direction is " << activeLight->getDirection() << "\n";
+	draw();
+}
+void Scene::changeLightLocation(mat4 rotation)
+{
+	vec4 newLocation = rotation*activeLight->getLocation();
+	activeLight->setLocation(vec3(newLocation.x,newLocation.y,newLocation.z));
+	cerr << " light location is " << activeLight->getLocation() << "\n";
 }

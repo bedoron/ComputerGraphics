@@ -16,8 +16,11 @@ protected :
 	mat4 _world_transform;
 	mat3 _normal_transform;
 	OBJItem objItem;
-	unsigned int _color;
-
+	vec3 _color;
+	vec3 _kDiffuze;
+	vec3 _kAmbiant;
+	vec3 _kspecular;
+	GLfloat shine;
 public:
 	
 	MeshModel(OBJItem item);
@@ -37,5 +40,9 @@ public:
 	void setNormal(bool normal) { objItem.setNormal(normal);}
 	bool getVertexNormal() {return objItem.getVertexNormal();}
 	bool getDrawBox() { return objItem.getDrawBox(); }
-	void setColor(unsigned int color){_color = color;}
+	void setColor(vec3 color){_color = color;}
+	void setKAbmbiant(vec3 kambiant){_kAmbiant=kambiant;}
+	void setKDiffuze(vec3 kdiffuze){_kDiffuze=kdiffuze;}
+	void setKspecular(vec3 kspecular){_kspecular=kspecular;}
+	void setShininess(GLfloat s){shine = s;}
 };
