@@ -212,9 +212,17 @@ bool Renderer::DrawTriangle( Face face,vec3 color)
 			if(bCordinated.x >= 0 && bCordinated.x <= 1 && bCordinated.y >= 0 && bCordinated.y <= 1
 				&& bCordinated.z >= 0 && bCordinated.z <= 1)
 			{
-				vec3 interpolatedNormal  = bCordinated.y * face.getVnX() + bCordinated.z * face.getVnY() + 
-					bCordinated.x * face.getVnZ();
-				plot(face,frameFace,j,i,color,normalize(interpolatedNormal) );
+				mat4 tmpCamera = _cTransform;
+				mat4 tmpCom = _composition;
+				mat4 tmp_projection = _projection;
+				SetCameraTransform(mat4(1));
+				SetProjection(mat4(1));
+				Face transformed = face.transformFace(*this);
+				SetCameraTransform(tmpCamera);
+				SetProjection(tmp_projection);
+				vec3 interpolatedNormal  = bCordinated.y * transformed.getVnX() + bCordinated.z * transformed.getVnY() + 
+					bCordinated.x * transformed.getVnZ();
+				plot(transformed,frameFace,j,i,color,normalize(interpolatedNormal) );
 					
 			}
 		}
