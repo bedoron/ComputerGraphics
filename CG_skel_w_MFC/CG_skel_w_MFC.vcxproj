@@ -101,6 +101,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AddCamera.cpp" />
+    <ClCompile Include="AddFog.cpp" />
     <ClCompile Include="AddLight.cpp" />
     <ClCompile Include="AxesModel.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -128,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddCamera.h" />
+    <ClInclude Include="AddFog.h" />
     <ClInclude Include="AddLight.h" />
     <ClInclude Include="AvlTree.h" />
     <ClInclude Include="AxesModel.h" />
@@ -136,6 +138,7 @@
     <ClInclude Include="CompositeElement.h" />
     <ClInclude Include="CubeModel.h" />
     <ClInclude Include="Face.h" />
+    <ClInclude Include="Fog.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="InitShader.h" />
     <ClInclude Include="InputDialog.h" />

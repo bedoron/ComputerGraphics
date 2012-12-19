@@ -219,6 +219,24 @@ BEGIN
     LTEXT           "Angle",IDC_STATIC,106,119,19,8
 END
 
+IDD_ADDFOG DIALOGEX 0, 0, 145, 177
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,23,156,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,77,156,50,14
+    EDITTEXT        IDC_Fog_Blue,69,31,40,14,ES_AUTOHSCROLL
+    LTEXT           "Blue",IDC_STATIC,35,34,14,8
+    GROUPBOX        "Fog Color",IDC_STATIC,23,19,94,89
+    EDITTEXT        IDC_Fog_Green,69,54,40,14,ES_AUTOHSCROLL
+    LTEXT           "Green",IDC_STATIC,35,56,20,8
+    EDITTEXT        IDC_Fog_Red,69,75,40,14,ES_AUTOHSCROLL
+    LTEXT           "Red",IDC_STATIC,35,78,14,8
+    EDITTEXT        IDC_Fog_density,69,119,40,14,ES_AUTOHSCROLL
+    LTEXT           "Fog density",IDC_STATIC,26,121,38,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -274,6 +292,14 @@ BEGIN
         RIGHTMARGIN, 290
         TOPMARGIN, 7
         BOTTOMMARGIN, 189
+    END
+
+    IDD_ADDFOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 138
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 170
     END
 END
 #endif    // APSTUDIO_INVOKED

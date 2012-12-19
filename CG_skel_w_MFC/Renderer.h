@@ -5,6 +5,7 @@
 #include "GL/glew.h"
 #include "Face.h"
 #include "Light.h"
+#include "Fog.h"
 class Camera;
 
 #define BLACK		0x000000
@@ -24,7 +25,7 @@ class Renderer
 	float *m_outBuffer; // 3*width*height
 	float *m_zbuffer; // width*height
 	int m_width, m_height;
-
+	Fog* fog;
 	mat4 _projection;
 	mat4 _cTransform;
 	mat4 _oTransform;
@@ -81,7 +82,7 @@ public:
 	void drawLineByVectors(vec3 from ,vec3 to,bool normal = false);
 	void drawLineByVectors(vec3 from ,vec3 to,unsigned int color = 0xffffff);
 	//TODO draw triangle
-	bool plot(Face worldFace,Face frameFace,int x, int y, vec3 color,vec3 normal); /* plot a single point */
+	bool plot(Face worldFace,Face frameFace,int x, int y, vec3 color,vec3 normal,GLfloat g=0.5); /* plot a single point */
 	int getWidth() const; /* Return screen's width */
 	int getHeight() const; /* Returns screen's  height */
 	void addLine(Line& newLine);
@@ -101,6 +102,12 @@ public:
 	void setKDiffuze(vec3 kdiffuze){_kDiffuze=kdiffuze;}
 	void setKspecular(vec3 kspecular){_kspecular=kspecular;}
 	void setShine(GLfloat shine){_shine = shine;}
+	void setFog(vec3 fogColor,GLfloat density);
+	void clearFog()
+	{
+		delete fog;
+		fog = NULL;
+	}
 };
 
 #define delta_threshold 0.001

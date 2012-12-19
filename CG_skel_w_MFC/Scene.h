@@ -105,4 +105,5 @@ public:
 	void addLight(Light* newLight);
 	void changeLightDirection(mat4 rotation);
 	void changeLightLocation(mat4 rotation);
+	void setFog(vec3 fogColor,GLfloat density);
 };

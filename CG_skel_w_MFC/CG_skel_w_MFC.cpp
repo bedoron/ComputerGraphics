@@ -13,6 +13,7 @@
 #include "Vertex.h"
 #include "AvlTree.h"
 #include "AddLight.h"
+#include "AddFog.h"
 using std::exception;
 using std::cerr;
 
@@ -48,7 +49,7 @@ OBJECTS_OVERFLOW_BUFFER = 2500, /* if you got here you suck */
 FILE_OPEN, MAIN_DEMO , MAIN_ABOUT , Main_BOUNDS 
 , Main_Clear , Main_selectM , Main_Move_Interval, MAIN_DEBUG, OBJECT_REMOVE_ACTIVE, 
 CAMERA_ADD, CAMERA_REMOVE_ACTIVE,CAMERA_SELECT_MODEL_AT, SELECT_OPERATION_FRAME,Main_Frustum,
-Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight
+Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog
 };
 
 
@@ -64,6 +65,7 @@ PresModel dlg_pres;
 AddCamera dlg_addcamera;
 MoveInterval dlg_interval;
 AddLight dlg_light;
+AddFog dlg_fog;
 int last_x,last_y;
 int pressedX,pressedY;
 bool lb_down,rb_down,mb_down;
@@ -365,6 +367,11 @@ void mainMenu(int id)
 
 			break;
 		}
+	case addFog:
+		{
+			dlg_fog.ShowWindow(SW_SHOW);
+			break;
+		}
 	}
 	initMenu();
 }
@@ -523,6 +530,7 @@ int menuDraw(bool destroy) {
 	glutAddMenuEntry("Look at active model (f)",CAMERA_SELECT_MODEL_AT);
 	glutAddMenuEntry("Add Cube",AddCube);
 	glutAddMenuEntry("Add Light",addLight);
+	glutAddMenuEntry("Add Fog",addFog);
 	glutAddMenuEntry("About",MAIN_ABOUT);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	
 
@@ -573,6 +581,8 @@ int my_main( int argc, char **argv )
 	dlg_interval.setScene(scene);
 	dlg_light.Create(AddLight::IDD);
 	dlg_light.setScene(scene);
+	dlg_fog.Create(AddFog::IDD);
+	dlg_fog.setScene(scene);
 	//----------------------------------------------------------------------------
 	// Initialize Callbacks
 

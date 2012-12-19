@@ -23,12 +23,14 @@ Renderer::Renderer() :m_width(MAIN_WIDTH), m_height(MAIN_HEIGHT),drawNormal(fals
 	InitOpenGLRendering();
 	CreateBuffers(MAIN_WIDTH,MAIN_HEIGHT);
 	initMvp();
+	fog = NULL;
 }
 Renderer::Renderer(int width, int height) :m_width(width), m_height(m_height),drawNormal(true),drawBound(true),lights()
 {
 	InitOpenGLRendering();
 	CreateBuffers(width,height);
 	initMvp();
+	fog = NULL;
 }
 
 Renderer::~Renderer(void) { }
@@ -230,8 +232,9 @@ bool Renderer::DrawTriangle( Face face,vec3 color)
 	return flag;
 }
 
-bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 normal) 
+bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 normal,GLfloat g) 
 {
+	
 	bool flag = true;
 	vec3 baryCordinate = Utils::getInstance().getBarycentricCoordinates(frameFace,x,y,Utils::interpolateFace(frameFace,x,y));
 	GLfloat zcordinate = Utils::interpolateFace(frameFace,x,y);
@@ -240,11 +243,22 @@ bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 
 	{
 		if(m_zbuffer[INDEXOF(m_width,x,y)]<zcordinate)
 		{
+			color/=255;
 			vec3 light = getLightFactorForPoint(worldCordinated.x,worldCordinated.y,worldCordinated.z, normal,worldFace);
-			color /=255.0;
-			m_outBuffer[INDEX(m_width,x,y,2)]= color.x * light.x;
-			m_outBuffer[INDEX(m_width,x,y,1)]= color.y * light.y;
-			m_outBuffer[INDEX(m_width,x,y,0)]= color.z * light.z;
+			vec3 cEye = (color * light);
+			if(fog)
+			{
+				GLfloat g = fog->fogDensity;
+				vec3 fogColor = fog->fogColor/255;
+				GLfloat z = length( activeCamera->getEye()-worldCordinated);
+				GLfloat d = -log(g)/log(2);
+				GLfloat f = pow(2,-d*z) ;
+				cEye = f*(cEye) + (1-f)*(fogColor);
+			}
+			//cEye /=255;
+			m_outBuffer[INDEX(m_width,x,y,2)]= cEye.x;/*color.x * light.x;*/
+			m_outBuffer[INDEX(m_width,x,y,1)]= cEye.y;/*color.y * light.y;*/
+			m_outBuffer[INDEX(m_width,x,y,0)]= cEye.z;/*color.z * light.z;*/
 
 			m_zbuffer[INDEXOF(m_width,x,y)]=zcordinate;
 		}
@@ -337,7 +351,10 @@ void Renderer::ClearColorBuffer()
 		}
 	//SwapBuffers();
 }
-
+void Renderer::setFog(vec3 fogColor,GLfloat density)
+{
+	fog= new Fog(fogColor,density);
+}
 Renderer::Line::Line(vec2 p1, vec2 p2, int color): _p1(p1), _p2(p2), horizontal(false), vertical(false), m_outBuffer(0), m_color(color) {
 	//calculateSlope(_p1, _p2, true);
 	calculateSlope();

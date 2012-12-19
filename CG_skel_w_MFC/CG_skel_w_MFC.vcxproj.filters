@@ -90,6 +90,9 @@
     <ClCompile Include="AddLight.cpp">
       <Filter>MFC</Filter>
     </ClCompile>
+    <ClCompile Include="AddFog.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CG_skel_w_MFC.h">
@@ -180,6 +183,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AddLight.h">
+      <Filter>MFC</Filter>
+    </ClInclude>
+    <ClInclude Include="Fog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AddFog.h">
       <Filter>MFC</Filter>
     </ClInclude>
   </ItemGroup>

@@ -433,3 +433,10 @@ void Scene::changeLightLocation(mat4 rotation)
 	activeLight->setLocation(vec3(newLocation.x,newLocation.y,newLocation.z));
 	cerr << " light location is " << activeLight->getLocation() << "\n";
 }
+void Scene::setFog(vec3 fogColor,GLfloat density)
+{
+	if(density)
+		m_renderer->setFog(fogColor,density);
+	else
+		m_renderer->clearFog();
+}
