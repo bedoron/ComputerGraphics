@@ -42,6 +42,7 @@ OBJItem Utils::parseOBJ(string filename) {
 	string fileLine;
 	vec3 zero(0,0,0);
 	objitem.addVertex(zero);
+	objitem.addNormal(zero);
 	while(getline(objfile, fileLine)) {
 		if(fileLine==""||fileLine[0]=='#')
 			continue;

@@ -267,6 +267,7 @@ void Scene::setFrustum(float left,float right,float top,float down,float zNear,f
 	_znear = zNear;
 	_zfar= zFar;
 	currentView = frusum;
+	m_renderer->setZdistance(abs(_znear-_zfar));
 }
 void Scene::setOrtho(float left,float right,float top,float down,float zNear,float zFar)
 {
@@ -280,6 +281,7 @@ void Scene::setOrtho(float left,float right,float top,float down,float zNear,flo
 	_bottom = down;
 	_znear = zNear;
 	_zfar= zFar;
+	m_renderer->setZdistance(abs(_znear-_zfar));
 	draw();
 }
 void Scene::setPrespective(float fovy,float aspect,float znear, float zfar)
@@ -292,6 +294,7 @@ void Scene::setPrespective(float fovy,float aspect,float znear, float zfar)
 	_aspect = aspect;
 	_znear = znear;
 	_zfar= zfar;
+	m_renderer->setZdistance(abs(_znear-_zfar));
 	draw();
 }
 

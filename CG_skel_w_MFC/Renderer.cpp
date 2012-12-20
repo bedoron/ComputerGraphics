@@ -203,6 +203,9 @@ bool Renderer::DrawTriangle( Face face,vec3 color)
 	minX = minX > 0 ? minX : 0;
 	int minY = (v1.y>v2.y)?(v2.y>v3.y?v3.y:v2.y):(v1.y>v3.y?v3.y:v1.y);
 	minY = minY > 0 ? minY : 0;
+	if( minX > m_width || minY > m_height || maxX < 0 || maxY <0)
+		return true;
+
 	if(faceDirection>0)	
 	for (int i = minY; i <= maxY; i++)
 	{
@@ -243,6 +246,8 @@ bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 
 	{
 		if(m_zbuffer[INDEXOF(m_width,x,y)]<zcordinate)
 		{
+			
+
 			color/=255;
 			vec3 light = getLightFactorForPoint(worldCordinated.x,worldCordinated.y,worldCordinated.z, normal,worldFace);
 			vec3 cEye = (color * light);
@@ -250,7 +255,7 @@ bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 
 			{
 				GLfloat g = fog->fogDensity;
 				vec3 fogColor = fog->fogColor/255;
-				GLfloat z = length( activeCamera->getEye()-worldCordinated);
+				GLfloat z = length( activeCamera->getEye()-worldCordinated)/Zdistance;
 				GLfloat d = -log(g)/log(2);
 				GLfloat f = pow(2,-d*z) ;
 				cEye = f*(cEye) + (1-f)*(fogColor);

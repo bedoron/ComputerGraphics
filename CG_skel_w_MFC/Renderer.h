@@ -43,6 +43,8 @@ class Renderer
 	vec3 _kAmbiant;
 	vec3 _kspecular;
 	GLfloat _shine;
+	GLfloat _opacity;
+	GLfloat Zdistance;
 	//////////////////////////////
 	// openGL stuff. Don't touch.
 
@@ -108,6 +110,8 @@ public:
 		delete fog;
 		fog = NULL;
 	}
+	void setOpacity(GLfloat val){_opacity=val;}
+	void setZdistance(GLfloat distance){Zdistance = distance;}
 };
 
 #define delta_threshold 0.001
