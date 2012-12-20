@@ -147,6 +147,7 @@
     <ClInclude Include="MoveInterval.h" />
     <ClInclude Include="OBJItem.h" />
     <ClInclude Include="PresModel.h" />
+    <ClInclude Include="Profiler.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />

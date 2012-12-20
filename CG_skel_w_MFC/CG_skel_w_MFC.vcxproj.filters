@@ -182,6 +182,9 @@
     <ClInclude Include="AddLight.h">
       <Filter>MFC</Filter>
     </ClInclude>
+    <ClInclude Include="Profiler.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CG_skel_w_MFC.rc">
