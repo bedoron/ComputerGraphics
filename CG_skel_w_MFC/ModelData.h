@@ -42,7 +42,8 @@ public:
 	CEdit _spcZ;
 	CEdit _shine;
 	CButton _calcNrml;
-
+	CEdit _colors;
+	CButton _cartoonize;
 	afx_msg void OnDestroy();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	Model* m_model;

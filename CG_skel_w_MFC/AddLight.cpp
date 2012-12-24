@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(AddLight, CDialogEx)
 	ON_BN_CLICKED(IDC_RD_PRL, &AddLight::OnBnClickedRdPrl)
 	ON_BN_CLICKED(IDC_RD_pnt, &AddLight::OnBnClickedRdpnt)
 	ON_BN_CLICKED(IDOK, &AddLight::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_BUTTON1, &AddLight::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -160,4 +161,15 @@ void AddLight::OnBnClickedOk()
 		break;
 	}
 	}
+}
+
+
+void AddLight::OnBnClickedButton1()
+{
+	DirectionX.SetWindowTextA(_T("1"));
+	DirectionY.SetWindowTextA(_T("1"));
+	DirectionZ.SetWindowTextA(_T("1"));
+	IntencityX.SetWindowTextA(_T("255"));
+	IntencityY.SetWindowTextA(_T("255"));
+	IntencityZ.SetWindowTextA(_T("255"));
 }

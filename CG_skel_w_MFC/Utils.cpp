@@ -1,9 +1,10 @@
 #include "stdafx.h";
 #include "Utils.h"
-
+#include "Material.h"
+#include <vector>
 #include "VNormal.h"
 #include "OBJItem.h"
-
+#include <stdlib.h>
 #include<iostream>
 #include<fstream>
 #include <sstream>
@@ -29,13 +30,21 @@ Utils &Utils::getInstance() {
 		instance = new Utils;
 	return *instance;
 }
-
-OBJItem Utils::parseOBJ(string filename) {
+/*vector<Material*>*/void getMaterails(string filename,string mtl)
+{
+	char drive[5];
+	char filename1[20];
+	char path[30];
+	char ext[5];
+	_splitpath(filename.c_str(),drive,path,filename1,ext);
+	string mtlFile = string(drive) + string(path) + mtl;
+}
+OBJItem Utils::parseOBJ(string filename,string fileID) {
 	OBJItem objitem;
 	ifstream objfile;
 
 	objfile.open(filename);
-
+	
 	if(!objfile.is_open())
 		throw ObjParserFileNotFound();
 
@@ -49,38 +58,58 @@ OBJItem Utils::parseOBJ(string filename) {
 		istringstream line(fileLine);
 		string action;
 		line >> action;
-		if(action == "v") {// vertex
+		if(action == "mtllib")
+		{
+			string mtlfile,command;
+
+			istringstream mtlline(fileLine);
+			mtlline >>command>> mtlfile;
+			getMaterails(filename,mtlfile);
+		}
+		else if(action == "v") {// vertex
 			float x,y,z = 0;
 			line >> x >> y >> z;
 			vec3 newPoint(x,y,z);
 			objitem.addVertex(newPoint);
 		}
 		else if(action == "f") {
-			int vn1 = 0 , vn2 = 0 , vn3 = 0;
-			int vt1 = 0 , vt2 = 0 , vt3 = 0;
-			int v1 = 0 , v2 = 0 , v3 = 0;
+			int vn1 = 0 , vn2 = 0 , vn3 = 0 , vn4 = 0;
+			int vt1 = 0 , vt2 = 0 , vt3 = 0 , vt4 = 0;
+			int v1 = 0 , v2 = 0 , v3 = 0 , v4 = 0;
 			int size=objitem.getVertexSize();
 			if(std::string::npos != fileLine.find("/"))
 			{
 				if(std::string::npos != fileLine.find("//"))
-					sscanf(fileLine.c_str(),"f %d//%d %d//%d %d//%d",&v1,&vn1,&v2,&vn2,&v3,&vn3);
+					sscanf(fileLine.c_str(),"f %d//%d %d//%d %d//%d %d//%d",&v1,&vn1,&v2,&vn2,&v3,&vn3,&v4,&vn4);
 				else
-					sscanf(fileLine.c_str(),"f %d/%d/%d %d/%d/%d %d/%d/%d",&v1,&vt1,&vn1,&v2,&vt2,&vn2,&v3,&vt3,&vn3);
+					sscanf(fileLine.c_str(),"f %d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d",&v1,&vt1,&vn1,&v2,&vt2,&vn2,&v3,&vt3,&vn3,&v4,&vt4,&vn4);
 			}
 			else
-				sscanf(fileLine.c_str(),"f %d %d %d",&v1,&v2,&v3);
+				sscanf(fileLine.c_str(),"f %d %d %d %d",&v1,&v2,&v3,&v4);
 			try
 			{
 				if(vn1==0 &&vn2==0 && vn3==0)
 				{
 					Face newFace(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v2),objitem.getVertexByNumber(v3),vec3(v1,v2,v3));
 					objitem.addFace(newFace);
+					if(v4 !=0 || vn4 != 0 || vt4 !=0)
+					{
+						Face newFace2(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v3),objitem.getVertexByNumber(v4),vec3(v1,v3,v4));
+						objitem.addFace(newFace2);
+					}
+
 				}
 				else
 				{
 					Face newFace(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v2),objitem.getVertexByNumber(v3),vec3(v1,v2,v3)
 						,objitem.getNormalByNumber(vn1),objitem.getNormalByNumber(vn2),objitem.getNormalByNumber(vn3));
 					objitem.addFace(newFace);
+					if(v4 !=0 || vn4 != 0 || vt4 !=0)
+					{
+						Face newFace2(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v3),objitem.getVertexByNumber(v4),vec3(v1,v3,v4)
+						,objitem.getNormalByNumber(vn1),objitem.getNormalByNumber(vn3),objitem.getNormalByNumber(vn4));
+						objitem.addFace(newFace2);
+					}
 				}
 			}
 			catch(exception& e)

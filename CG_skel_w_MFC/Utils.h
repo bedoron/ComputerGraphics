@@ -23,7 +23,7 @@ class Utils
 public:
 	static Utils &getInstance();
 	~Utils();
-	OBJItem parseOBJ(string filename) throw(ObjParserException, ObjParserFileNotFound);
+	OBJItem parseOBJ(string filename,string fileID) throw(ObjParserException, ObjParserFileNotFound);
 	static GLfloat interpolateFace(Face face,GLfloat x, GLfloat y);
 	vec3 getBarycentricCoordinates(Face face,GLfloat x, GLfloat y, GLfloat z);
 

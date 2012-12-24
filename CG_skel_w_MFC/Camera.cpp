@@ -5,13 +5,13 @@ using std::stringstream;
 
 Camera::Camera(const vec3 &position): m_position(position)
 {
-	arrow = Utils::getInstance().parseOBJ("arrow.obj");
+	/*arrow = Utils::getInstance().parseOBJ("arrow.obj");*/
 	
 }
 
 Camera::Camera(): m_position(vec3(0,0,0)) 
 {
-	arrow = Utils::getInstance().parseOBJ("arrow.obj");
+	//arrow = Utils::getInstance().parseOBJ("arrow.obj");
 }
 
 Camera::~Camera(void) {

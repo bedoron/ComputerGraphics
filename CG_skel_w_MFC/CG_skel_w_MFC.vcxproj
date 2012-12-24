@@ -113,6 +113,7 @@
     <ClCompile Include="InputDialog.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Line.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="MeshModel.cpp" />
     <ClCompile Include="ModelData.cpp" />
     <ClCompile Include="MoveInterval.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="mat.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="MeshModel.h" />
     <ClInclude Include="ModelData.h" />
     <ClInclude Include="MoveInterval.h" />

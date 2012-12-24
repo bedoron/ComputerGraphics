@@ -41,4 +41,5 @@ public:
 	afx_msg void OnBnClickedRdpnt();
 	afx_msg void OnBnClickedOk();
 	void setScene(Scene* scene){_scene=scene;}
+	afx_msg void OnBnClickedButton1();
 };

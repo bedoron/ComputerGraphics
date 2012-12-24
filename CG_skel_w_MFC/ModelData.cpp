@@ -54,7 +54,9 @@ void CModelData::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, SpecularY, _spcY);
 	DDX_Control(pDX, SpecularZ, _spcZ);
 	DDX_Control(pDX, IDC_shine, _shine);
+	DDX_Control(pDX, IDC_colors, _colors);
 	DDX_Control(pDX, IDC_clc_nrml, _calcNrml);
+	DDX_Control(pDX, IDC_Cartoonize, _cartoonize);
 }
 
 
@@ -201,6 +203,9 @@ void CModelData::OnBnClickedOk()
 	_shine.GetWindowTextA(colorBufferX,5);
 	static_cast<MeshModel*>(m_model)->setShininess(atof(colorBufferX));
 	static_cast<MeshModel*>(m_model)->setVNormal(_calcNrml.GetCheck()==BST_CHECKED);
+	static_cast<MeshModel*>(m_model)->setCartoonize(_cartoonize.GetCheck()==BST_CHECKED);
+	_colors.GetWindowTextA(colorBufferX,5);
+	static_cast<MeshModel*>(m_model)->setColor(atoi(colorBufferX));
 	// Deal with rotation
 	bool dontTranslate;
 	rotateModel(readAndClearRotation(dontTranslate));
@@ -271,5 +276,6 @@ void CModelData::initColors()
 	_spcY.SetWindowTextA(_T("1"));
 	_spcZ.SetWindowTextA(_T("1"));
 	_shine.SetWindowTextA(_T("18"));
+	_colors.SetWindowTextA(_T("255"));
 	_calcNrml.SetCheck(true);
 }

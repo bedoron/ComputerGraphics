@@ -206,7 +206,7 @@ bool Renderer::DrawTriangle( Face face,vec3 color)
 	if( minX > m_width || minY > m_height || maxX < 0 || maxY <0)
 		return true;
 
-	if(faceDirection>0)	
+	if(faceDirection>-0.25)	
 	for (int i = minY; i <= maxY; i++)
 	{
 		for (int j = minX; j <= maxX; j++)
@@ -227,20 +227,18 @@ bool Renderer::DrawTriangle( Face face,vec3 color)
 				SetProjection(tmp_projection);
 				vec3 interpolatedNormal  = bCordinated.y * transformed.getVnX() + bCordinated.z * transformed.getVnY() + 
 					bCordinated.x * transformed.getVnZ();
-				plot(transformed,frameFace,j,i,color,normalize(interpolatedNormal) );
-					
+				plot(transformed,frameFace,j,i,color,normalize(interpolatedNormal),bCordinated,z );
 			}
 		}
 	}
 	return flag;
 }
 
-bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 normal,GLfloat g) 
+bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 normal,vec3 baryCordinate,GLfloat zcordinate,GLfloat g) 
 {
 	
 	bool flag = true;
-	vec3 baryCordinate = Utils::getInstance().getBarycentricCoordinates(frameFace,x,y,Utils::interpolateFace(frameFace,x,y));
-	GLfloat zcordinate = Utils::interpolateFace(frameFace,x,y);
+
 	vec3 worldCordinated = worldFace.getVecX()* baryCordinate.y+worldFace.getVecY()* baryCordinate.z +worldFace.getVecZ()* baryCordinate.x;
 	if(x<m_width && x>0 && y>0 && y<m_height)
 	{
@@ -250,6 +248,15 @@ bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 
 
 			color/=255;
 			vec3 light = getLightFactorForPoint(worldCordinated.x,worldCordinated.y,worldCordinated.z, normal,worldFace);
+			if(_cartoonize)
+			{
+				if(light.x >0.5) light.x =1;
+				else light.x =0.5;
+				if(light.y >0.5) light.y =1;
+				else light.y =0.5;
+				if(light.z >0.5) light.z =1;
+				else light.z =0.5;
+			}
 			vec3 cEye = (color * light);
 			if(fog)
 			{
@@ -260,7 +267,18 @@ bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 
 				GLfloat f = pow(2,-d*z) ;
 				cEye = f*(cEye) + (1-f)*(fogColor);
 			}
-			//cEye /=255;
+			int numOfColors = 256/_color;
+			cEye *= 255;
+			cEye = vec3((int)cEye.x/numOfColors,(int)cEye.y/numOfColors,(int)cEye.z/numOfColors);
+			cEye *= numOfColors;
+			cEye /=255;
+			if(_cartoonize)
+			{
+				vec4 eye4 = activeCamera->getEye();
+				vec3 eye(eye4.x,eye4.y,eye4.z);
+				if( dot(eye,normal)<=0.1)
+					cEye =vec3(0);
+			}
 			m_outBuffer[INDEX(m_width,x,y,2)]= cEye.x;/*color.x * light.x;*/
 			m_outBuffer[INDEX(m_width,x,y,1)]= cEye.y;/*color.y * light.y;*/
 			m_outBuffer[INDEX(m_width,x,y,0)]= cEye.z;/*color.z * light.z;*/
@@ -272,7 +290,7 @@ bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 
 	}
 	return flag;
 }
-vec3 Renderer::getLightFactorForPoint(GLfloat x,GLfloat y,GLfloat z,vec3 normal,Face& f)
+vec3 Renderer::getLightFactorForPoint(GLfloat x,GLfloat y,GLfloat z,vec3& normal,Face& f)
 {
 	vec3 point(x,y,z);
 	vec3 light = (0.0,0.0,0.0);
@@ -350,9 +368,9 @@ void Renderer::ClearColorBuffer()
 	for(int x = 0 ;x<m_width ;x++)
 		for(int y = 0 ; y < m_height ;y++)
 		{	
-			m_outBuffer[INDEX(m_width,x,y,2)]=  BLACK			& 0x0000ff;
-			m_outBuffer[INDEX(m_width,x,y,1)]= (BLACK >> 8)		& 0x0000ff;
-			m_outBuffer[INDEX(m_width,x,y,0)]= (BLACK >> 16)	& 0x0000ff;
+			m_outBuffer[INDEX(m_width,x,y,2)]=  WHITE			& 0x0000ff;
+			m_outBuffer[INDEX(m_width,x,y,1)]= (WHITE >> 8)		& 0x0000ff;
+			m_outBuffer[INDEX(m_width,x,y,0)]= (WHITE >> 16)	& 0x0000ff;
 		}
 	//SwapBuffers();
 }

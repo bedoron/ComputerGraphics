@@ -93,6 +93,9 @@
     <ClCompile Include="AddFog.cpp">
       <Filter>MFC</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CG_skel_w_MFC.h">
@@ -167,9 +170,6 @@
     <ClInclude Include="Frustum.h">
       <Filter>MFC</Filter>
     </ClInclude>
-    <ClInclude Include="PresModel.h">
-      <Filter>MFC</Filter>
-    </ClInclude>
     <ClInclude Include="AddCamera.h">
       <Filter>MFC</Filter>
     </ClInclude>
@@ -190,6 +190,12 @@
     </ClInclude>
     <ClInclude Include="AddFog.h">
       <Filter>MFC</Filter>
+    </ClInclude>
+    <ClInclude Include="PresModel.h">
+      <Filter>MFC</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

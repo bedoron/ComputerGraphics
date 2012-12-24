@@ -12,7 +12,7 @@ void Scene::loadOBJModel(string fileName,string id)
 {
 	try
 	{
-		item = Utils::getInstance().parseOBJ(fileName);
+		item = Utils::getInstance().parseOBJ(fileName,id);
 	}
 	catch(ObjParserFileNotFound &err)
 	{
@@ -112,7 +112,7 @@ Model* Scene::setActiveModel(int id) {
 	refreshModelWindow();
 	
 	cerr << active->getName() << "\n" << active->getObjectTransform() << "\n";
-	cerr << "Center transformed to :\n" << m_renderer->calculateMvpPCTransformation(active->getModelCenter()) << "\n";
+	cerr << "Center transformed to :\n" << m_renderer->calculateMvpPCTransformation(vec4(active->getModelCenter())) << "\n";
 	return active;
 }
 

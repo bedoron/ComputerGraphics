@@ -298,7 +298,7 @@ void motion(int x, int y)
 		}
 	case m_light:
 		{
-			scene->changeLightDirection(RotateX(dx/3)*RotateY(dy/3));
+			scene->changeLightDirection(rotation);
 			break;
 		}
 
@@ -384,7 +384,9 @@ void objectMenuHandler(int id) {
 		if(dlg.DoModal()==IDOK) {
 			std::string s((LPCTSTR)dlg.GetPathName());
 			scene->loadOBJModel((LPCTSTR)dlg.GetPathName(), (LPCTSTR)dlg.GetFileName());
+			
 			scene->draw();
+			
 		}
 	} break;
 	case OBJECT_REMOVE_ACTIVE:

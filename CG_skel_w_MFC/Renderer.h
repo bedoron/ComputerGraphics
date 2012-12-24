@@ -43,8 +43,9 @@ class Renderer
 	vec3 _kAmbiant;
 	vec3 _kspecular;
 	GLfloat _shine;
-	GLfloat _opacity;
+	int _color;
 	GLfloat Zdistance;
+	bool _cartoonize;
 	//////////////////////////////
 	// openGL stuff. Don't touch.
 
@@ -84,7 +85,7 @@ public:
 	void drawLineByVectors(vec3 from ,vec3 to,bool normal = false);
 	void drawLineByVectors(vec3 from ,vec3 to,unsigned int color = 0xffffff);
 	//TODO draw triangle
-	bool plot(Face worldFace,Face frameFace,int x, int y, vec3 color,vec3 normal,GLfloat g=0.5); /* plot a single point */
+	bool plot(Face worldFace,Face frameFace,int x, int y, vec3 color,vec3 normal,vec3 baryCordinate,GLfloat zcordinate,GLfloat g=0.5); /* plot a single point */
 	int getWidth() const; /* Return screen's width */
 	int getHeight() const; /* Returns screen's  height */
 	void addLine(Line& newLine);
@@ -95,7 +96,7 @@ public:
 	vec3 calculateMvpPCTransformation(vec4 worldPoint,bool mode=true);
 	void resetZBuffer();
 	bool checkZBuffer();
-	vec3 getLightFactorForPoint(GLfloat x,GLfloat y,GLfloat z,vec3 normal,Face& f);
+	vec3 getLightFactorForPoint(GLfloat x,GLfloat y,GLfloat z,vec3& normal,Face& f);
 	void addLight(Light* l){lights.push_back(l);}
 	void addLights(vector<Light*> oldlights){lights = oldlights;}
 	vector<Light*> getLights(){return lights;}
@@ -110,8 +111,9 @@ public:
 		delete fog;
 		fog = NULL;
 	}
-	void setOpacity(GLfloat val){_opacity=val;}
+	void setColors(GLfloat val){_color=val;}
 	void setZdistance(GLfloat distance){Zdistance = distance;}
+	void setCartoon(bool val){_cartoonize=val;}
 };
 
 #define delta_threshold 0.001

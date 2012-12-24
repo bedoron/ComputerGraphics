@@ -79,19 +79,19 @@ void OBJItem::draw(Renderer& renderer)
 		{
 			Face curentface(*it);
 			vec3 currentVerticies = curentface.getVertices();
-			if(calcNormals)
+			if(!calcNormals)
 			{
 				curentface.setVN1(getCalculatedNormal(currentVerticies.x));
 				curentface.setVN2(getCalculatedNormal(currentVerticies.y));
 				curentface.setVN3(getCalculatedNormal(currentVerticies.z));
 			}
 			//draw triangle
-			if(renderer.DrawTriangle(curentface,_color) && false)
-			{
-				renderer.drawLineByVectors((*it).getVecX() ,(*it).getVecY() ,(unsigned int) RED);
-				renderer.drawLineByVectors((*it).getVecY() ,(*it).getVecZ() ,(unsigned int) RED);
-				renderer.drawLineByVectors((*it).getVecZ() ,(*it).getVecX() ,(unsigned int) RED);
-			}
+			renderer.DrawTriangle(curentface,_color) ;
+			/*{
+			renderer.drawLineByVectors((*it).getVecX() ,(*it).getVecY() ,(unsigned int) RED);
+			renderer.drawLineByVectors((*it).getVecY() ,(*it).getVecZ() ,(unsigned int) RED);
+			renderer.drawLineByVectors((*it).getVecZ() ,(*it).getVecX() ,(unsigned int) RED);
+			}*/
 			//draw normal
 			if(drawNormal)
 				renderer.drawLineByVectors((*it).getNormalLine()[0] ,(*it).getNormalLine()[1] ,(unsigned int)BLUE);

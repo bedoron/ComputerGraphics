@@ -24,7 +24,7 @@ public:
 	void setLightType(int type){lightType=type;}
 	void setAngle(GLfloat angle){_angle=angle;}
 	int getLightType() { return lightType;}
-	vec3 getLight(vec3 normal,vec3 _kAmbiant,vec3 _kDiffuze,vec3 _kSpecular,vec3 point,mat4 cam,Face face,vec4 eye_at,GLfloat shininess)
+	vec3 getLight(vec3& normal,vec3& _kAmbiant,vec3& _kDiffuze,vec3& _kSpecular,vec3& point,mat4& cam,Face& face,vec4& eye_at,GLfloat shininess)
 	{
 		vec3 v = vec3(eye_at.x,eye_at.y,eye_at.z);
 		vec3 tmpintensity = intencity/255;
@@ -38,10 +38,13 @@ public:
 		}
 		case L_PARALEL:
 		{
-			GLfloat angle = dot(normalize(direction),normal);
-			light +=tmpintensity*_kDiffuze*angle;
-			vec3 h = normalize(v)+normalize(direction);
-			light += _kSpecular * max(pow(dot(normalize(h),normal),shininess),0);
+			if(dot(normalize(normal),normalize(direction)>0))
+			{
+				GLfloat angle = dot(normalize(direction),normal);
+				light +=tmpintensity*_kDiffuze*angle;
+				vec3 h = normalize(v)+normalize(direction);
+				light += _kSpecular * max(pow(dot(normalize(h),normal),shininess),0);
+			}
 			break;
 		}
 		case L_POINT:

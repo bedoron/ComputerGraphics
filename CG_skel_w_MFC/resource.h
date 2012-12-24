@@ -98,9 +98,10 @@
 #define IDC_shine                       1071
 #define IDC_clc_nrml                    1072
 #define IDC_Fog_Blue                    1073
-#define IDC_shine2                      1073
-#define IDC_opacity                     1073
+#define IDC_colors                      1074
 #define IDC_Fog_Green                   1075
+#define IDC_CHECK1                      1075
+#define IDC_Cartoonize                  1075
 #define IDC_Fog_Red                     1076
 #define IDC_Fog_density                 1077
 
@@ -110,7 +111,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112
 #define _APS_NEXT_COMMAND_VALUE         40002
-#define _APS_NEXT_CONTROL_VALUE         1074
+#define _APS_NEXT_CONTROL_VALUE         1076
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif

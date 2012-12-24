@@ -21,6 +21,8 @@ protected :
 	vec3 _kAmbiant;
 	vec3 _kspecular;
 	GLfloat shine;
+	int _numOfColors;
+	bool _cartoonize;
 public:
 	
 	MeshModel(OBJItem item);
@@ -46,4 +48,7 @@ public:
 	void setKspecular(vec3 kspecular){_kspecular=kspecular;}
 	void setShininess(GLfloat s){shine = s;}
 	void setVNormal(bool nrml){useNormals = nrml;}
+	void setColor(int colors){_numOfColors = colors;}
+	void setCartoonize(bool val){_cartoonize=val;}
+
 };
