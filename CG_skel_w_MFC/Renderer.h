@@ -24,6 +24,10 @@ class Renderer
 {
 	float *m_outBuffer; // 3*width*height
 	float *m_zbuffer; // width*height
+	float *m_aliased_outBuffer; // 3*width*height
+	float *m_aliased_zbuffer; // 3*width*height
+	bool antiAliasing;
+	float *m_zbuffer; // width*height
 	int m_width, m_height;
 	Fog* fog;
 	mat4 _projection;

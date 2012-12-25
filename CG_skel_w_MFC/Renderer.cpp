@@ -52,7 +52,10 @@ void Renderer::CreateBuffers(int width, int height)
 	CreateOpenGLBuffer(); //Do not remove this line.
 	m_outBuffer = new float[3*m_width*m_height];
 	m_zbuffer = new float[m_width*m_height];
-
+	if(antiAliasing) {
+		m_aliased_outBuffer = new float[3*m_width*m_height*4];
+		m_aliased_zbuffer = new float[3*m_width*m_height*4];
+	}
 }
 
 void Renderer::SetDemoBuffer()
