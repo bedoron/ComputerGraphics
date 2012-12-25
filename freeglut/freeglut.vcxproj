@@ -61,7 +61,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Lib>
-      <OutputFile>lib\freeglut_static.lib</OutputFile>
+      <OutputFile>$(TargetDir)\freeglut_static.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -83,7 +83,7 @@
       <OutputFile>lib\freeglut_static.lib</OutputFile>
     </Link>
     <Lib>
-      <OutputFile>lib\freeglut_static.lib</OutputFile>
+      <OutputFile>$(TargetDir)\freeglut_static.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

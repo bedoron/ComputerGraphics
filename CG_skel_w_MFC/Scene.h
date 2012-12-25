@@ -58,6 +58,14 @@ public:
 	void initDefaultLight();
 	void loadOBJModel(string fileName,string id);
 
+	void setAntialiasing(bool val) { 
+		if(val == m_renderer->getAntialiasing()) return;
+		m_renderer->setAntialiasing(val); 
+		draw();
+	}
+
+	bool getAntialiasing() { return m_renderer->getAntialiasing(); }
+
 	void drawDebug(vec4 eye = vec4(2,5,-10,1)); //
 	void draw(vec3 rotation);
 	void draw(vec3 rotation,float zoom,bool update= false);

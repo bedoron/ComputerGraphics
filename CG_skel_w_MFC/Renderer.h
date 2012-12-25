@@ -27,7 +27,6 @@ class Renderer
 	float *m_aliased_outBuffer; // 3*width*height
 	float *m_aliased_zbuffer; // 3*width*height
 	bool antiAliasing;
-	float *m_zbuffer; // width*height
 	int m_width, m_height;
 	Fog* fog;
 	mat4 _projection;
@@ -61,14 +60,24 @@ class Renderer
 	
 
 	class Line; // This is a forward decleration
+	void putPixel(int x, int y, GLfloat zIndex, vec3 colors);
+	GLfloat sumQuad(int x, int y, int color);
+	void doAntialiasing();
 protected:
 	float *getOutBuffer();
+	float *getZBuffer();
 	
 public:
 	Renderer();
 	Renderer(int width, int height);
 	~Renderer(void);
 	
+	bool getAntialiasing() { return antiAliasing; }
+	void setAntialiasing(bool val) { 
+		antiAliasing = val; 
+		initMvp();
+	};
+
 	bool isDrawNormal();
 	void setDrawnormal(bool _drawNormal);
 	bool isDrawBound();
