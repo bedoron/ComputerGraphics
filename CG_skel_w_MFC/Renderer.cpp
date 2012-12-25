@@ -248,11 +248,16 @@ bool Renderer::DrawTriangle( Face face,vec3 color,bool flat)
 	vec3 _v2 = face.getVecY();
 	vec3 _v3 = face.getVecZ();
 	bool flag= true;
-	Face newFace =face.transformFace(*this);
+	vec4 objectV1_4 = _oTransform * _v1;
+	vec4 objectV2_4 = _oTransform * _v2;
+	vec4 objectV3_4 = _oTransform * _v3;
+	vec3 objectv1(objectV1_4.x,objectV1_4.y,objectV1_4.z);
+	vec3 objectv2(objectV2_4.x,objectV2_4.y,objectV2_4.z);
+	vec3 objectv3(objectV3_4.x,objectV3_4.y,objectV3_4.z);
 	vec3 v1 = calculateMvpPCTransformation(_v1);
 	vec3 v2 = calculateMvpPCTransformation(_v2);
 	vec3 v3 = calculateMvpPCTransformation(_v3);
-	vec3 tmpNormal = newFace.getNormal();			// normal for flat shading
+	vec3 tmpNormal = normalize(cross(objectv2-objectv1,objectv3-objectv1));
 	GLfloat faceDirection=  dot(normalize(activeCamera->getEye()-activeCamera->getAt()),tmpNormal);
 	int maxX = (v1.x<v2.x)?(v2.x<v3.x?v3.x:v2.x):(v1.x<v3.x?v3.x:v1.x);
 	maxX = maxX < width ? maxX : width;
@@ -265,7 +270,7 @@ bool Renderer::DrawTriangle( Face face,vec3 color,bool flat)
 	if( minX > width || minY > height || maxX < 0 || maxY <0)
 		return true;
 
-	if(faceDirection>-0.25)	
+	if(faceDirection>0)	
 	for (int i = minY; i <= maxY; i++)
 	{
 		for (int j = minX; j <= maxX; j++)
