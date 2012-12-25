@@ -28,6 +28,7 @@ private:
 	AvlTree<Vertex>* verticesTree;
 	vec3 _color;
 	bool calcNormals;
+	int renderMode;
 public:
 	OBJItem(void);
 	OBJItem(const OBJItem& item);
@@ -62,5 +63,6 @@ public:
 	vec3 getCalculatedNormal(int vertex);
 	void setColor(vec3 color){_color = color;}
 	void setCalcNormals(bool val){calcNormals = val;}
+	void setRenderType(int val){renderMode = val;}
 };
 

@@ -58,13 +58,13 @@ vec3 Face::getNormal()
 {
 	return _normalVec;
 }
-Face Face::transformFace(Renderer& renderer)
+Face Face::transformFace(Renderer& renderer, bool mode)
 {
-	vec3 newX = renderer.calculateMvpPCTransformation(_x,false);
-	vec3 newY = renderer.calculateMvpPCTransformation(_y,false);
-	vec3 newZ = renderer.calculateMvpPCTransformation(_z,false);
-	vec3 newvn1 = renderer.calculateMvpPCTransformation(_x+_vn1,false);
-	vec3 newvn2 = renderer.calculateMvpPCTransformation(_y+_vn2,false);
-	vec3 newvn3 = renderer.calculateMvpPCTransformation(_z+_vn3,false);
+	vec3 newX = renderer.calculateMvpPCTransformation(_x,mode);
+	vec3 newY = renderer.calculateMvpPCTransformation(_y,mode);
+	vec3 newZ = renderer.calculateMvpPCTransformation(_z,mode);
+	vec3 newvn1 = renderer.calculateMvpPCTransformation(_x+_vn1,mode);
+	vec3 newvn2 = renderer.calculateMvpPCTransformation(_y+_vn2,mode);
+	vec3 newvn3 = renderer.calculateMvpPCTransformation(_z+_vn3,mode);
 	return Face(newX,newY,newZ,_vertices,newvn1-newX,newvn2-newY,newvn3-newZ);
 }

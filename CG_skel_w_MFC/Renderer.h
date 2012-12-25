@@ -71,7 +71,7 @@ public:
 	void setDrawBound(bool _drawBound);
 	void Init();
 	void DrawTriangles(const vector<vec3>* vertices, const vector<vec3>* normals=NULL);
-	bool DrawTriangle( Face face,vec3 color);
+	bool DrawTriangle( Face face,vec3 color,bool flat = false);
 	void SetCameraTransform(const mat4& cTransform);
 	void SetProjection(const mat4& projection);
 	mat4 getObjectMatrices() { return _oTransform; };
@@ -86,6 +86,8 @@ public:
 	void drawLineByVectors(vec3 from ,vec3 to,unsigned int color = 0xffffff);
 	//TODO draw triangle
 	bool plot(Face worldFace,Face frameFace,int x, int y, vec3 color,vec3 normal,vec3 baryCordinate,GLfloat zcordinate,GLfloat g=0.5); /* plot a single point */
+	void plotFrench(int x, int y, GLfloat zIndex);
+	void DrawTriangleFrech( Face face,vec3 color);
 	int getWidth() const; /* Return screen's width */
 	int getHeight() const; /* Returns screen's  height */
 	void addLine(Line& newLine);

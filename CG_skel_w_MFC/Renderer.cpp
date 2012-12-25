@@ -183,7 +183,7 @@ mat4 Renderer::getProjection()
 	return _projection;
 }
 
-bool Renderer::DrawTriangle( Face face,vec3 color)
+bool Renderer::DrawTriangle( Face face,vec3 color,bool flat)
 {
 	vec3 _v1 = face.getVecX();
 	vec3 _v2 = face.getVecY();
@@ -206,7 +206,7 @@ bool Renderer::DrawTriangle( Face face,vec3 color)
 	if( minX > m_width || minY > m_height || maxX < 0 || maxY <0)
 		return true;
 
-	//if(faceDirection>-0.25)	
+	if(faceDirection>-0.25)	
 	for (int i = minY; i <= maxY; i++)
 	{
 		for (int j = minX; j <= maxX; j++)
@@ -227,16 +227,70 @@ bool Renderer::DrawTriangle( Face face,vec3 color)
 				SetProjection(tmp_projection);
 				vec3 interpolatedNormal  = bCordinated.y * transformed.getVnX() + bCordinated.z * transformed.getVnY() + 
 					bCordinated.x * transformed.getVnZ();
-				plot(transformed,frameFace,j,i,color,normalize(interpolatedNormal),bCordinated,z );
+				plot(transformed,frameFace,j,i,color,flat?face.getNormal():normalize(interpolatedNormal),bCordinated,z );
 			}
 		}
 	}
 	return flag;
 }
 
+void Renderer::DrawTriangleFrech(Face face,vec3 color)
+{
+	vec3 tmpNormal = face.transformFace(*this).getNormal();			// normal for flat shading
+	GLfloat faceDirection=  dot((activeCamera->getEye()-activeCamera->getAt()),tmpNormal);
+	if(faceDirection < 0) return;
+
+	vec3 P1 = face.getVecX();
+	vec3 P2 = face.getVecY();
+	vec3 P3 = face.getVecZ();
+
+	vec3 lightP1 = getLightFactorForPoint(P1.x,P1.y,P1.z, face.getVnX(),face);
+	vec3 lightP2 = getLightFactorForPoint(P2.x,P2.y,P2.z, face.getVnY(),face);
+	vec3 lightP3 = getLightFactorForPoint(P3.x,P3.y,P3.z, face.getVnZ(),face);
+
+	Face mvpFace = face.transformFace(*this,true); 
+	Face frameFace = face.transformFace(*this);
+	vec3 v1 = mvpFace.getVecX();
+	vec3 v2 = mvpFace.getVecY();
+	vec3 v3 = mvpFace.getVecZ();
+
+	int maxX = (v1.x<v2.x)?(v2.x<v3.x?v3.x:v2.x):(v1.x<v3.x?v3.x:v1.x);
+	maxX = maxX < m_width ? maxX : m_width;
+	int maxY = (v1.y<v2.y)?(v2.y<v3.y?v3.y:v2.y):(v1.y<v3.y?v3.y:v1.y);
+	maxY = maxY < m_height ? maxY : m_height;
+	int minX = (v1.x>v2.x)?(v2.x>v3.x?v3.x:v2.x):(v1.x>v3.x?v3.x:v1.x);
+	minX = minX > 0 ? minX : 0;
+	int minY = (v1.y>v2.y)?(v2.y>v3.y?v3.y:v2.y):(v1.y>v3.y?v3.y:v1.y);
+	minY = minY > 0 ? minY : 0;
+	if( minX > m_width || minY > m_height || maxX < 0 || maxY <0)
+		return;
+
+	for (int i = minY; i <= maxY; i++)
+	{
+		for (int j = minX; j <= maxX; j++)
+		{
+			GLfloat z = Utils::interpolateFace(mvpFace,j,i);
+			vec3 bCordinated = Utils::getInstance().getBarycentricCoordinates(mvpFace,j,i,z);
+			if(bCordinated.x >= 0 && bCordinated.x <= 1 && bCordinated.y >= 0 && bCordinated.y <= 1
+				&& bCordinated.z >= 0 && bCordinated.z <= 1)
+			{
+				vec3 cEye = bCordinated.y * lightP1 + bCordinated.z * lightP2 + 
+					bCordinated.x * lightP3;
+				m_outBuffer[INDEX(m_width,j,i,2)]= cEye.x;/*color.x * light.x;*/
+				m_outBuffer[INDEX(m_width,j,i,1)]= cEye.y;/*color.y * light.y;*/
+				m_outBuffer[INDEX(m_width,j,i,0)]= cEye.z;/*color.z * light.z;*/
+
+				m_zbuffer[INDEXOF(m_width,j,i)]=Utils::interpolateFace(frameFace,j,i);;	
+			}
+		}
+	}
+
+}
+
+
 bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 normal,vec3 baryCordinate,GLfloat zcordinate,GLfloat g) 
 {
-	
+
 	bool flag = true;
 
 	vec3 worldCordinated = worldFace.getVecX()* baryCordinate.y+worldFace.getVecY()* baryCordinate.z +worldFace.getVecZ()* baryCordinate.x;

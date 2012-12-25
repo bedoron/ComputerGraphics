@@ -6,6 +6,7 @@
 
 class Renderer;
 
+enum RenderType{Flat=2000,french,Phong};
 class Face 
 {
 private:
@@ -47,7 +48,7 @@ public:
 	vec3 getKAmbiant(){return _kambiant;}
 	vec3 getKDiffuze(){return _kdiffuze;}
 	vec3 getKSpecular(){return _kspecular;}
-	Face transformFace(Renderer& renderer);
+	Face transformFace(Renderer& renderer, bool mode = false);
 	bool isMaterial(){return matrial;}
 	void setNS(GLfloat val){matrial=false;_ns =val;}
 	GLfloat getNS(){return _ns;}

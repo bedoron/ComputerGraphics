@@ -82,6 +82,7 @@ void MeshModel::draw(Renderer& renderer)
 	objItem.setCalcNormals(useNormals);
 	renderer.setColors(_numOfColors);
 	renderer.setCartoon(_cartoonize);
+	objItem.setRenderType(renderMode);
 	objItem.draw(renderer);
 }
 void MeshModel::setObjectTransform(mat4 worldTransform)

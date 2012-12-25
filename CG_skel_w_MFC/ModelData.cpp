@@ -65,6 +65,9 @@ BEGIN_MESSAGE_MAP(CModelData, CDialogEx)
 	ON_WM_SHOWWINDOW()
 	ON_BN_CLICKED(IDOK, &CModelData::OnBnClickedOk)
 	ON_CBN_SELCHANGE(ROTATION_SELECT, &CModelData::OnCbnSelchangeSelect)
+	ON_BN_CLICKED(IDC_RD_flat, &CModelData::OnBnClickedRdflat)
+	ON_BN_CLICKED(IDC_RD_frnch, &CModelData::OnBnClickedRdfrnch)
+	ON_BN_CLICKED(IDC_RD_png, &CModelData::OnBnClickedRdpng)
 END_MESSAGE_MAP()
 
 
@@ -206,6 +209,7 @@ void CModelData::OnBnClickedOk()
 	static_cast<MeshModel*>(m_model)->setCartoonize(_cartoonize.GetCheck()==BST_CHECKED);
 	_colors.GetWindowTextA(colorBufferX,5);
 	static_cast<MeshModel*>(m_model)->setColor(atoi(colorBufferX));
+	static_cast<MeshModel*>(m_model)->setRenderType(renderMode);
 	// Deal with rotation
 	bool dontTranslate;
 	rotateModel(readAndClearRotation(dontTranslate));
@@ -278,4 +282,21 @@ void CModelData::initColors()
 	_shine.SetWindowTextA(_T("18"));
 	_colors.SetWindowTextA(_T("255"));
 	_calcNrml.SetCheck(true);
+}
+
+void CModelData::OnBnClickedRdflat()
+{
+	renderMode = Flat;
+}
+
+
+void CModelData::OnBnClickedRdfrnch()
+{
+	renderMode = french;
+}
+
+
+void CModelData::OnBnClickedRdpng()
+{
+	renderMode = Phong;
 }

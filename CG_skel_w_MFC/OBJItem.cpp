@@ -3,7 +3,7 @@
 #include "CubeModel.h"
 
 OBJItem::OBJItem(void):vertices(),faces(),normals(),minX(5),minY(5),minZ(5)
-	,maxX(0),maxY(0),maxZ(0), drawBox(false), drawVertexNormal(false), drawNormal(false),_color(WHITE),calcNormals(true)
+	,maxX(0),maxY(0),maxZ(0), drawBox(false), drawVertexNormal(false), drawNormal(false),_color(WHITE),calcNormals(true),renderMode(Phong)
 {
 	verticesTree = new AvlTree<Vertex>();
 }
@@ -93,7 +93,27 @@ void OBJItem::draw(Renderer& renderer)
 				renderer.setKspecular(curentface.getKSpecular());
 				renderer.setShine(curentface.getNS());
 			}
-			renderer.DrawTriangle(curentface,_color) ;
+			switch(renderMode)
+			{
+			case Flat:
+				{
+					renderer.DrawTriangle(curentface,_color,true);
+					break;
+				}
+			case french:
+				{
+					renderer.DrawTriangleFrech(curentface,_color);
+					break;
+				}
+			case Phong:
+				{
+					renderer.DrawTriangle(curentface,_color);
+					break;
+				}
+
+			}
+			
+			renderer.DrawTriangle(curentface,_color);
 			/*{
 			renderer.drawLineByVectors((*it).getVecX() ,(*it).getVecY() ,(unsigned int) RED);
 			renderer.drawLineByVectors((*it).getVecY() ,(*it).getVecZ() ,(unsigned int) RED);

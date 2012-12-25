@@ -23,6 +23,7 @@ protected :
 	GLfloat shine;
 	int _numOfColors;
 	bool _cartoonize;
+	int renderMode;
 public:
 	
 	MeshModel(OBJItem item);
@@ -50,5 +51,6 @@ public:
 	void setVNormal(bool nrml){useNormals = nrml;}
 	void setColor(int colors){_numOfColors = colors;}
 	void setCartoonize(bool val){_cartoonize=val;}
+	void setRenderType(int val){renderMode = val;}
 
 };

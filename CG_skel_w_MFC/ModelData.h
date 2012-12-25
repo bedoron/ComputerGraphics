@@ -44,6 +44,7 @@ public:
 	CButton _calcNrml;
 	CEdit _colors;
 	CButton _cartoonize;
+	int renderMode;
 	afx_msg void OnDestroy();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	Model* m_model;
@@ -74,4 +75,7 @@ public:
 
 	void refreshModelData();
 	void initColors();
+	afx_msg void OnBnClickedRdflat();
+	afx_msg void OnBnClickedRdfrnch();
+	afx_msg void OnBnClickedRdpng();
 };
