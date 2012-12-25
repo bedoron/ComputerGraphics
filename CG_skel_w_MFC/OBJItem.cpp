@@ -86,6 +86,13 @@ void OBJItem::draw(Renderer& renderer)
 				curentface.setVN3(getCalculatedNormal(currentVerticies.z));
 			}
 			//draw triangle
+			if(!curentface.isMaterial())
+			{
+				renderer.setKAbmbiant(curentface.getKAmbiant());
+				renderer.setKDiffuze(curentface.getKDiffuze());
+				renderer.setKspecular(curentface.getKSpecular());
+				renderer.setShine(curentface.getNS());
+			}
 			renderer.DrawTriangle(curentface,_color) ;
 			/*{
 			renderer.drawLineByVectors((*it).getVecX() ,(*it).getVecY() ,(unsigned int) RED);

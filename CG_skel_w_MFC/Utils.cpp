@@ -30,14 +30,60 @@ Utils &Utils::getInstance() {
 		instance = new Utils;
 	return *instance;
 }
-/*vector<Material*>*/void getMaterails(string filename,string mtl)
+void getMaterails(string mtlFile,vector<Material*>* materials)
 {
-	char drive[5];
-	char filename1[20];
-	char path[30];
-	char ext[5];
-	_splitpath(filename.c_str(),drive,path,filename1,ext);
-	string mtlFile = string(drive) + string(path) + mtl;
+	
+	ifstream mtlStream;
+
+	mtlStream.open(mtlFile);
+	if(!mtlStream.is_open())
+		throw ObjParserFileNotFound();
+	string fileLine;
+	Material* material = NULL;
+	
+	while(getline(mtlStream, fileLine)) 
+	{
+		string command;
+		istringstream mtlIsStream(fileLine);
+		mtlIsStream >> command;
+	
+		if(command=="newmtl")
+		{
+			if(material)
+				materials->push_back(material);
+			string name;
+			mtlIsStream >> name;
+			material = new Material(name);
+		}
+		else if(command == "Ka")
+		{
+			GLfloat r=0,g=0,b=0;
+			mtlIsStream >> r >> g >> b;
+			material->setKambiant(vec3(b,g,r));
+		}
+		else if(command == "Kd")
+		{
+			GLfloat r=0,g=0,b=0;
+			mtlIsStream >> r >> g >> b;
+			material->setKdiffuse(vec3(b,g,r));
+		}
+		else if(command == "Ks")
+		{
+			GLfloat r=0,g=0,b=0;
+			mtlIsStream >> r >> g >> b;
+			material->setKspecular(vec3(b,g,r));
+		}
+		else if(command == "Ns")
+		{
+			GLfloat ns;
+			mtlIsStream >> ns;
+			material->setNS(ns);
+		}
+
+
+	}
+	if(material)
+		materials->push_back(material);
 }
 OBJItem Utils::parseOBJ(string filename,string fileID) {
 	OBJItem objitem;
@@ -52,6 +98,8 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 	vec3 zero(0,0,0);
 	objitem.addVertex(zero);
 	objitem.addNormal(zero);
+	Material * currentMaterial=NULL;
+	vector<Material*> materials;
 	while(getline(objfile, fileLine)) {
 		if(fileLine==""||fileLine[0]=='#')
 			continue;
@@ -63,8 +111,27 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 			string mtlfile,command;
 
 			istringstream mtlline(fileLine);
-			mtlline >>command>> mtlfile;
-			getMaterails(filename,mtlfile);
+			mtlline >> command >> mtlfile;
+			char drive[5];
+			char filename1[20];
+			char path[200];
+			char ext[5];
+			_splitpath(filename.c_str(),drive,path,filename1,ext);
+			string mtlFilePath = string(drive) + string(path) + mtlfile;
+			ifstream ifile(mtlFilePath);
+			if (ifile) 
+				getMaterails(mtlFilePath,&materials);
+
+		}
+		else if(action == "usemtl")
+		{
+			string matName;
+			line >> matName;
+			for(vector<Material*>::iterator it = materials.begin();it!= materials.end(); ++ it)
+			{
+				if((*it)->getName() == matName)
+					currentMaterial = (*it);
+			}
 		}
 		else if(action == "v") {// vertex
 			float x,y,z = 0;
@@ -83,18 +150,49 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 					sscanf(fileLine.c_str(),"f %d//%d %d//%d %d//%d %d//%d",&v1,&vn1,&v2,&vn2,&v3,&vn3,&v4,&vn4);
 				else
 					sscanf(fileLine.c_str(),"f %d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d",&v1,&vt1,&vn1,&v2,&vt2,&vn2,&v3,&vt3,&vn3,&v4,&vt4,&vn4);
+				if(v2==0 && v3==0)
+					sscanf(fileLine.c_str(),"f %d/%d %d/%d %d/%d %d/%d",&v1,&vt1,&v2,&vt2,&v3,&vt3,&v4,&vt4);
+				
 			}
 			else
 				sscanf(fileLine.c_str(),"f %d %d %d %d",&v1,&v2,&v3,&v4);
+
 			try
 			{
+				if(v1 < 0)
+					v1 = objitem.getVertexSize()+v1;
+				if(v2 < 0)
+					v2 = objitem.getVertexSize()+v2;
+				if(v3 < 0)
+					v3 = objitem.getVertexSize()+v3;
+				if(vn1 < 0)
+					vn1 = objitem.getVNsize()+vn1;
+				if(vn2 < 0)
+					vn2 = objitem.getVNsize()+vn2;
+				if(vn3 < 0)
+					vn3 = objitem.getVNsize()+vn3;
+				
 				if(vn1==0 &&vn2==0 && vn3==0)
 				{
 					Face newFace(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v2),objitem.getVertexByNumber(v3),vec3(v1,v2,v3));
+					if(currentMaterial)
+					{
+						newFace.setKambiant(currentMaterial->getKAmbiant());
+						newFace.setKdiffuse(currentMaterial->getKDiffuze());
+						newFace.setKspecular(currentMaterial->getKSpecular());
+						newFace.setNS(currentMaterial->getNS());
+					}
 					objitem.addFace(newFace);
 					if(v4 !=0 || vn4 != 0 || vt4 !=0)
 					{
 						Face newFace2(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v3),objitem.getVertexByNumber(v4),vec3(v1,v3,v4));
+						if(currentMaterial)
+						{
+							newFace2.setKambiant(currentMaterial->getKAmbiant());
+							newFace2.setKdiffuse(currentMaterial->getKDiffuze());
+							newFace2.setKspecular(currentMaterial->getKSpecular());
+							newFace.setNS(currentMaterial->getNS());
+						}
 						objitem.addFace(newFace2);
 					}
 
@@ -103,11 +201,23 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 				{
 					Face newFace(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v2),objitem.getVertexByNumber(v3),vec3(v1,v2,v3)
 						,objitem.getNormalByNumber(vn1),objitem.getNormalByNumber(vn2),objitem.getNormalByNumber(vn3));
+					if(currentMaterial)
+					{
+						newFace.setKambiant(currentMaterial->getKAmbiant());
+						newFace.setKdiffuse(currentMaterial->getKDiffuze());
+						newFace.setKspecular(currentMaterial->getKSpecular());
+					}
 					objitem.addFace(newFace);
 					if(v4 !=0 || vn4 != 0 || vt4 !=0)
 					{
 						Face newFace2(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v3),objitem.getVertexByNumber(v4),vec3(v1,v3,v4)
-						,objitem.getNormalByNumber(vn1),objitem.getNormalByNumber(vn3),objitem.getNormalByNumber(vn4));
+							,objitem.getNormalByNumber(vn1),objitem.getNormalByNumber(vn3),objitem.getNormalByNumber(vn4));
+						if(currentMaterial)
+						{
+							newFace2.setKambiant(currentMaterial->getKAmbiant());
+							newFace2.setKdiffuse(currentMaterial->getKDiffuze());
+							newFace2.setKspecular(currentMaterial->getKSpecular());
+						}
 						objitem.addFace(newFace2);
 					}
 				}

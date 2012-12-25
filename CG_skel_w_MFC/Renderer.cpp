@@ -206,7 +206,7 @@ bool Renderer::DrawTriangle( Face face,vec3 color)
 	if( minX > m_width || minY > m_height || maxX < 0 || maxY <0)
 		return true;
 
-	if(faceDirection>-0.25)	
+	//if(faceDirection>-0.25)	
 	for (int i = minY; i <= maxY; i++)
 	{
 		for (int j = minX; j <= maxX; j++)

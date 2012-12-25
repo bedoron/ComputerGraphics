@@ -21,6 +21,7 @@ private:
 	vec3 _kambiant;
 	vec3 _kdiffuze;
 	vec3 _kspecular;
+	GLfloat _ns;
 	bool matrial;
 public:
 	Face(vec3 x,vec3 y,vec3 z,vec3 vertices=vec3(),vec3 vn1=vec3(0,0,0),vec3 vn2=vec3(0,0,0),vec3 vn3=vec3(0,0,0));
@@ -48,6 +49,8 @@ public:
 	vec3 getKSpecular(){return _kspecular;}
 	Face transformFace(Renderer& renderer);
 	bool isMaterial(){return matrial;}
+	void setNS(GLfloat val){matrial=false;_ns =val;}
+	GLfloat getNS(){return _ns;}
 };
 
 #endif // !_FACE_

@@ -2,7 +2,7 @@
 #include "Material.h"
 
 
-Material::Material(void)
+Material::Material(std::string val):name(val)
 {
 }
 

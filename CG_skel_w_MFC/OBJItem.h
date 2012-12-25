@@ -47,6 +47,10 @@ public:
 	{
 		return vertices.size();
 	}
+	int getVNsize()
+	{
+		return normals.size();
+	}
 	vec3 getMidPoint();
 
 	bool getDrawBox() { return drawBox; };
