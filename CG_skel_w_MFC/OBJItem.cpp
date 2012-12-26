@@ -13,7 +13,7 @@ OBJItem::~OBJItem(void)
 }
 OBJItem::OBJItem(const OBJItem& item):vertices(item.vertices),faces(item.faces),normals(item.normals)
 	,minX(item.minX),minY(item.minY),minZ(item.minZ),maxX(item.maxX),maxY(item.maxY),maxZ(item.maxZ),
-	drawBox(false), drawVertexNormal(false), drawNormal(false),_color(item._color),verticesTree(item.verticesTree),calcNormals(true)
+	drawBox(false), drawVertexNormal(false), drawNormal(false),_color(item._color),verticesTree(item.verticesTree),calcNormals(true),renderMode(Phong)
 {
 }
 void OBJItem::addVertex(vec3& vertex)

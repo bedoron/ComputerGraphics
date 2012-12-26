@@ -301,17 +301,30 @@ bool Renderer::DrawTriangle( Face face,vec3 color,bool flat)
 void Renderer::DrawTriangleFrech(Face face,vec3 color)
 {
 	int width = getWidth(); int height = getHeight();
-	vec3 tmpNormal = face.transformFace(*this).getNormal();			// normal for flat shading
+	vec4 objectV1_4 = _oTransform * face.getVecX();
+	vec4 objectV2_4 = _oTransform * face.getVecY();
+	vec4 objectV3_4 = _oTransform * face.getVecZ();
+	vec3 objectv1(objectV1_4.x,objectV1_4.y,objectV1_4.z);
+	vec3 objectv2(objectV2_4.x,objectV2_4.y,objectV2_4.z);
+	vec3 objectv3(objectV3_4.x,objectV3_4.y,objectV3_4.z);
+	vec3 tmpNormal = normalize(cross(objectv2-objectv1,objectv3-objectv1));
 	GLfloat faceDirection=  dot((activeCamera->getEye()-activeCamera->getAt()),tmpNormal);
 	if(faceDirection < 0) return;
+	mat4 tmpCamera = _cTransform;
+	mat4 tmpCom = _composition;
+	mat4 tmp_projection = _projection;
+	SetCameraTransform(mat4(1));
+	SetProjection(mat4(1));
+	Face transformed = face.transformFace(*this);
+	SetCameraTransform(tmpCamera);
+	SetProjection(tmp_projection);
+	vec4 P1 = transformed.getVecX();
+	vec4 P2 = transformed.getVecY();
+	vec4 P3 = transformed.getVecZ();
 
-	vec3 P1 = face.getVecX();
-	vec3 P2 = face.getVecY();
-	vec3 P3 = face.getVecZ();
-
-	vec3 lightP1 = getLightFactorForPoint(P1.x,P1.y,P1.z, face.getVnX(),face);
-	vec3 lightP2 = getLightFactorForPoint(P2.x,P2.y,P2.z, face.getVnY(),face);
-	vec3 lightP3 = getLightFactorForPoint(P3.x,P3.y,P3.z, face.getVnZ(),face);
+	vec3 lightP1 = getLightFactorForPoint(P1.x,P1.y,P1.z, transformed.getVnX(),transformed);
+	vec3 lightP2 = getLightFactorForPoint(P2.x,P2.y,P2.z, transformed.getVnY(),transformed);
+	vec3 lightP3 = getLightFactorForPoint(P3.x,P3.y,P3.z, transformed.getVnZ(),transformed);
 
 	Face mvpFace = face.transformFace(*this,true); 
 	Face frameFace = face.transformFace(*this);
@@ -346,7 +359,8 @@ void Renderer::DrawTriangleFrech(Face face,vec3 color)
 				m_outBuffer[INDEX(m_width,j,i,0)]= cEye.z;
 				m_zbuffer[INDEXOF(m_width,j,i)]=Utils::interpolateFace(frameFace,j,i);;	 
 */
-				putPixel(j,i,Utils::interpolateFace(frameFace,j,i), colors/255.0);
+				
+				putPixel(j,i,Utils::interpolateFace(mvpFace,j,i), colors);
 			}
 		}
 	}
