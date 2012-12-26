@@ -264,18 +264,8 @@ void motion(int x, int y)
     if (m < sinw) m = sinw;
 
 	float stepping = 10;
-	mat4 rotation;
-	if(m==sinu) {
-		rotation = RotateX(stepping*zu);
-		
-	}
-	else if(m==sinv) {
-		rotation = RotateY(stepping*zv);
-		
-	}
-	else if(m==sinw) {
-		rotation = RotateZ(stepping*zw);
-	}
+	mat4 rotation(RotateX(dy)*RotateY(dx));
+	
 	switch ( mouseMode)
 	{
 	case m_Model:
@@ -564,7 +554,7 @@ int my_main( int argc, char **argv )
 	glutInit( &argc, argv );
 	glutInitDisplayMode( GLUT_RGBA| GLUT_DOUBLE);
 	glutInitWindowSize( MAIN_WIDTH, MAIN_HEIGHT);
-	glutInitContextVersion( 3,1 );
+	glutInitContextVersion( 4,0 );
 	glutInitContextProfile( GLUT_CORE_PROFILE );
 	glutCreateWindow( "CG" );
 	glewExperimental = GL_TRUE;
