@@ -47,6 +47,7 @@ class Scene {
 	int m_activeModel;
 	GLfloat _left,_right,_top,_bottom,_zfar,_znear,_fovy,_aspect;
 	bool _renderCamera;
+	bool _addFog;
 	int _width,_height;
 public:
 	Scene();

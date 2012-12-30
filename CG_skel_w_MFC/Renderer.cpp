@@ -7,18 +7,25 @@
 #include "Utils.h"
 //#include "Line.h"
 #include "Camera.h"
-#define INDEX(width,x,y,c) ((x+y*width)*3+c)
-#define INDEXOF(width,x,y) (x+y*width)
 #define LINE(p1,p2,color) Line(*this, p1,p2, color)
 #define DLINE(p1,p2,color) LINE(p1,p2,color).draw()
 void Renderer::resetZBuffer()
 {
 	GLfloat *zbuffer = getZBuffer();
-	int bounds = getWidth()*getHeight();
-	for (int i = 0; i < bounds; ++i)
+	
+	int width = getWidth();
+	int height = getHeight();
+	SetObjectMatrices(mat4(1));
+	vec4 eye_at = normalize( activeCamera->getEye()- activeCamera->getAt());
+	
+	for (int j = 0; j < height; j++)
 	{
-		zbuffer[i]=-10000;
+		for(int i = 0 ; i < width ; i++)
+		{
+			zbuffer[INDEXOF(width,i,j)]=-_zfar;
+		}
 	}
+//	cout <<"eye "<< eye4 << "\n";
 }
 Renderer::Renderer() : antiAliasing(false), m_width(MAIN_WIDTH), m_height(MAIN_HEIGHT),drawNormal(false),drawBound(false),lights()
 {
@@ -254,11 +261,12 @@ bool Renderer::DrawTriangle( Face face,vec3 color,bool flat)
 	vec3 objectv1(objectV1_4.x,objectV1_4.y,objectV1_4.z);
 	vec3 objectv2(objectV2_4.x,objectV2_4.y,objectV2_4.z);
 	vec3 objectv3(objectV3_4.x,objectV3_4.y,objectV3_4.z);
+	vec3 midpoint = (objectv1 + objectv2 + objectv3) /3;
 	vec3 v1 = calculateMvpPCTransformation(_v1);
 	vec3 v2 = calculateMvpPCTransformation(_v2);
 	vec3 v3 = calculateMvpPCTransformation(_v3);
 	vec3 tmpNormal = normalize(cross(objectv2-objectv1,objectv3-objectv1));
-	GLfloat faceDirection=  dot(normalize(activeCamera->getEye()-activeCamera->getAt()),tmpNormal);
+	GLfloat faceDirection=  dot(normalize(activeCamera->getEye()-midpoint),tmpNormal);
 	int maxX = (v1.x<v2.x)?(v2.x<v3.x?v3.x:v2.x):(v1.x<v3.x?v3.x:v1.x);
 	maxX = maxX < width ? maxX : width;
 	int maxY = (v1.y<v2.y)?(v2.y<v3.y?v3.y:v2.y):(v1.y<v3.y?v3.y:v1.y);
@@ -291,7 +299,7 @@ bool Renderer::DrawTriangle( Face face,vec3 color,bool flat)
 				SetProjection(tmp_projection);
 				vec3 interpolatedNormal  = bCordinated.y * transformed.getVnX() + bCordinated.z * transformed.getVnY() + 
 					bCordinated.x * transformed.getVnZ();
-				plot(transformed,frameFace,j,i,color,flat?face.getNormal():normalize(interpolatedNormal),bCordinated,z );
+				plot(transformed,frameFace,j,i,color,flat?transformed.getNormal():normalize(interpolatedNormal),bCordinated,z );
 			}
 		}
 	}
@@ -308,7 +316,7 @@ void Renderer::DrawTriangleFrech(Face face,vec3 color)
 	vec3 objectv2(objectV2_4.x,objectV2_4.y,objectV2_4.z);
 	vec3 objectv3(objectV3_4.x,objectV3_4.y,objectV3_4.z);
 	vec3 tmpNormal = normalize(cross(objectv2-objectv1,objectv3-objectv1));
-	GLfloat faceDirection=  dot((activeCamera->getEye()-activeCamera->getAt()),tmpNormal);
+	GLfloat faceDirection=  dot((activeCamera->getEye()-(objectv1 + objectv2 + objectv3)/3),tmpNormal);
 	if(faceDirection < 0) return;
 	mat4 tmpCamera = _cTransform;
 	mat4 tmpCom = _composition;
@@ -352,15 +360,17 @@ void Renderer::DrawTriangleFrech(Face face,vec3 color)
 			if(bCordinated.x >= 0 && bCordinated.x <= 1 && bCordinated.y >= 0 && bCordinated.y <= 1
 				&& bCordinated.z >= 0 && bCordinated.z <= 1)
 			{
+				mat4 tmpProjection = _projection;
+				SetProjection(mat4(1));
+				Face f = transformed.transformFace(*this);
+				vec3 faceCor = f.getVecX()* bCordinated.y+f.getVecY()* bCordinated.z +f.getVecZ()* bCordinated.x;
+				SetProjection(tmpProjection);
 				vec3 colors = bCordinated.y * lightP1 + bCordinated.z * lightP2 + 
 					bCordinated.x * lightP3;
-/*				m_outBuffer[INDEX(m_width,j,i,2)]= cEye.x;
-				m_outBuffer[INDEX(m_width,j,i,1)]= cEye.y;
-				m_outBuffer[INDEX(m_width,j,i,0)]= cEye.z;
-				m_zbuffer[INDEXOF(m_width,j,i)]=Utils::interpolateFace(frameFace,j,i);;	 
-*/
+				vec3 worldCordinate = bCordinated.y * transformed.getVecX() + bCordinated.z * transformed.getVecY() 
+					+ bCordinated.x*transformed.getVecZ();
 				
-				putPixel(j,i,Utils::interpolateFace(mvpFace,j,i), colors);
+				putPixel(j,i,faceCor.z, colors);
 			}
 		}
 	}
@@ -396,11 +406,14 @@ bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 
 	{
 		GLfloat *zbuffer = getZBuffer();
 		GLfloat *outBuffer = getOutBuffer();
-
-		if(zbuffer[INDEXOF(width,x,y)]<zcordinate)
+		mat4 tmpProjection = _projection;
+		SetProjection(mat4(1));
+		Face f = worldFace.transformFace(*this);
+		vec3 faceCor = f.getVecX()* baryCordinate.y+f.getVecY()* baryCordinate.z +f.getVecZ()* baryCordinate.x;
+		SetProjection(tmpProjection);
+		if(x<width && x>0 && y>0 && y<height)
+		if(zbuffer[INDEXOF(width,x,y)]<faceCor.z&& faceCor.z < _znear)
 		{
-			
-
 			color/=255;
 			vec3 light = getLightFactorForPoint(worldCordinated.x,worldCordinated.y,worldCordinated.z, normal,worldFace);
 			if(_cartoonize)
@@ -413,15 +426,7 @@ bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 
 				else light.z =0.5;
 			}
 			vec3 cEye = (color * light);
-			if(fog)
-			{
-				GLfloat g = fog->fogDensity;
-				vec3 fogColor = fog->fogColor/255;
-				GLfloat z = length( activeCamera->getEye()-worldCordinated)/Zdistance;
-				GLfloat d = -log(g)/log(2);
-				GLfloat f = pow(2,-d*z) ;
-				cEye = f*(cEye) + (1-f)*(fogColor);
-			}
+			
 			int numOfColors = 256/_color;
 			cEye *= 255;
 			cEye = vec3((int)cEye.x/numOfColors,(int)cEye.y/numOfColors,(int)cEye.z/numOfColors);
@@ -429,18 +434,13 @@ bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 
 			cEye /=255;
 			if(_cartoonize)
 			{
-				vec4 eye4 = activeCamera->getEye();
+				vec4 eye4 = activeCamera->getEye()-activeCamera->getAt();
 				vec3 eye(eye4.x,eye4.y,eye4.z);
-				if( dot(eye,normal)<=0.1)
+				if( dot(eye,normal)<=0.2)
 					cEye =vec3(0);
 			}
-			/*
-			outBuffer[INDEX(m_width,x,y,2)]= cEye.x;
-			outBuffer[INDEX(m_width,x,y,1)]= cEye.y;
-			outBuffer[INDEX(m_width,x,y,0)]= cEye.z;
-			zbuffer[INDEXOF(m_width,x,y)]=zcordinate;
-			*/
-			putPixel(x,y, zcordinate, cEye);
+			
+			putPixel(x,y, faceCor.z, cEye);
 		}
 		else
 			flag= false;
@@ -475,7 +475,26 @@ vec2 Renderer::calculateTransformation(vec4 relativePoint) { // USE THIS FUNCTIO
 		return vec2(transformed.x/transformed.w, transformed.y/transformed.w);
 	return vec2(transformed.x, transformed.y);
 }
+void Renderer::addFog()
+{
+	int width = getWidth();	
+	int height = getHeight();
+	GLfloat *zbuff = getZBuffer();
+	vec3 fogcolor = fog->getFogColor();
+	GLfloat *out = getOutBuffer();
+	for(int j = 0 ; j < height ; j++)
+	{
+		for(int i = 0 ; i < width ; i++)
+		{
+			GLfloat z = zbuff[INDEXOF(width,i,j)];
+			GLfloat t = (z +_zfar)/Zdistance;
+			vec3 pixel(out[INDEX(width,i,j,2)] , out[INDEX(width,i,j,1)] , out[INDEX(width,i,j,0)]);
+			vec3 output = (t) * pixel + (1-t)* fogcolor;
+			putPixel(i,j,zbuff[INDEXOF(width,i,j)],output);
+		}
 
+	}
+}
 void Renderer::drawLineByVectors( vec3 from ,vec3 to,unsigned int color) {
 
 	vec2 vOut1 = calculateTransformation(from);
@@ -550,12 +569,13 @@ void Renderer::setFog(vec3 fogColor,GLfloat density)
 {
 	fog= new Fog(fogColor,density);
 }
-Renderer::Line::Line(vec2 p1, vec2 p2, int color): _p1(p1), _p2(p2), horizontal(false), vertical(false), m_outBuffer(0), m_color(color) {
-	//calculateSlope(_p1, _p2, true);
-	calculateSlope();
-}
+//Renderer::Line::Line(vec2 p1, vec2 p2, int color): _p1(p1), _p2(p2), horizontal(false), vertical(false), m_outBuffer(0), m_color(color) {
+//	//calculateSlope(_p1, _p2, true);
+//	calculateSlope();
+//}
 
-Renderer::Line::Line(Renderer &renderer, vec2 p1, vec2 p2, int color): _p1(p1), _p2(p2), horizontal(false), vertical(false), m_outBuffer(0), m_color(color) {
+Renderer::Line::Line(Renderer &renderer, vec2 p1, vec2 p2, int color): _p1(p1), _p2(p2), horizontal(false), vertical(false), m_outBuffer(0), m_color(color) ,m_renderer(renderer)
+{
 	m_outBuffer = renderer.getOutBuffer();
 	m_width = renderer.getWidth();
 	m_height = renderer.getHeight();

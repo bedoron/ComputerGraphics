@@ -30,12 +30,13 @@ void Scene::initDefaultCamera() {
 	m_activeCamera = new Camera();
 	cameras.push_back(m_activeCamera); // Default camera for debug
 	m_activeCamera->LookAt(vec4(5,5,5,1),vec4(0,0,0,1),vec4(0,1,0,1));	
-	_left = _bottom = _znear = -2;
-	_right = _top = _zfar = 2;
+	_left = _bottom = _znear = 1;
+	_right = _top = -5;
+	_zfar = 50;
 	_fovy = 45;
 	_aspect=1;
-	m_activeCamera->Perspective(45,1,-1,-20);
-	
+	m_activeCamera->Perspective(45,1,_znear,_zfar);
+	m_renderer->SetProjection(m_activeCamera->getProjection());
 	
 	_height = m_renderer->getHeight();
 	_width = m_renderer->getWidth();
@@ -44,22 +45,18 @@ void Scene::initDefaultCamera() {
 }
 void Scene::initDefaultLight()
 {
-	/*m_activeLight = new Light();
-	m_activeLight->setLocation(vec3(10,10,10));
-	m_activeLight->setDirection(vec3(1,1,0));
+	m_activeLight = new Light();
+	
+	m_activeLight->setDirection(vec3(1,1,1));
 	m_activeLight->setLightType(L_PARALEL);
-	m_activeLight->setIntencity(vec3(5,44,122));
+	m_activeLight->setIntencity(vec3(255,255,255));
 	lights.push_back(m_activeLight);
-	Light* ambiant = new Light();
-	ambiant->setIntencity(vec3(50,50,50));
-	ambiant->setLightType(L_AMBIANT);
-	lights.push_back(ambiant);
-	m_renderer->addLight(ambiant);
+	
 	m_renderer->addLight(m_activeLight);
-	activeLight=m_activeLight;*/
+	activeLight=m_activeLight;
 	
 }
-Scene::Scene():models(),cameras(), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0),lights()
+Scene::Scene():models(),cameras(), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0),lights(),_addFog(false)
 {
 //	axes= new AxesModel(); 
 //	activeEntity = WORLD_ACTIVE;
@@ -68,7 +65,7 @@ Scene::Scene():models(),cameras(), axes(new AxesModel()), activeEntity(WORLD_ACT
 	initDefaultLight();
 }
 Scene::Scene(Renderer *renderer) : m_renderer(renderer),names(),m_activeModel(-1),size(0),models(),cameras(),
-	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0),lights()
+	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0),lights(),_addFog(false)
 {
 	moveInterval=1;
 	initDefaultCamera();
@@ -76,7 +73,7 @@ Scene::Scene(Renderer *renderer) : m_renderer(renderer),names(),m_activeModel(-1
 };
 
 Scene::Scene(Renderer *renderer, CModelData& win) : m_renderer(renderer),names(),m_activeModel(-1),size(0),models(),cameras(),
-	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(&win),lights()
+	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(&win),lights(),_addFog(false)
 {
 	model_win->setScene(this);
 	initDefaultCamera();
@@ -145,8 +142,9 @@ void Scene::draw(mat4 translation)
 		models[m_activeModel]->setObjectTransform(oTransform);
 	}
 	m_renderer->resetZBuffer();
-	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	m_renderer->SetProjection(m_activeCamera->getProjection());
+	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
+
 	
 	m_renderer->ClearColorBuffer();
 	m_renderer->drawAxis();
@@ -159,6 +157,8 @@ void Scene::draw(mat4 translation)
 	axes->draw(*m_renderer);*/
 	if (_renderCamera)
 		drawCameras();
+	if(_addFog)
+		m_renderer->addFog();
 	m_renderer->SwapBuffers();
 	refreshModelWindow(); // IMPORTANT HOOK !
 }
@@ -257,8 +257,8 @@ void Scene::drawCameras()
 void Scene::setFrustum(float left,float right,float top,float down,float zNear,float zFar)
 {
 	m_activeCamera->Frustum(left,right,down,top,zNear,zFar);
-	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	m_renderer->SetProjection(m_activeCamera->getProjection());
+	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	draw();
 	_left= left;
 	_right = right;
@@ -268,12 +268,14 @@ void Scene::setFrustum(float left,float right,float top,float down,float zNear,f
 	_zfar= zFar;
 	currentView = frusum;
 	m_renderer->setZdistance(abs(_znear-_zfar));
+	m_renderer->setZFar(_zfar);
+	m_renderer->setZNear(_znear);
 }
 void Scene::setOrtho(float left,float right,float top,float down,float zNear,float zFar)
 {
 	m_activeCamera->Ortho(left,right,down,top,zNear,zFar);
-	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	m_renderer->SetProjection(m_activeCamera->getProjection());
+	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	currentView = ortho;
 	_left= left;
 	_right = right;
@@ -282,19 +284,23 @@ void Scene::setOrtho(float left,float right,float top,float down,float zNear,flo
 	_znear = zNear;
 	_zfar= zFar;
 	m_renderer->setZdistance(abs(_znear-_zfar));
+	m_renderer->setZFar(_zfar);
+	m_renderer->setZNear(_znear);
 	draw();
 }
 void Scene::setPrespective(float fovy,float aspect,float znear, float zfar)
 {
 	m_activeCamera->Perspective(fovy,aspect,znear,zfar);
-	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	m_renderer->SetProjection(m_activeCamera->getProjection());
+	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	currentView= prespective;
 	_fovy = fovy;
 	_aspect = aspect;
 	_znear = znear;
 	_zfar= zfar;
 	m_renderer->setZdistance(abs(_znear-_zfar));
+	m_renderer->setZFar(_zfar);
+	m_renderer->setZNear(_znear);
 	draw();
 }
 
@@ -442,4 +448,6 @@ void Scene::setFog(vec3 fogColor,GLfloat density)
 		m_renderer->setFog(fogColor,density);
 	else
 		m_renderer->clearFog();
+	_addFog = density !=0;
+	draw();
 }

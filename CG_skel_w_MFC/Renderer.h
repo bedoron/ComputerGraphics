@@ -49,6 +49,7 @@ class Renderer
 	int _color;
 	GLfloat Zdistance;
 	bool _cartoonize;
+	GLfloat _znear,_zfar;
 	//////////////////////////////
 	// openGL stuff. Don't touch.
 
@@ -129,6 +130,9 @@ public:
 	void setColors(GLfloat val){_color=val;}
 	void setZdistance(GLfloat distance){Zdistance = distance;}
 	void setCartoon(bool val){_cartoonize=val;}
+	void setZNear(GLfloat val){_znear = val;}
+	void setZFar(GLfloat val){_zfar = val;}
+	void addFog();
 };
 
 #define delta_threshold 0.001
@@ -151,14 +155,20 @@ class Renderer::Line
 	int m_height;
 	int m_color;
 	bool inverseSteps;
+	Renderer& m_renderer;
+	#define INDEX(width,x,y,c) ((x+y*width)*3+c)
+	#define INDEXOF(width,x,y) (x+y*width)
 
-	inline int INDEX(int width, int x, int y, int c) { return ((x+y*width)*3+c); }
 	inline void plot(int x, int y) {
 		if(x<m_width&& y<m_height && x>=0 && y>=0)
 		{
 			m_outBuffer[INDEX(m_width,x,y,2)]=  m_color			& 0x0000ff;
 			m_outBuffer[INDEX(m_width,x,y,1)]= (m_color >> 8)	& 0x0000ff;
 			m_outBuffer[INDEX(m_width,x,y,0)]= (m_color >> 16)	& 0x0000ff;
+			/*int width = m_renderer.getWidth();
+			int height = m_renderer.getHeight();
+			float* z_buffer = m_renderer.getZBuffer();
+			z_buffer[INDEXOF(width,x,y)]=m_renderer._znear;*/
 		}
 	}
 

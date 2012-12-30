@@ -200,6 +200,7 @@ void mouse(int button, int state, int x, int y)
 		lb_down = (state==GLUT_UP)?0:1;	
 		pressedX = x;
 		pressedY = y;
+		cout << "( " << x <<"," << y << ")\n";
 		break;
 	case GLUT_RIGHT_BUTTON:
 		rb_down = (state==GLUT_UP)?0:1;
