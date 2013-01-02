@@ -361,10 +361,13 @@ void Renderer::DrawTriangleFrech(Face face,vec3 color)
 				&& bCordinated.z >= 0 && bCordinated.z <= 1)
 			{
 				mat4 tmpProjection = _projection;
+				mat4 tmpOtransform = _oTransform;
+				SetObjectMatrices(mat4(1));
 				SetProjection(mat4(1));
 				Face f = transformed.transformFace(*this);
 				vec3 faceCor = f.getVecX()* bCordinated.y+f.getVecY()* bCordinated.z +f.getVecZ()* bCordinated.x;
 				SetProjection(tmpProjection);
+				SetObjectMatrices(tmpOtransform);
 				vec3 colors = bCordinated.y * lightP1 + bCordinated.z * lightP2 + 
 					bCordinated.x * lightP3;
 				vec3 worldCordinate = bCordinated.y * transformed.getVecX() + bCordinated.z * transformed.getVecY() 
@@ -401,16 +404,19 @@ bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 
 	bool flag = true;
 	int width = getWidth();
 	int height = getHeight();
-	vec3 worldCordinated = worldFace.getVecX()* baryCordinate.y+worldFace.getVecY()* baryCordinate.z +worldFace.getVecZ()* baryCordinate.x;
+	vec3 worldCordinated = worldFace.getVecX() * baryCordinate.y + worldFace.getVecY() * baryCordinate.z + worldFace.getVecZ() * baryCordinate.x;
 	if(x<width && x>0 && y>0 && y<height)
 	{
 		GLfloat *zbuffer = getZBuffer();
 		GLfloat *outBuffer = getOutBuffer();
 		mat4 tmpProjection = _projection;
+		mat4 tmpOtransform = _oTransform;
+		SetObjectMatrices(mat4(1));
 		SetProjection(mat4(1));
-		Face f = worldFace.transformFace(*this);
-		vec3 faceCor = f.getVecX()* baryCordinate.y+f.getVecY()* baryCordinate.z +f.getVecZ()* baryCordinate.x;
+		Face f = worldFace.transformFace(*this,true);
+		vec3 faceCor = f.getVecX() * baryCordinate.y + f.getVecY() * baryCordinate.z + f.getVecZ() * baryCordinate.x;
 		SetProjection(tmpProjection);
+		SetObjectMatrices(tmpOtransform);
 		if(x<width && x>0 && y>0 && y<height)
 		if(zbuffer[INDEXOF(width,x,y)]<faceCor.z&& faceCor.z < _znear)
 		{

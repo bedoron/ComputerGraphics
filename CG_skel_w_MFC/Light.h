@@ -38,7 +38,7 @@ public:
 		}
 		case L_PARALEL:
 		{
-			if(dot(normalize(normal),normalize(direction)>0))
+			if(dot(normalize(normal),normalize(direction))>0)
 			{
 				GLfloat angle = dot(normalize(direction),normal);
 				light +=tmpintensity*_kDiffuze*angle;
