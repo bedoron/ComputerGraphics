@@ -1,0 +1,271 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+# Multi/Sub Material__488 (3) to come 
+#
+newmtl GlossBlack
+Ka  0.0 0.0 0.0
+Kd  1.0 0.6 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  6.4
+illum 2
+#
+newmtl 08_-_Default
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl mirror
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  1.0 1.0 1.0
+d  0.8
+Ns  1.4
+illum 2
+#
+# Multi/Sub Material__488 done 
+#
+# Multi/Sub Material__123 (3) to come 
+#
+newmtl 12_-_Default
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+bump -s 0.8 30.0 1.0 tire.JPG
+#
+newmtl 06_-_Default
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl Metal_Chrome
+Ka  0.0 0.0 0.0
+Kd  0.3 0.3 0.3
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  15.0
+illum 2
+#
+# Multi/Sub Material__123 done 
+#
+# Multi/Sub Material__94 (3) to come 
+#
+newmtl GlossBlack
+Ka  0.0 0.0 0.0
+Kd  1.0 0.6 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  6.4
+illum 2
+#
+newmtl 08_-_Default
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl mirror
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  1.0 1.0 1.0
+d  0.8
+Ns  1.4
+illum 2
+#
+# Multi/Sub Material__94 done 
+#
+# Multi/Sub Material__155 (2) to come 
+#
+newmtl GlossBlack
+Ka  0.0 0.0 0.0
+Kd  1.0 0.6 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  6.4
+illum 2
+#
+newmtl Metal_Chrome
+Ka  0.0 0.0 0.0
+Kd  0.3 0.3 0.3
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  15.0
+illum 2
+#
+# Multi/Sub Material__155 done 
+#
+# Multi/Sub Material__82 (3) to come 
+#
+newmtl GlossBlack
+Ka  0.0 0.0 0.0
+Kd  1.0 0.6 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  6.4
+illum 2
+#
+newmtl 08_-_Default
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl mirror
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  1.0 1.0 1.0
+d  0.8
+Ns  1.4
+illum 2
+#
+# Multi/Sub Material__82 done 
+#
+# Multi/Sub Material__384 (15) to come 
+#
+newmtl GlossBlack
+Ka  0.0 0.0 0.0
+Kd  1.0 0.6 0.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  6.4
+illum 2
+#
+newmtl 08_-_Default
+Ka  0.1 0.1 0.1
+Kd  0.1 0.1 0.1
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl front_light
+Ka  0.6 0.6 0.6
+Kd  0.6 0.6 0.6
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+map_Kd white2.JPG
+map_Ks white2.JPG
+#
+newmtl front_light_2
+Ka  1.0 0.4 0.0
+Kd  1.0 0.4 0.0
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl Metal_Chrome
+Ka  0.0 0.0 0.0
+Kd  0.3 0.3 0.3
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  15.0
+illum 2
+#
+newmtl 05_-_Default
+Ka  0.0 0.0 0.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  5.0
+illum 2
+#
+newmtl mirror
+Ka  0.0 0.0 0.0
+Kd  0.0 0.0 0.0
+Ks  1.0 1.0 1.0
+d  0.8
+Ns  1.4
+illum 2
+#
+newmtl 13_-_Default
+Ka  0.6 0.6 0.6
+Kd  0.6 0.6 0.6
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+map_Kd white2.JPG
+map_Ks white2.JPG
+#
+newmtl 15_-_Default
+Ka  0.6 0.6 0.6
+Kd  0.6 0.6 0.6
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+map_Kd white2.JPG
+map_Ks white2.JPG
+#
+newmtl 16_-_Default
+Ka  0.6 0.6 0.6
+Kd  0.6 0.6 0.6
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+map_Kd red.JPG
+map_Ks red.JPG
+#
+newmtl 17_-_Default
+Ka  0.6 0.6 0.6
+Kd  0.6 0.6 0.6
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+map_Kd red.JPG
+map_Ks red.JPG
+#
+newmtl 05_-_Defaudlt
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.5 0.5 0.5
+d  1.0
+Ns  10.0
+illum 2
+#
+newmtl 18_-_Default
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl Material__476
+Ka  0.6 0.6 0.6
+Kd  0.6 0.6 0.6
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+#
+newmtl Material__475
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+map_Kd -o 0.0 -0.0 0.0 number_plate.JPG
+#
+# Multi/Sub Material__384 done 
+#
+# EOF

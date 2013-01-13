@@ -1,0 +1,31 @@
+# Max2Mtl Version 4.0 Mar 10th, 2001
+#
+# Multi/Sub Material__319 (3) to come 
+#
+newmtl Metal_Dark_Gold
+Ka  0.0 0.0 0.0
+Kd  0.9 0.6 0.3
+Ks  0.9 0.8 0.7
+d  1.0
+Ns  15.0
+illum 2
+#
+newmtl GlossWhite
+Ka  0.0 0.0 0.0
+Kd  1.0 1.0 1.0
+Ks  1.0 1.0 1.0
+d  1.0
+Ns  25.0
+illum 2
+#
+newmtl 01_-_Default
+Ka  1.0 1.0 1.0
+Kd  1.0 1.0 1.0
+Ks  0.9 0.9 0.9
+d  1.0
+Ns  0.0
+illum 2
+#
+# Multi/Sub Material__319 done 
+#
+# EOF

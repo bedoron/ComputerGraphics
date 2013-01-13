@@ -79,6 +79,8 @@ public:
 		initMvp();
 	};
 
+	void displayPixel(int x, int y);
+
 	bool isDrawNormal();
 	void setDrawnormal(bool _drawNormal);
 	bool isDrawBound();

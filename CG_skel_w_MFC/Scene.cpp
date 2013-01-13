@@ -32,7 +32,7 @@ void Scene::initDefaultCamera() {
 	m_activeCamera->LookAt(vec4(5,5,5,1),vec4(0,0,0,1),vec4(0,1,0,1));	
 	_left = _bottom = _znear = 1;
 	_right = _top = -5;
-	_zfar = 30;
+	_zfar = 20;
 	_fovy = 45;
 	_aspect=1;
 	m_activeCamera->Perspective(45,1,_znear,_zfar);

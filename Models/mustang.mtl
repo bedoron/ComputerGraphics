@@ -1,0 +1,617 @@
+# Blender MTL File: 'mustang.blend'
+# Material Count: 59
+newmtl Badging_Chrom1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Badging_Chrom2
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Badging_Chrom3
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Badging_Chrom4
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Badging_Chrom5
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Badging_Chrome
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Black
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Black1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Black2
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Black3
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Black4
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Body_paint
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.740392 0.558431 0.320000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Bottom1_BOTTOM.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\BOTTOM.TGA
+
+
+newmtl Bottom2_BOTTOM.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\BOTTOM.TGA
+
+
+newmtl Bottom_BOTTOM.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\BOTTOM.TGA
+
+
+newmtl Brake_Disc1_BRAKDISC.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\BRAKDISC.TGA
+map_d C:\\Documents and Settings\\Ward Family\\My Documents\\My Pictures\\car templates\\blender images\\Slum Run\\TIREBACK.TGA
+
+
+newmtl Brake_Disc2_BRAKDISC.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\BRAKDISC.TGA
+map_d C:\\Documents and Settings\\Ward Family\\My Documents\\My Pictures\\car templates\\blender images\\Slum Run\\TIREBACK.TGA
+
+
+newmtl Brake_Disc3_BRAKDISC.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\BRAKDISC.TGA
+map_d C:\\Documents and Settings\\Ward Family\\My Documents\\My Pictures\\car templates\\blender images\\Slum Run\\TIREBACK.TGA
+
+
+newmtl Brake_Disc4_BRAKDISC.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\BRAKDISC.TGA
+map_d C:\\Documents and Settings\\Ward Family\\My Documents\\My Pictures\\car templates\\blender images\\Slum Run\\TIREBACK.TGA
+
+
+newmtl Brake_Disc_BRAKDISC.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\BRAKDISC.TGA
+map_d C:\\Documents and Settings\\Ward Family\\My Documents\\My Pictures\\car templates\\blender images\\Slum Run\\TIREBACK.TGA
+
+
+newmtl Brake_Pads
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Brake_Pads1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Brake_Pads2
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl DoorLine1_DOORLINE.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\DOORLINE.TGA
+map_d C:\\Documents and Settings\\Ward Family\\My Documents\\My Pictures\\car templates\\blender images\\Slum Run\\DOORLINE.TGA
+
+
+newmtl DoorLine2_DOORLINE.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\DOORLINE.TGA
+map_d C:\\Documents and Settings\\Ward Family\\My Documents\\My Pictures\\car templates\\blender images\\Slum Run\\DOORLINE.TGA
+
+
+newmtl DoorLine3_DOORLINE.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\DOORLINE.TGA
+map_d C:\\Documents and Settings\\Ward Family\\My Documents\\My Pictures\\car templates\\blender images\\Slum Run\\DOORLINE.TGA
+
+
+newmtl DoorLine_DOORLINE.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\DOORLINE.TGA
+map_d C:\\Documents and Settings\\Ward Family\\My Documents\\My Pictures\\car templates\\blender images\\Slum Run\\DOORLINE.TGA
+
+
+newmtl Interior
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.244706 0.241569 0.241569
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl License_LICENSE.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\LICENSE.TGA
+
+
+newmtl Mat
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Material_#580
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.467451 0.467451 0.467451
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Material_#581
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.467451 0.467451 0.467451
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Material_#582
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.467451 0.467451 0.467451
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Material_#583
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.467451 0.467451 0.467451
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Material_#589
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.467451 0.467451 0.467451
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Material_#592
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.053333 0.053333 0.053333
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Material_#595
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.467451 0.467451 0.467451
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Material_#597
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.122353 0.122353 0.122353
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Material_#599_WDEFROST.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.467451 0.467451 0.467451
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\WDEFROST.TGA
+
+
+newmtl Misc
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc2
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc3
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc4
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc5
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc6
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc7
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc_Chrome
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc_Chrome1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc_Chrome2
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc_Chrome3
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc_Chrome4
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc_Chrome5
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc_Chrome6
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Misc_Chrome7
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl Tire_Back
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.153725 0.153725 0.153725
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_d C:\\Documents and Settings\\Ward Family\\My Documents\\My Pictures\\car templates\\blender images\\Slum Run\\TIREBACK.TGA
+
+
+newmtl Tire_TIRE.TGA
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.153725 0.153725 0.153725
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Documents and Settings\Ward Family\My Documents\My Pictures\car templates\blender images\Slum Run\TIRE.TGA
+
+
+newmtl floor
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.281950 0.281950 0.281950
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl headlight_glass
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.233240 0.225854 0.249566
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 0.307190
+illum 2
+
+

@@ -1,0 +1,261 @@
+#==================================================
+#Material list
+#This file has been created by PoseRay v3.13.7.479
+#3D model to POV-Ray/Moray Converter.
+#Author: FlyerX
+#Email: flyerx_2000@yahoo.com
+#Web: http://mysite.verizon.net/sfg0000/
+#==================================================
+ 
+#==================================================
+newmtl ACAD_color_34
+Ns 2.5
+Ka 0 0 0
+Kd 0.5058824 0.2509804 0
+Ks 0 0 0
+d 1
+#Ka2 0 0 0
+#Ks2 0 0 0
+#Ns2 100
+#r 0
+#r2 0
+#cell_hi
+#trans1_su 1
+#trans1_sv 1
+#trans1_tu 0
+#trans1_tv 0
+#trans1_r 0
+#trans1_ru0 0
+#trans1_rv0 0
+#trans2_su 1
+#trans2_sv 1
+#trans2_tu 0
+#trans2_tv 0
+#trans2_r 0
+#trans2_ru0 0
+#trans2_rv0 0
+#trans3_su 1
+#trans3_sv 1
+#trans3_tu 0
+#trans3_tv 0
+#trans3_r 0
+#trans3_ru0 0
+#trans3_rv0 0
+#trans4_su 1
+#trans4_sv 1
+#trans4_tu 0
+#trans4_tv 0
+#trans4_r 0
+#trans4_ru0 0
+#trans4_rv0 0
+ 
+#==================================================
+newmtl ACAD_color_2
+Ns 2.5
+Ka 0 0 0
+Kd 1 1 0
+Ks 0 0 0
+d 1
+#Ka2 0 0 0
+#Ks2 0 0 0
+#Ns2 100
+#r 0
+#r2 0
+#cell_hi
+#trans1_su 1
+#trans1_sv 1
+#trans1_tu 0
+#trans1_tv 0
+#trans1_r 0
+#trans1_ru0 0
+#trans1_rv0 0
+#trans2_su 1
+#trans2_sv 1
+#trans2_tu 0
+#trans2_tv 0
+#trans2_r 0
+#trans2_ru0 0
+#trans2_rv0 0
+#trans3_su 1
+#trans3_sv 1
+#trans3_tu 0
+#trans3_tv 0
+#trans3_r 0
+#trans3_ru0 0
+#trans3_rv0 0
+#trans4_su 1
+#trans4_sv 1
+#trans4_tu 0
+#trans4_tv 0
+#trans4_r 0
+#trans4_ru0 0
+#trans4_rv0 0
+ 
+#==================================================
+newmtl ACAD_color_250
+Ns 2.5
+Ka 0 0 0
+Kd 0.2 0.2 0.2
+Ks 0 0 0
+d 1
+#Ka2 0 0 0
+#Ks2 0 0 0
+#Ns2 100
+#r 0
+#r2 0
+#cell_hi
+#trans1_su 1
+#trans1_sv 1
+#trans1_tu 0
+#trans1_tv 0
+#trans1_r 0
+#trans1_ru0 0
+#trans1_rv0 0
+#trans2_su 1
+#trans2_sv 1
+#trans2_tu 0
+#trans2_tv 0
+#trans2_r 0
+#trans2_ru0 0
+#trans2_rv0 0
+#trans3_su 1
+#trans3_sv 1
+#trans3_tu 0
+#trans3_tv 0
+#trans3_r 0
+#trans3_ru0 0
+#trans3_rv0 0
+#trans4_su 1
+#trans4_sv 1
+#trans4_tu 0
+#trans4_tv 0
+#trans4_r 0
+#trans4_ru0 0
+#trans4_rv0 0
+ 
+#==================================================
+newmtl ACAD_color_78
+Ns 2.5
+Ka 0 0 0
+Kd 0.1529412 0.3098039 0
+Ks 0 0 0
+d 1
+#Ka2 0 0 0
+#Ks2 0 0 0
+#Ns2 100
+#r 0
+#r2 0
+#cell_hi
+#trans1_su 1
+#trans1_sv 1
+#trans1_tu 0
+#trans1_tv 0
+#trans1_r 0
+#trans1_ru0 0
+#trans1_rv0 0
+#trans2_su 1
+#trans2_sv 1
+#trans2_tu 0
+#trans2_tv 0
+#trans2_r 0
+#trans2_ru0 0
+#trans2_rv0 0
+#trans3_su 1
+#trans3_sv 1
+#trans3_tu 0
+#trans3_tv 0
+#trans3_r 0
+#trans3_ru0 0
+#trans3_rv0 0
+#trans4_su 1
+#trans4_sv 1
+#trans4_tu 0
+#trans4_tv 0
+#trans4_r 0
+#trans4_ru0 0
+#trans4_rv0 0
+ 
+#==================================================
+newmtl ACAD_color_5
+Ns 2.5
+Ka 0 0 0
+Kd 0 0 1
+Ks 0 0 0
+d 1
+#Ka2 0 0 0
+#Ks2 0 0 0
+#Ns2 100
+#r 0
+#r2 0
+#cell_hi
+#trans1_su 1
+#trans1_sv 1
+#trans1_tu 0
+#trans1_tv 0
+#trans1_r 0
+#trans1_ru0 0
+#trans1_rv0 0
+#trans2_su 1
+#trans2_sv 1
+#trans2_tu 0
+#trans2_tv 0
+#trans2_r 0
+#trans2_ru0 0
+#trans2_rv0 0
+#trans3_su 1
+#trans3_sv 1
+#trans3_tu 0
+#trans3_tv 0
+#trans3_r 0
+#trans3_ru0 0
+#trans3_rv0 0
+#trans4_su 1
+#trans4_sv 1
+#trans4_tu 0
+#trans4_tv 0
+#trans4_r 0
+#trans4_ru0 0
+#trans4_rv0 0
+ 
+#==================================================
+newmtl ACAD_color_253
+Ns 2.5
+Ka 0 0 0
+Kd 0.5098039 0.5098039 0.5098039
+Ks 0 0 0
+d 1
+#Ka2 0 0 0
+#Ks2 0 0 0
+#Ns2 100
+#r 0
+#r2 0
+#cell_hi
+#trans1_su 1
+#trans1_sv 1
+#trans1_tu 0
+#trans1_tv 0
+#trans1_r 0
+#trans1_ru0 0
+#trans1_rv0 0
+#trans2_su 1
+#trans2_sv 1
+#trans2_tu 0
+#trans2_tv 0
+#trans2_r 0
+#trans2_ru0 0
+#trans2_rv0 0
+#trans3_su 1
+#trans3_sv 1
+#trans3_tu 0
+#trans3_tv 0
+#trans3_r 0
+#trans3_ru0 0
+#trans3_rv0 0
+#trans4_su 1
+#trans4_sv 1
+#trans4_tu 0
+#trans4_tv 0
+#trans4_r 0
+#trans4_ru0 0
+#trans4_rv0 0
+ 

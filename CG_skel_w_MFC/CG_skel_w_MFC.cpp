@@ -39,7 +39,7 @@ using std::cerr;
 
 #define MAXIMUM_MENUS 8
 
-enum Mouse_Mode{m_Model,m_camera,m_light};
+enum Mouse_Mode{m_Model,m_camera,m_light, m_pixel_debug};
 enum MENU_ELEMENTS {
 OBJECTS_NAMESPACE_BEGIN = 0,
 OBJECTS_NAMESPACE_END = 999,
@@ -120,6 +120,10 @@ void keyboard( unsigned char key, int x, int y )
 	case 'l':
 		mouseMode = m_light;
 		cerr << "light is using mouse\n";
+		break;
+	case 'd':
+		mouseMode = m_pixel_debug;
+		cerr << "Pixel debug mode, click anywhere to get pixel values\n";
 		break;
 	}
 	
@@ -207,6 +211,8 @@ void mouse(int button, int state, int x, int y)
 		break;
 	case GLUT_MIDDLE_BUTTON:
 		mb_down = (state==GLUT_UP)?0:1;	
+		if(mouseMode==m_pixel_debug)
+			renderer->displayPixel(x,y);		
 		break;
 	case GLUT_WHEEL_UP:
 		scene->setZoom(1);
@@ -292,7 +298,6 @@ void motion(int x, int y)
 			scene->changeLightDirection(rotation);
 			break;
 		}
-
 	}
 	
 	
@@ -555,7 +560,7 @@ int my_main( int argc, char **argv )
 	glutInit( &argc, argv );
 	glutInitDisplayMode( GLUT_RGBA| GLUT_DOUBLE);
 	glutInitWindowSize( MAIN_WIDTH, MAIN_HEIGHT);
-	glutInitContextVersion( 4,0 );
+	glutInitContextVersion( 3,1 );
 	glutInitContextProfile( GLUT_CORE_PROFILE );
 	glutCreateWindow( "CG" );
 	glewExperimental = GL_TRUE;

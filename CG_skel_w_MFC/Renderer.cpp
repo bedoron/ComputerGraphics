@@ -398,6 +398,35 @@ void Renderer::putPixel(int x, int y, GLfloat zIndex, vec3 colors) {
 }
 
 
+void Renderer::displayPixel(int x, int y) {
+	cerr << "("<<x << "," << y<<")";
+	if(antiAliasing) {
+		vec3 quads(sumQuad(x,y,2), sumQuad(x,y,1),sumQuad(x,y,0));
+		cerr << "sumQuad: " << quads << "\n";
+	}
+	vec3 screenArray(m_outBuffer[INDEX(m_width,x,y,2)],m_outBuffer[INDEX(m_width,x,y,1)], m_outBuffer[INDEX(m_width,x,y,0)]);
+	cerr << "("<<x << "," << y<<")";
+	cerr << "Display: " << screenArray << "\n";
+	GLfloat *out = getOutBuffer();
+
+	if(antiAliasing) {
+		m_aliased_outBuffer[INDEX(2*m_width,x, y,2)]= 1;
+		m_aliased_outBuffer[INDEX(2*m_width, x+1, y,2)]= 1;
+		m_aliased_outBuffer[INDEX(2*m_width,x, y+1,2)]= 1;
+		m_aliased_outBuffer[INDEX(2*m_width,x+1, y+1,2)]= 1;
+	} else {
+		int width = m_width;
+		int corsair_size = 20;
+		int half_corsair = corsair_size/2;
+		for(int i=0;i<corsair_size;++i) { // Draw an X
+			m_outBuffer[INDEX(m_width, x+i, y, 2)] = 1;
+//			m_outBuffer[INDEX(width,x, (m_height-y)-half_corsair+i , 2)] = 1;
+//			m_outBuffer[INDEX(width,x-half_corsair+i,(m_height-y) , 2)] = 1;
+		}
+	}
+	SwapBuffers();
+}
+
 bool Renderer::plot(Face worldFace,Face frameFace, int x, int y,vec3 color,vec3 normal,vec3 baryCordinate,GLfloat zcordinate,GLfloat g) 
 {
 
