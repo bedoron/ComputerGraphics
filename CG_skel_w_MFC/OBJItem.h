@@ -29,6 +29,25 @@ private:
 	vec3 _color;
 	bool calcNormals;
 	int renderMode;
+
+	vec3 _kDiffuze;
+	vec3 _kAmbiant;
+	vec3 _kspecular;
+	GLfloat _shine;
+	//OpenGL
+	vec3* verticesArray;
+	vec4* verticesArray4;
+	vec3* normalsArray;
+	vec4* normalsArray4;
+	GLuint _buffer[6];
+	GLuint _vao;
+
+	GLuint GLkAmbient;
+	GLuint GLkDiffuse;
+	GLuint GLkSpecular;
+	GLuint GLShininess;
+
+
 public:
 	OBJItem(void);
 	OBJItem(const OBJItem& item);
@@ -39,6 +58,7 @@ public:
 	vec3& getVertexByNumber(int id);
 	vec3& getNormalByNumber(int id);
 	void draw(Renderer& renderer);
+	void draw(GLuint program);
 	GLfloat getMinX();
 	GLfloat getMinY();
 	GLfloat getMinZ();
@@ -64,5 +84,14 @@ public:
 	void setColor(vec3 color){_color = color;}
 	void setCalcNormals(bool val){calcNormals = val;}
 	void setRenderType(int val){renderMode = val;}
+	void copyData();
+	void initVao();
+	void setKvalue(vec3 kambiant,vec3 kdiffuse,vec3 kspecular,GLfloat shine)
+	{
+		_kspecular=kspecular;
+		_kDiffuze = kdiffuse;
+		_kAmbiant = kambiant;
+		_shine = shine;
+	}
 };
 

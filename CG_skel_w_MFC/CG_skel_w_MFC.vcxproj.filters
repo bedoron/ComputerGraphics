@@ -210,5 +210,11 @@
     <None Include="vshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="GouraudVShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="tmp.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

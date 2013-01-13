@@ -172,6 +172,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="fshader.glsl" />
+    <None Include="GouraudVShader.glsl" />
+    <None Include="tmp.glsl" />
     <None Include="vshader.glsl" />
   </ItemGroup>
   <ItemGroup>

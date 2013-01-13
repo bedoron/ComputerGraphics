@@ -17,6 +17,7 @@ protected:
 	virtual ~Model() {}
 public:
 	void virtual draw(Renderer& renderer)=0;
+	void virtual drawNormal(GLuint program)=0;
 	void virtual setObjectTransform(mat4 worldTransform)=0;
 	mat4 virtual getObjectTransform()=0;
 	vec3 virtual getModelCenter()=0;
@@ -66,7 +67,7 @@ public:
 	}
 
 	bool getAntialiasing() { return m_renderer->getAntialiasing(); }
-
+	void drawGL(mat4 translation);
 	void drawDebug(vec4 eye = vec4(2,5,-10,1)); //
 	void draw(vec3 rotation);
 	void draw(vec3 rotation,float zoom,bool update= false);

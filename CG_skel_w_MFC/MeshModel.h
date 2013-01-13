@@ -53,4 +53,5 @@ public:
 	void setCartoonize(bool val){_cartoonize=val;}
 	void setRenderType(int val){renderMode = val;}
 
+	void drawNormal(GLuint program);
 };

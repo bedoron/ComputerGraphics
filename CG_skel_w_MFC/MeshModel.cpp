@@ -83,6 +83,7 @@ void MeshModel::draw(Renderer& renderer)
 	renderer.setColors(_numOfColors);
 	renderer.setCartoon(_cartoonize);
 	objItem.setRenderType(renderMode);
+	objItem.setKvalue(_kAmbiant,_kDiffuze,_kspecular,shine);
 	objItem.draw(renderer);
 }
 void MeshModel::setObjectTransform(mat4 worldTransform)
@@ -104,4 +105,12 @@ void MeshModel::scale(const vec3& scaler) {
 
 void MeshModel::rotate(const vec3& rotors) {
 	_world_transform = _world_transform * RotateX(rotors.x) * RotateY(rotors.y) * RotateZ(rotors.z);
+}
+void MeshModel::drawNormal(GLuint program)
+{
+	objItem.setColor(_color);
+	objItem.setCalcNormals(useNormals);
+	objItem.setRenderType(renderMode);
+	objItem.setKvalue(_kAmbiant,_kDiffuze,_kspecular,shine);
+	objItem.draw(program);
 }

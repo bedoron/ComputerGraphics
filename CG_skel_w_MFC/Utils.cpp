@@ -226,8 +226,6 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 			{
 				e.what();
 			}
-
-
 		}
 		else if(action == "vn") {
 			float i,j,k = 0;
@@ -236,6 +234,7 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 			objitem.addNormal(normal);
 		}
 	}
+	objitem.copyData();
 	return objitem;
 }
 

@@ -6,6 +6,7 @@
 #include "CubeModel.h"
 #include "AxesModel.h"
 #include "ModelData.h"
+#include "InitShader.h"
 using namespace std;
 
 void Scene::loadOBJModel(string fileName,string id)
@@ -32,7 +33,7 @@ void Scene::initDefaultCamera() {
 	m_activeCamera->LookAt(vec4(5,5,5,1),vec4(0,0,0,1),vec4(0,1,0,1));	
 	_left = _bottom = _znear = 1;
 	_right = _top = -5;
-	_zfar = 30;
+	_zfar = 20;
 	_fovy = 45;
 	_aspect=1;
 	m_activeCamera->Perspective(45,1,_znear,_zfar);
@@ -132,10 +133,31 @@ void Scene::draw(vec3 rotation,GLfloat zoom,bool change)
 void Scene::drawDebug(vec4 eye) {
 	std::cerr << "Narf!\n";
 };
-
+void Scene::drawGL(mat4 translation)
+{
+	glEnable(GL_DEPTH_TEST);
+	GLuint program;
+	program = InitShader("tmp.glsl", "fshader.glsl");
+	glUseProgram(program);
+	 // init lights
+	GLuint Projection = glGetUniformLocation( program, "Projection");
+	GLuint CameraView = glGetUniformLocation( program, "CameraView");
+	GLuint ModelView = glGetUniformLocation( program, "ModelView");
+	GLuint CameraPosition = glGetUniformLocation( program, "CameraPosition");	
+	glUniformMatrix4fv(Projection,1,GL_TRUE,m_activeCamera->getProjection());
+	glUniformMatrix4fv(CameraView,1,GL_TRUE,m_activeCamera->getInverseTransformation());
+	vec4 camposition  = m_activeCamera->getEye();
+	glUniform4f(CameraPosition,camposition.x,camposition.y,camposition.z,camposition.w);
+	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  //2
+	{
+		(*it)->drawNormal(program);
+	}
+}
 
 void Scene::draw(mat4 translation)
 {
+	drawGL(	translation);
+	return;
 	if(models.size()!=0 && m_activeModel!=-1) {
 		mat4 oTransform =models[m_activeModel]->getObjectTransform() ;	
 		oTransform =translation *  oTransform ; 
