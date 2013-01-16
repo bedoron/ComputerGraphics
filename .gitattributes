@@ -8,6 +8,7 @@
 *.vbproj merge=union
 *.fsproj merge=union
 *.dbproj merge=union
+*.glsl text eol=lf
 
 # Standard to msysgit
 *.doc	 diff=astextplain
