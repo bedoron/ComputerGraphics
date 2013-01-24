@@ -64,27 +64,16 @@ vec2 vec2fFromStream(std::istream & aStream)
 MeshModel::MeshModel(OBJItem modelItem):objItem(modelItem),_world_transform(mat4()),_color(vec3(255,255,255)),
 	_kAmbiant(vec3(1,1,1)),_kDiffuze(vec3(1,1,1)),_kspecular(vec3(1,1,1)),shine(18),_numOfColors(255),_cartoonize(false)
 {
-	
 }
 
 MeshModel::~MeshModel(void)
 {
 }
 
-void MeshModel::draw(Renderer& renderer)
+void MeshModel::reDraw(GLuint program)
 {
-	renderer.SetObjectMatrices(_world_transform);
-	objItem.setColor(_color);
-	renderer.setKAbmbiant(_kAmbiant);
-	renderer.setKDiffuze(_kDiffuze);
-	renderer.setKspecular(_kspecular);
-	renderer.setShine(shine);
-	objItem.setCalcNormals(useNormals);
-	renderer.setColors(_numOfColors);
-	renderer.setCartoon(_cartoonize);
-	objItem.setRenderType(renderMode);
-	objItem.setKvalue(_kAmbiant,_kDiffuze,_kspecular,shine);
-	objItem.draw(renderer);
+	objItem.setKvalue(_kAmbiant,_kDiffuze,_kspecular,shine,_world_transform);
+	objItem.reDraw(program);
 }
 void MeshModel::setObjectTransform(mat4 worldTransform)
 {
@@ -111,6 +100,6 @@ void MeshModel::drawNormal(GLuint program)
 	objItem.setColor(_color);
 	objItem.setCalcNormals(useNormals);
 	objItem.setRenderType(renderMode);
-	objItem.setKvalue(_kAmbiant,_kDiffuze,_kspecular,shine);
+	objItem.setKvalue(_kAmbiant,_kDiffuze,_kspecular,shine,_world_transform);
 	objItem.draw(program);
 }

@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CG_skel_w_MFC", "CG_skel_w_
 		{7FFB8BD3-9807-4B3B-867F-CDBD36BC48A1} = {7FFB8BD3-9807-4B3B-867F-CDBD36BC48A1}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testing", "CG_skel_w_MFC\testing.vcxproj", "{22A7F089-C16C-47B5-BE49-065C0B6ADA7B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -29,6 +31,10 @@ Global
 		{849F10CE-4916-4A83-A3CB-A19AF397A995}.Debug|Win32.Build.0 = Debug|Win32
 		{849F10CE-4916-4A83-A3CB-A19AF397A995}.Release|Win32.ActiveCfg = Release|Win32
 		{849F10CE-4916-4A83-A3CB-A19AF397A995}.Release|Win32.Build.0 = Release|Win32
+		{22A7F089-C16C-47B5-BE49-065C0B6ADA7B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{22A7F089-C16C-47B5-BE49-065C0B6ADA7B}.Debug|Win32.Build.0 = Debug|Win32
+		{22A7F089-C16C-47B5-BE49-065C0B6ADA7B}.Release|Win32.ActiveCfg = Release|Win32
+		{22A7F089-C16C-47B5-BE49-065C0B6ADA7B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

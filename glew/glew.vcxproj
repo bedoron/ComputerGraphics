@@ -83,7 +83,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <Lib>
-      <OutputFile>$(TargetDir)\glew.lib</OutputFile>
+      <OutputFile>lib\glew.lib</OutputFile>
     </Lib>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>

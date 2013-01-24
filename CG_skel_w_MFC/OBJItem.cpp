@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "OBJItem.h"
-#include "CubeModel.h"
+
 
 OBJItem::OBJItem(void):vertices(),faces(),normals(),minX(5),minY(5),minZ(5)
-	,maxX(0),maxY(0),maxZ(0), drawBox(false), drawVertexNormal(false), drawNormal(false),_color(WHITE),calcNormals(true),renderMode(Phong)
+	,maxX(0),maxY(0),maxZ(0), drawBox(false), drawVertexNormal(false), drawNormal(false),_color(0),calcNormals(true),renderMode(Phong)
 {
 	verticesTree = new AvlTree<Vertex>();
 }
@@ -74,68 +74,68 @@ void OBJItem::draw(Renderer& renderer)
 
 			
 
-	for(std::vector<Face>::iterator it = faces.begin() ;it != faces.end(); ++it) 
-	{
-		try
-		{
-			Face curentface(*it);
-			vec3 currentVerticies = curentface.getVertices();
-			if(!calcNormals)
-			{
-				curentface.setVN1(getCalculatedNormal(currentVerticies.x));
-				curentface.setVN2(getCalculatedNormal(currentVerticies.y));
-				curentface.setVN3(getCalculatedNormal(currentVerticies.z));
-			}
-			//draw triangle
-			if(!curentface.isMaterial())
-			{
-				renderer.setKAbmbiant(curentface.getKAmbiant());
-				renderer.setKDiffuze(curentface.getKDiffuze());
-				renderer.setKspecular(curentface.getKSpecular());
-				renderer.setShine(curentface.getNS());
-			}
-			switch(renderMode)
-			{
-			case Flat:
-				{
-					renderer.DrawTriangle(curentface,_color,true);
-					break;
-				}
-			case french:
-				{
-					renderer.DrawTriangleFrech(curentface,_color);
-					break;
-				}
-			case Phong:
-				{
-					renderer.DrawTriangle(curentface,_color);
-					break;
-				}
+	//for(std::vector<Face>::iterator it = faces.begin() ;it != faces.end(); ++it) 
+	//{
+	//	try
+	//	{
+	//		Face curentface(*it);
+	//		vec3 currentVerticies = curentface.getVertices();
+	//		if(!calcNormals)
+	//		{
+	//			curentface.setVN1(getCalculatedNormal(currentVerticies.x));
+	//			curentface.setVN2(getCalculatedNormal(currentVerticies.y));
+	//			curentface.setVN3(getCalculatedNormal(currentVerticies.z));
+	//		}
+	//		//draw triangle
+	//		if(!curentface.isMaterial())
+	//		{
+	//			renderer.setKAbmbiant(curentface.getKAmbiant());
+	//			renderer.setKDiffuze(curentface.getKDiffuze());
+	//			renderer.setKspecular(curentface.getKSpecular());
+	//			renderer.setShine(curentface.getNS());
+	//		}
+	//		switch(renderMode)
+	//		{
+	//		case Flat:
+	//			{
+	//				renderer.DrawTriangle(curentface,_color,true);
+	//				break;
+	//			}
+	//		case french:
+	//			{
+	//				renderer.DrawTriangleFrech(curentface,_color);
+	//				break;
+	//			}
+	//		case Phong:
+	//			{
+	//				renderer.DrawTriangle(curentface,_color);
+	//				break;
+	//			}
 
-			}
-			
-			renderer.DrawTriangle(curentface,_color);
-			/*{
-			renderer.drawLineByVectors((*it).getVecX() ,(*it).getVecY() ,(unsigned int) RED);
-			renderer.drawLineByVectors((*it).getVecY() ,(*it).getVecZ() ,(unsigned int) RED);
-			renderer.drawLineByVectors((*it).getVecZ() ,(*it).getVecX() ,(unsigned int) RED);
-			}*/
-			//draw normal
-			if(drawNormal)
-				renderer.drawLineByVectors((*it).getNormalLine()[0] ,(*it).getNormalLine()[1] ,(unsigned int)BLUE);
-			if(drawVertexNormal)
-			{
-				renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecX()+curentface.getVnX(),(unsigned int)GREEN);
-				renderer.drawLineByVectors(curentface.getVecY(),curentface.getVecY()+curentface.getVnY(),(unsigned int)GREEN);
-				renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecZ()+curentface.getVnZ(),(unsigned int)GREEN);
-			}
-		}
-		catch(exception& e)
-		{
-			e.what();
-		}
-		
-	}
+	//		}
+	//		
+	//		renderer.DrawTriangle(curentface,_color);
+	//		/*{
+	//		renderer.drawLineByVectors((*it).getVecX() ,(*it).getVecY() ,(unsigned int) RED);
+	//		renderer.drawLineByVectors((*it).getVecY() ,(*it).getVecZ() ,(unsigned int) RED);
+	//		renderer.drawLineByVectors((*it).getVecZ() ,(*it).getVecX() ,(unsigned int) RED);
+	//		}*/
+	//		//draw normal
+	//		if(drawNormal)
+	//			renderer.drawLineByVectors((*it).getNormalLine()[0] ,(*it).getNormalLine()[1] ,(unsigned int)BLUE);
+	//		if(drawVertexNormal)
+	//		{
+	//			renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecX()+curentface.getVnX(),(unsigned int)GREEN);
+	//			renderer.drawLineByVectors(curentface.getVecY(),curentface.getVecY()+curentface.getVnY(),(unsigned int)GREEN);
+	//			renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecZ()+curentface.getVnZ(),(unsigned int)GREEN);
+	//		}
+	//	}
+	//	catch(exception& e)
+	//	{
+	//		e.what();
+	//	}
+	//	
+	//}
 }
 vec3 OBJItem::getMidPoint()
 {
@@ -185,61 +185,138 @@ void OBJItem::copyData()
 	verticesArray4 = new vec4[faces.size()*3];
 	normalsArray = new vec3[faces.size()*3];
 	normalsArray4 = new vec4[faces.size()*3];
+	_kAmbiantArray = new vec4[faces.size()*3];
+	_kDifuseArray = new vec4[faces.size()*3];
+	_kSpecularArray = new vec4[faces.size()*3];
+	_shineArray = new float[faces.size()*3];
 	int k=0;
 	for(std::vector<Face>::iterator it = faces.begin() ;it != faces.end(); ++it) 
 	{
 		Face tmp = (*it);
-		normalsArray[k]=tmp.getVnX();
-		normalsArray4[k]=tmp.getVnX();
+		vec3 faceVertices = tmp.getVertices();
+		_kAmbiantArray[k] = tmp.getKAmbiant();
+		_kDifuseArray[k] = tmp.getKDiffuze();
+		_kSpecularArray[k] = tmp.getKSpecular();
+		vec3 tmpNormal=tmp.getVnX();
+		if(tmpNormal.x!=0&&tmpNormal.y!=0&&tmpNormal.z!=0)
+			normalsArray[k]=tmp.getVnX();
+		else
+			normalsArray[k] = getCalculatedNormal(faceVertices.x);
+		_shineArray[k] = tmp.getNS();
+		normalsArray4[k]=vec4(normalsArray[k]);
 		verticesArray[k]=tmp.getVecX();
-		verticesArray4[k++]=tmp.getVecX();
-		normalsArray[k]=tmp.getVnY();
-		normalsArray4[k]=tmp.getVnY();
+		verticesArray4[k++]=vec4(tmp.getVecX());
+		
+		_kAmbiantArray[k] = tmp.getKAmbiant();
+		_kDifuseArray[k] = tmp.getKDiffuze();
+		_kSpecularArray[k] = tmp.getKSpecular();
+
+		tmpNormal=tmp.getVnY();
+		if(tmpNormal.x!=0&&tmpNormal.y!=0&&tmpNormal.z!=0)
+			normalsArray[k]=tmp.getVnY();
+		else
+			normalsArray[k] = getCalculatedNormal(faceVertices.y);
+		_shineArray[k] = tmp.getNS();
+		normalsArray4[k]=vec4(normalsArray[k]);
 		verticesArray[k]=tmp.getVecY();
-		verticesArray4[k++]=tmp.getVecY();
-		normalsArray[k]=tmp.getVnZ();
-		normalsArray4[k]=tmp.getVnZ();
+		verticesArray4[k++]=vec4(tmp.getVecY());
+		
+		_kAmbiantArray[k] = tmp.getKAmbiant();
+		_kDifuseArray[k] = tmp.getKDiffuze();
+		_kSpecularArray[k] = tmp.getKSpecular();
+
+		tmpNormal=tmp.getVnZ();
+		if(tmpNormal.x!=0&&tmpNormal.y!=0&&tmpNormal.z!=0)
+			normalsArray[k]=tmp.getVnZ();
+		else
+			normalsArray[k] = getCalculatedNormal(faceVertices.z);
+		_shineArray[k] = tmp.getNS();
+		normalsArray4[k]=vec4(normalsArray[k]);
 		verticesArray[k]=tmp.getVecZ();
-		verticesArray4[k++]=tmp.getVecZ();
+		verticesArray4[k++]=vec4(tmp.getVecZ());
 	}
-	initVao();
 }
-void OBJItem::initVao()
-{
-	glGenVertexArrays(1 ,&_vao);
-	glBindVertexArray( _vao );
 
-	glGenBuffers(6,_buffer);
-	GLint _size = faces.size()*3;
-	glBindBuffer(GL_ARRAY_BUFFER,_buffer[0]);
-	glBufferData(GL_ARRAY_BUFFER,_size*sizeof(GLfloat)*4,verticesArray4,GL_STATIC_DRAW);
-
-	glBindBuffer( GL_ARRAY_BUFFER, _buffer[1]);
-	glBufferData( GL_ARRAY_BUFFER, _size*sizeof(GLfloat)*3, normalsArray, GL_STATIC_DRAW);
-}
 void OBJItem::draw(GLuint program)
 {
-	GLkAmbient = glGetUniformLocation( program, "kAmbient");
-	GLkDiffuse = glGetUniformLocation( program, "kDiffuse");
-	GLkSpecular = glGetUniformLocation( program, "kSpecular");
-	GLShininess = glGetUniformLocation( program, "Shininess");
+	copyData();
+	vec4* points = verticesArray4;
+	vec4* colors = normalsArray4;
 
-	glUniform4fv(GLkAmbient,1,_kAmbiant);
-	glUniform4fv(GLkDiffuse,1,_kDiffuze);
-	glUniform4fv(GLkSpecular,1,_kspecular);
-	glUniform1f(GLShininess, _shine);
+	int NumVertices = getFacesSize()*3;
+	GLuint buffer[6];
+	glGenBuffers(6, buffer);
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), points, GL_STATIC_DRAW);
 
-	glBindBuffer( GL_ARRAY_BUFFER, _buffer[0] );
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), colors, GL_STATIC_DRAW);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[2]);
+	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), _kAmbiantArray, GL_STATIC_DRAW);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[3]);
+	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), _kDifuseArray, GL_STATIC_DRAW);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[4]);
+	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), _kSpecularArray, GL_STATIC_DRAW);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[5]);
+	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(float), _shineArray, GL_STATIC_DRAW);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
 	GLuint vPosition = glGetAttribLocation( program, "vPosition");
 	glEnableVertexAttribArray(vPosition);
+
+
 	glVertexAttribPointer( vPosition/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
 		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
 
-	glBindBuffer( GL_ARRAY_BUFFER, _buffer[1] );
-	GLuint vNormal = glGetAttribLocation( program, "vNormal");
-	glEnableVertexAttribArray(vNormal);		
-	glVertexAttribPointer( vNormal/*atrib*/, 3/*size*/, GL_FLOAT/*type*/,
-		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+	GLuint vColor= glGetAttribLocation( program, "vNormal");
+	glEnableVertexAttribArray(vColor);
 
-	glDrawArrays(GL_TRIANGLES,0,faces.size()*3);
+	glVertexAttribPointer( vColor/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[2]);
+	GLuint kambiant= glGetAttribLocation( program, "kambiant");
+	glEnableVertexAttribArray(kambiant);
+
+	glVertexAttribPointer( kambiant/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[3]);
+	GLuint kdiffuse= glGetAttribLocation( program, "kdiffuse");
+	glEnableVertexAttribArray(kdiffuse);
+
+	glVertexAttribPointer( kdiffuse/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[4]);
+	GLuint kspecular= glGetAttribLocation( program, "kspecular");
+	glEnableVertexAttribArray(kspecular);
+
+	glVertexAttribPointer( kspecular/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[5]);
+	GLuint shine= glGetAttribLocation( program, "shininess");
+	glEnableVertexAttribArray(shine);
+
+	glVertexAttribPointer( shine/*atrib*/, 1/*size*/, GL_FLOAT/*type*/,
+	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+
+
+}
+void OBJItem::reDraw(GLuint program)
+{
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glClearDepth(1.0);	
+	GLuint model_view = glGetUniformLocation( program, "ModelView");
+	glUniformMatrix4fv(model_view, 1, GL_TRUE, _world_transform);
+	
+	glDrawArrays( GL_TRIANGLES, 0, faces.size()*3);
+	
 }

@@ -83,7 +83,7 @@
       <OutputFile>lib\freeglut_static.lib</OutputFile>
     </Link>
     <Lib>
-      <OutputFile>$(TargetDir)\freeglut_static.lib</OutputFile>
+      <OutputFile>lib\freeglut_static.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

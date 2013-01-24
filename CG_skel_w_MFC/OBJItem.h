@@ -39,9 +39,13 @@ private:
 	vec4* verticesArray4;
 	vec3* normalsArray;
 	vec4* normalsArray4;
+	vec4* _kAmbiantArray;
+	vec4* _kDifuseArray;
+	vec4* _kSpecularArray;
+	float* _shineArray;
 	GLuint _buffer[6];
-	GLuint _vao;
-
+	
+	mat4 _world_transform;
 	GLuint GLkAmbient;
 	GLuint GLkDiffuse;
 	GLuint GLkSpecular;
@@ -68,6 +72,18 @@ public:
 	{
 		return vertices.size();
 	}
+	int getFacesSize()
+	{
+		return faces.size();
+	}
+	vec4* getFacesAsArray()
+	{
+		return verticesArray4;
+	}
+	vec4* getNormalsAsArray()
+	{
+		return normalsArray4;
+	}
 	int getVNsize()
 	{
 		return normals.size();
@@ -86,12 +102,14 @@ public:
 	void setRenderType(int val){renderMode = val;}
 	void copyData();
 	void initVao();
-	void setKvalue(vec3 kambiant,vec3 kdiffuse,vec3 kspecular,GLfloat shine)
+	void setKvalue(vec3 kambiant,vec3 kdiffuse,vec3 kspecular,GLfloat shine,mat4 world)
 	{
 		_kspecular=kspecular;
 		_kDiffuze = kdiffuse;
 		_kAmbiant = kambiant;
 		_shine = shine;
+		_world_transform = world;
 	}
+	void reDraw(GLuint program);
 };
 

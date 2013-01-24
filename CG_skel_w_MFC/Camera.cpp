@@ -22,9 +22,9 @@ void Camera::pointCameraAt(vec4 at)
 }
 mat4 Camera::LookAt(const vec4& eye, const vec4& at, const vec4& up ) 
 {
-	_eye = eye;
+	/*_eye = eye;
 	_at = at;
-	_up = up;
+	_up = up;*/
 	vec4 zeroVec(0,0,0,0);
 	vec4 tempVec = at-eye;
 	if ((tempVec) == zeroVec)
@@ -41,9 +41,9 @@ mat4 Camera::LookAt(const vec4& eye, const vec4& at, const vec4& up )
 	
 	//vec4 t = vec4(0.0,0.0,0.0,1.0);
 	mat3 c = transpose (mat3(u,v,n)) ;
-	cInverse = mat4(c) * Translate(-eye);
+	return mat4(c) * Translate(-eye);
 
-	return cTransform;
+	//return cTransform;
 
 }
 
@@ -55,14 +55,15 @@ void Camera::setInverseMat(mat4 inverse)
 {
 	cInverse = inverse;
 }
-void Camera::Ortho( const float left, const float right, const float bottom, const float top, const float zNear, const float zFar ) {
+mat4 Camera::Ortho( const float left, const float right, const float bottom, const float top, const float zNear, const float zFar ) {
 	mat4 p;
 	p[0][0] = 2/(right-left); p[0][1] = 0				; p[0][2] = 0				; p[0][3] = -(right + left)/(right - left);
 	p[1][0] = 0				; p[1][1] = 2/(top-bottom)	; p[1][2] = 0				; p[1][3] = -(top + bottom)/(top- bottom);
-	p[2][0] = 0				; p[2][1] = 0				; p[2][2] = 2/(zNear - zFar); p[2][3] = -(zNear + zFar)/(zNear- zFar);
+	p[2][0] = 0				; p[2][1] = 0				; p[2][2] = 2/(zNear - zFar); p[2][3] = -(zNear + zFar)/(zFar - zNear);
 	p[3][0] = 0				; p[3][1] = 0				; p[3][2] = 0				; p[3][3] = 1;
-	projection = p;
+	return p;
 }
+
 void Camera::Frustum( const float left, const float right,
 		const float bottom, const float top,
 		const float zNear, const float zFar )
@@ -91,9 +92,7 @@ void Camera::Perspective( const float fovy, const float aspect,
 void Camera::draw(Renderer& renderer)
 {
 	vec3 eye3(_eye.x,_eye.y,_eye.z);
-	renderer.drawLineByVectors(eye3+vec3(-0.05,0,0),eye3+vec3(0.05,0,0),(unsigned int)MAGENTA);
-	renderer.drawLineByVectors(eye3+vec3(0,-0.05,0),eye3+vec3(0,0.05,0),(unsigned int)MAGENTA);
-	renderer.drawLineByVectors(eye3+vec3(0,0,-0.05),eye3+vec3(0,0,0.05),(unsigned int)MAGENTA);
+
 	//vec4 tmp= _eye-_at;
 	//vec3 direction=normalize(vec3(tmp.x,tmp.y,tmp.z));
 	//mat4 objectTransfor(1);
@@ -107,8 +106,8 @@ void Camera::draw(Renderer& renderer)
 
 
 const string& Camera::getName() {
-	stringstream os;
-	os << "(" << _eye.x << "," << _eye.y << "," << _eye.z << ")";
-	name = os.str();
-	return name;
+	//stringstream os;
+	//os << "(" << _eye.x << "," << _eye.y << "," << _eye.z << ")";
+	//name = os.str();
+	return "";
 }

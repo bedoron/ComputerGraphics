@@ -59,19 +59,19 @@ void getMaterails(string mtlFile,vector<Material*>* materials)
 		{
 			GLfloat r=0,g=0,b=0;
 			mtlIsStream >> r >> g >> b;
-			material->setKambiant(vec3(b,g,r));
+			material->setKambiant(vec3(r,g,b));
 		}
 		else if(command == "Kd")
 		{
 			GLfloat r=0,g=0,b=0;
 			mtlIsStream >> r >> g >> b;
-			material->setKdiffuse(vec3(b,g,r));
+			material->setKdiffuse(vec3(r,g,b));
 		}
 		else if(command == "Ks")
 		{
 			GLfloat r=0,g=0,b=0;
 			mtlIsStream >> r >> g >> b;
-			material->setKspecular(vec3(b,g,r));
+			material->setKspecular(vec3(r,g,b));
 		}
 		else if(command == "Ns")
 		{
@@ -234,7 +234,7 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 			objitem.addNormal(normal);
 		}
 	}
-	objitem.copyData();
+	//objitem.copyData();
 	return objitem;
 }
 

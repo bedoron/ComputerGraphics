@@ -27,7 +27,7 @@ public:
 	void setInverseMat(mat4 inverse);
 	void setTransformation(const mat4& transform);
 	mat4 LookAt(const vec4& eye, const vec4& at, const vec4& up );
-	void Ortho( const float left, const float right,
+	mat4 Ortho( const float left, const float right,
 		const float bottom, const float top,
 		const float zNear, const float zFar );
 	// These two are the same

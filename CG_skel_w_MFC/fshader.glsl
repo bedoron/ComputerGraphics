@@ -1,10 +1,9 @@
-#version 150
+#version 150 
 
 in vec4 color;
+out vec4 fcolor;
 
-out vec4 fColor;
-
-void main() 
-{ 
-   fColor = color;
-} 
+void main()
+{
+	fcolor = color;
+}

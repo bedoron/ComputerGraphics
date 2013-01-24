@@ -9,9 +9,7 @@ static char*
 readShaderSource(const char* shaderFile)
 {
     FILE* fp = fopen(shaderFile, "r");
-	TCHAR pwd[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH,pwd);
-	
+
     if ( fp == NULL ) { return NULL; }
 
     fseek(fp, 0L, SEEK_END);
@@ -23,7 +21,7 @@ readShaderSource(const char* shaderFile)
 
     buf[size] = '\0';
     fclose(fp);
-	
+
     return buf;
 }
 
@@ -56,7 +54,6 @@ InitShader(const char* vShaderFile, const char* fShaderFile)
 	glCompileShader( shader );
 
 	GLint  compiled;
-	
 	glGetShaderiv( shader, GL_COMPILE_STATUS, &compiled );
 	if ( !compiled ) {
 	    std::cerr << s.filename << " failed to compile:" << std::endl;

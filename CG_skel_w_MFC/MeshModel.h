@@ -10,7 +10,7 @@ using namespace std;
 class MeshModel : public Model
 {
 protected :
-	MeshModel() {}
+
 	vec3 *_vertices;
 	//add more attributes
 	mat4 _world_transform;
@@ -25,11 +25,11 @@ protected :
 	bool _cartoonize;
 	int renderMode;
 public:
-	
+	MeshModel() {}
 	MeshModel(OBJItem item);
 	~MeshModel(void);
 	void loadFile(string item);
-	void draw(Renderer& renderer);
+	void reDraw(GLuint program);
 	void setObjectTransform(mat4 worldTransform);
 	mat4 getObjectTransform();
 	vec3 getModelCenter();

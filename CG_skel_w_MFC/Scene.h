@@ -3,7 +3,7 @@
 #include "gl/glew.h"
 #include <vector>
 #include <string>
-#include "Renderer.h"
+//#include "Renderer.h"
 #include "Utils.h"
 #include "Camera.h"
 #include "Light.h"
@@ -16,7 +16,7 @@ protected:
 	string name;
 	virtual ~Model() {}
 public:
-	void virtual draw(Renderer& renderer)=0;
+	void virtual reDraw(GLuint program)=0;
 	void virtual drawNormal(GLuint program)=0;
 	void virtual setObjectTransform(mat4 worldTransform)=0;
 	mat4 virtual getObjectTransform()=0;
@@ -26,95 +26,56 @@ public:
 };
 
 //
-
+typedef vec4  color4;
+typedef vec4  point4;
+enum projection{ortho,prespctive,frustum};
 class Scene {
-
+	point4 eye;
+	point4 at;
+	point4 up;
+	mat4 _current_Projection;
+	mat4 _currentCamera;
 	vector<Model*> models;
-	vector<Light*> lights;
-	vector<Camera*> cameras;
-	Light* m_activeLight;
-	Camera*	m_activeCamera;
-	Renderer *m_renderer;
-	OBJItem item;
-	GLfloat size;
-	Model* axes;
-	vector<string> names;
-	vector<string> cameraNames;
-	ActiveEntity_t activeEntity;
-	bool modelFrameOps; // Decide if manipulation is done with respect to model space or world space
-	CModelData *model_win;
-	enum{ortho=3000,frusum,prespective};
-	int currentView ;
-	int m_activeModel;
+	GLuint program;
+	MeshModel* _activeModel;
+	projection _currentPtype;
 	GLfloat _left,_right,_top,_bottom,_zfar,_znear,_fovy,_aspect;
-	bool _renderCamera;
-	bool _addFog;
-	int _width,_height;
 public:
 	Scene();
+	void LookAt( const vec4& eye, const vec4& at, const vec4& up )
+	{
+		vec4 zeroVec(0,0,0,0);
+		vec4 tempVec = at-eye;
+		if ((tempVec) == zeroVec)
+		{
+			_currentCamera=  mat4(1.0);
+			return;
+		}
+		vec3 eye3(eye.x,eye.y ,eye.z);
+		vec3 at3 (at.x , at.y , at.z);
+		vec3 up3 (up.x , up.y , up.z);
+		vec3 n = normalize(eye3-at3);   //z'
+		vec3 u = normalize(cross(up3,n));  //x'
 
-	Scene(Renderer *renderer); 
-	Scene(Renderer *renderer, CModelData& win);
+		vec3 v = normalize(cross(n,u));  //y'
+
+		//vec4 t = vec4(0.0,0.0,0.0,1.0);
+		mat3 c = transpose (mat3(u,v,n)) ;
+		_currentCamera= mat4(c) * Translate(-eye);
+		this->eye = eye;
+
+	}
 
 	void initDefaultCamera();
 	void initDefaultLight();
-	void loadOBJModel(string fileName,string id);
+	void loadOBJModel(MeshModel* model);
 
-	void setAntialiasing(bool val) { 
-		if(val == m_renderer->getAntialiasing()) return;
-		m_renderer->setAntialiasing(val); 
-		draw();
-	}
-
-	bool getAntialiasing() { return m_renderer->getAntialiasing(); }
-	void drawGL(mat4 translation);
-	void drawDebug(vec4 eye = vec4(2,5,-10,1)); //
-	void draw(vec3 rotation);
-	void draw(vec3 rotation,float zoom,bool update= false);
-	void draw(mat4 translation = mat4(1));
-	void setNormal(bool normal);
-	void drawDemo();
-	void clearScene();
-	GLfloat getSize();
-	Model* setActiveModel(int id);
-	Model* getActiveModel();
-	
-	Light* activeLight;
-	int activeCamera;
-	int getModelCount();
-	GLfloat moveInterval;
-	void pointCameraAt();
-	void setRenderer(int width , int height);
-	void activateModel()	{ activeEntity =  MODEL_ACTIVE; }
-	void activateCamera()	{ activeEntity = CAMERA_ACTIVE; }
-	void activateWorld()	{ activeEntity = WORLD_ACTIVE;	} // Not really needed
-	void modelFrame()		{ modelFrameOps = true;			}
-	void worldFrame()		{ modelFrameOps = false;		}
-	bool isModelFrame()		{ return modelFrameOps;			}
-	Model* nextModel();	// cycle to next model
-	std::vector<string> getNames();
-	std::vector<string> getCameraNames();
-	void addCamera(vec4 eye,vec4 at,vec4 up);
-	bool setActiveCamera(int num);
-	void refreshModelWindow();
-	void hideModelWindow();
-	void showModelWindow();
-	void drawCameras();
 	void setFrustum(float left,float right,float top,float down,float zNear,float zFar);
 	void setOrtho(float left,float right,float top,float down,float zNear,float zFar);
 	void setPrespective(float fovy,float aspect,float znear, float zfar);
-	void removeActiveModel();
-	void removeActiveCamera();
 	void setZoom(GLfloat zoom);
-	void setRenderCamera(bool renderCamera) {_renderCamera = renderCamera; }
-	bool getRenderCamera() {return _renderCamera; }
-	Camera* getActiveCamera(){return m_activeCamera;}
-	void addCube();
-	void setMoveInterval(GLfloat val){moveInterval=val;}
-	GLfloat getMoveInterval(){return moveInterval;}
-	void addLight(Light* newLight);
-	void changeLightDirection(mat4 rotation);
-	void changeLightLocation(mat4 rotation);
-	void setFog(vec3 fogColor,GLfloat density);
+	void transformActiveModel(mat4 translation);
+	void draw();
+	void redraw();
 	
 };
