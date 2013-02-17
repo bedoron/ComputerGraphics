@@ -101,6 +101,7 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MeshModel.cpp" />
     <ClCompile Include="OBJItem.cpp" />
+    <ClCompile Include="pngLib\PngWrapper.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -121,6 +122,12 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="MeshModel.h" />
     <ClInclude Include="OBJItem.h" />
+    <ClInclude Include="pngLib\png.h" />
+    <ClInclude Include="pngLib\pngasmrd.h" />
+    <ClInclude Include="pngLib\pngconf.h" />
+    <ClInclude Include="pngLib\PngWrapper.h" />
+    <ClInclude Include="pngLib\zconf.h" />
+    <ClInclude Include="pngLib\zlib.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="stdafx.h" />
@@ -136,8 +143,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="fshader.glsl" />
+    <None Include="NormalMapFshader.glsl" />
+    <None Include="NormalMapVshader.glsl" />
     <None Include="PhongFshader.glsl" />
     <None Include="PhongVshader.glsl" />
+    <None Include="pngLib\zlib1.dll" />
+    <None Include="TextureFshader.glsl" />
+    <None Include="TextureVshader.glsl" />
+    <None Include="ToonFshader.glsl" />
+    <None Include="ToonVshader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -149,6 +163,10 @@
     <ProjectReference Include="..\glew\glew.vcxproj">
       <Project>{e354a711-c2d4-4492-a756-1000564dccb8}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="pngLib\libpng.lib" />
+    <Library Include="pngLib\zlib.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

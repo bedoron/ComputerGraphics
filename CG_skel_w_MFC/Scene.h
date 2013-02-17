@@ -7,8 +7,11 @@
 #include "Utils.h"
 #include "Camera.h"
 #include "Light.h"
+#include "pngLib/PngWrapper.h"
 using namespace std;
+enum programType {program_Phong,program_NormalMapping,program_Silhouette,program_toon,program_Texture};
 enum ActiveEntity_t { WORLD_ACTIVE, MODEL_ACTIVE, CAMERA_ACTIVE };
+
 class CModelData;
 
 class Model {
@@ -16,11 +19,13 @@ protected:
 	string name;
 	virtual ~Model() {}
 public:
-	void virtual reDraw(GLuint program)=0;
+	void virtual reDraw(GLuint program,programType type)=0;
+	void virtual drawSilhoette()=0;
 	void virtual drawNormal(GLuint program)=0;
 	void virtual setObjectTransform(mat4 worldTransform)=0;
 	mat4 virtual getObjectTransform()=0;
 	vec3 virtual getModelCenter()=0;
+	void virtual drawTexture(GLuint program,GLuint textureID,GLint textid)=0;
 	const string& getName() const { return name; };
 	const string& setName(const string &newName) { name = newName; return name; };
 };
@@ -28,48 +33,30 @@ public:
 //
 typedef vec4  color4;
 typedef vec4  point4;
-enum projection{ortho,prespctive,frustum};
+
+enum projectionType {ortho,prespctive,frustum};
 class Scene {
+	bool _programChanged;
 	point4 eye;
 	point4 at;
 	point4 up;
 	mat4 _current_Projection;
 	mat4 _currentCamera;
 	vector<Model*> models;
-	GLuint program;
+	GLuint program,tex;
 	MeshModel* _activeModel;
-	projection _currentPtype;
+	projectionType _currentPtype;
+	programType _currentProgram;
 	GLfloat _left,_right,_top,_bottom,_zfar,_znear,_fovy,_aspect;
+	GLuint _texturesIds[5];
+	GLint _textids[5];
 public:
 	Scene();
-	void LookAt( const vec4& eye, const vec4& at, const vec4& up )
-	{
-		vec4 zeroVec(0,0,0,0);
-		vec4 tempVec = at-eye;
-		if ((tempVec) == zeroVec)
-		{
-			_currentCamera=  mat4(1.0);
-			return;
-		}
-		vec3 eye3(eye.x,eye.y ,eye.z);
-		vec3 at3 (at.x , at.y , at.z);
-		vec3 up3 (up.x , up.y , up.z);
-		vec3 n = normalize(eye3-at3);   //z'
-		vec3 u = normalize(cross(up3,n));  //x'
-
-		vec3 v = normalize(cross(n,u));  //y'
-
-		//vec4 t = vec4(0.0,0.0,0.0,1.0);
-		mat3 c = transpose (mat3(u,v,n)) ;
-		_currentCamera= mat4(c) * Translate(-eye);
-		this->eye = eye;
-
-	}
-
+	void LookAt( const vec4& eye, const vec4& at, const vec4& up );
 	void initDefaultCamera();
 	void initDefaultLight();
 	void loadOBJModel(MeshModel* model);
-
+	void setProgramType(programType prog);
 	void setFrustum(float left,float right,float top,float down,float zNear,float zFar);
 	void setOrtho(float left,float right,float top,float down,float zNear,float zFar);
 	void setPrespective(float fovy,float aspect,float znear, float zfar);
@@ -77,5 +64,8 @@ public:
 	void transformActiveModel(mat4 translation);
 	void draw();
 	void redraw();
-	
+	void drawSilhoette();
+	void loadPng(const char* fileName, const int textureUnit, const int textureNumber);
+	void texture();
+	void loadTexture();
 };

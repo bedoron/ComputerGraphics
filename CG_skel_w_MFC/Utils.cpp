@@ -171,7 +171,21 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 					vn2 = objitem.getVNsize()+vn2;
 				if(vn3 < 0)
 					vn3 = objitem.getVNsize()+vn3;
-				
+				vec2 finalVT1;
+				vec2 finalVT2;
+				vec2 finalVT3;
+				if(objitem.getVTsize()>0)
+				{
+					finalVT1 = objitem.getVTByNumber(vt1);
+					finalVT2 = objitem.getVTByNumber(vt2);
+					finalVT3 = objitem.getVTByNumber(vt3);
+				}
+				else
+				{
+					finalVT1 = vec2(0,0);
+					finalVT2 = vec2(0,0);
+					finalVT3 = vec2(0,0);
+				}
 				if(vn1==0 &&vn2==0 && vn3==0)
 				{
 					Face newFace(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v2),objitem.getVertexByNumber(v3),vec3(v1,v2,v3));
@@ -200,7 +214,8 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 				else
 				{
 					Face newFace(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v2),objitem.getVertexByNumber(v3),vec3(v1,v2,v3)
-						,objitem.getNormalByNumber(vn1),objitem.getNormalByNumber(vn2),objitem.getNormalByNumber(vn3));
+						,objitem.getNormalByNumber(vn1),objitem.getNormalByNumber(vn2),objitem.getNormalByNumber(vn3),
+						finalVT1,finalVT2,finalVT3);
 					if(currentMaterial)
 					{
 						newFace.setKambiant(currentMaterial->getKAmbiant());
@@ -211,7 +226,8 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 					if(v4 !=0 || vn4 != 0 || vt4 !=0)
 					{
 						Face newFace2(objitem.getVertexByNumber(v1),objitem.getVertexByNumber(v3),objitem.getVertexByNumber(v4),vec3(v1,v3,v4)
-							,objitem.getNormalByNumber(vn1),objitem.getNormalByNumber(vn3),objitem.getNormalByNumber(vn4));
+							,objitem.getNormalByNumber(vn1),objitem.getNormalByNumber(vn3),objitem.getNormalByNumber(vn4),
+							finalVT1,finalVT2,finalVT3);
 						if(currentMaterial)
 						{
 							newFace2.setKambiant(currentMaterial->getKAmbiant());
@@ -227,14 +243,22 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 				e.what();
 			}
 		}
-		else if(action == "vn") {
+		else if(action == "vn")
+		{
 			float i,j,k = 0;
 			line >> i >> j >> k;
 			vec3 normal(i,j,k);
 			objitem.addNormal(normal);
 		}
+		else if(action =="vt")
+		{
+			float i,j,k = 0;
+			line >> i >> j ;
+			vec2 vnormal(i,j);
+			objitem.addVT(vnormal);
+		}
 	}
-	//objitem.copyData();
+	objitem.copyData();
 	return objitem;
 }
 

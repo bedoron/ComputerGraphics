@@ -35,7 +35,8 @@ enum MENU_ELEMENTS {
 	FILE_OPEN, MAIN_DEMO , MAIN_ABOUT , Main_BOUNDS 
 	, Main_Clear , Main_selectM , Main_Move_Interval, MAIN_DEBUG, OBJECT_REMOVE_ACTIVE, 
 	CAMERA_ADD, CAMERA_REMOVE_ACTIVE,CAMERA_SELECT_MODEL_AT, SELECT_OPERATION_FRAME,Main_Frustum,
-	Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING
+	Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING,menu_normalMapping,menu_Silhouette,menu_Phong,
+	menu_toon,menu_texture
 };
 
 
@@ -171,7 +172,7 @@ void
 void
 	reshape( int width, int height )
 {
-
+	 glViewport (0, 0, (GLsizei)width, (GLsizei)height);
 }
 void mouse(int button, int state, int x, int y)
 {
@@ -246,17 +247,15 @@ void keyboardSpecial(int key,int x,int y)
 		exit( EXIT_SUCCESS );
 		break;
 
-	}
+		}
 		glutPostRedisplay();
 }
 void fileMenu(int id)
 {
 	switch (id)
 	{
-		case FILE_OPEN:
-			/*CFileDialog dlg(TRUE,_T(".obj"),NULL,NULL,_T("*.obj|*.*"));*/
-
-			/*if(dlg.DoModal()==IDOK)*/
+	case FILE_OPEN:
+		{
 			OPENFILENAME ofn;       // common dialog box structure
 			char szFile[260];       // buffer for file name
 			ZeroMemory( &ofn , sizeof( ofn));
@@ -277,12 +276,14 @@ void fileMenu(int id)
 			{
 				std::string s(ofn.lpstrFile);
 				item = Utils::getInstance().parseOBJ(s, s);
-				
+
 				MeshModel *model = new MeshModel(item);
 				scene->loadOBJModel(model);
 				glFlush();
 			}
 			break;
+		}
+
 	}
 }
 
@@ -291,12 +292,38 @@ void mainMenu(int id)
 	switch (id)
 	{
 	case MAIN_DEMO:
-	
+
 		break;
 	case MAIN_ABOUT:
 		AfxMessageBox(_T("Computer Graphics"));
 		break;
+	case menu_Phong:
+		{
+			scene->setProgramType(program_Phong);
+			break;
+		}
+	case menu_normalMapping:
+		{
+			scene->setProgramType(program_NormalMapping);
+			break;
+		}
+	case menu_Silhouette:
+		{
+			scene->setProgramType(program_Silhouette);
+			break;
+		}
+	case menu_toon:
+	{
+		scene->setProgramType(program_toon);
+		break;
 	}
+	case menu_texture:
+	{
+		scene->setProgramType(program_Texture);
+		break;
+	}
+	}
+
 }
 
 void initMenu()
@@ -306,7 +333,11 @@ void initMenu()
 	glutAddMenuEntry("Open..",FILE_OPEN);
 	glutCreateMenu(mainMenu);
 	glutAddSubMenu("File",menuFile);
-	glutAddMenuEntry("Demo",MAIN_DEMO);
+	glutAddMenuEntry("Phong",menu_Phong);
+	glutAddMenuEntry("normal maing",menu_normalMapping);
+	glutAddMenuEntry("Silhouette",menu_Silhouette);
+	glutAddMenuEntry("Toon",menu_toon);
+	glutAddMenuEntry("Texture",menu_texture);
 	glutAddMenuEntry("About",MAIN_ABOUT);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }

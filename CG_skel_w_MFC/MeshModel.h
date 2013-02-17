@@ -29,7 +29,7 @@ public:
 	MeshModel(OBJItem item);
 	~MeshModel(void);
 	void loadFile(string item);
-	void reDraw(GLuint program);
+	void reDraw(GLuint program,programType type);
 	void setObjectTransform(mat4 worldTransform);
 	mat4 getObjectTransform();
 	vec3 getModelCenter();
@@ -54,4 +54,6 @@ public:
 	void setRenderType(int val){renderMode = val;}
 
 	void drawNormal(GLuint program);
+	void drawSilhoette();
+	void drawTexture(GLuint program,GLuint textureID,GLint textid);
 };

@@ -70,10 +70,10 @@ MeshModel::~MeshModel(void)
 {
 }
 
-void MeshModel::reDraw(GLuint program)
+void MeshModel::reDraw(GLuint program,programType type)
 {
 	objItem.setKvalue(_kAmbiant,_kDiffuze,_kspecular,shine,_world_transform);
-	objItem.reDraw(program);
+	objItem.reDraw(program, type);
 }
 void MeshModel::setObjectTransform(mat4 worldTransform)
 {
@@ -102,4 +102,16 @@ void MeshModel::drawNormal(GLuint program)
 	objItem.setRenderType(renderMode);
 	objItem.setKvalue(_kAmbiant,_kDiffuze,_kspecular,shine,_world_transform);
 	objItem.draw(program);
+}
+void MeshModel::drawSilhoette()
+{
+	objItem.drawSilhoette();
+}
+void MeshModel::drawTexture(GLuint program,GLuint textureID,GLint textid)
+{
+	objItem.setColor(_color);
+	objItem.setCalcNormals(useNormals);
+	objItem.setRenderType(renderMode);
+	objItem.setKvalue(_kAmbiant,_kDiffuze,_kspecular,shine,_world_transform);
+	objItem.drawTexture(program,textureID,textid);
 }

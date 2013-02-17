@@ -57,6 +57,9 @@
     <ClCompile Include="VNormal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pngLib\PngWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InitShader.h">
@@ -113,6 +116,24 @@
     <ClInclude Include="VNormal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pngLib\png.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\pngasmrd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\pngconf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\PngWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\zconf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\zlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CG_skel_w_MFC.rc">
@@ -129,8 +150,31 @@
     <None Include="PhongVshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="ToonFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ToonVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="pngLib\zlib1.dll" />
+    <None Include="TextureFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="TextureVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="NormalMapFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="NormalMapVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="pngLib\libpng.lib" />
+    <Library Include="pngLib\zlib.lib" />
   </ItemGroup>
 </Project>

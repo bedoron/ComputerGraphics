@@ -2,7 +2,6 @@
 #include <vector>
 #include "Face.h"
 #include <exception>
-#include "Renderer.h"
 #include "AvlTree.h"
 #include "Vertex.h"
 using std::out_of_range;
@@ -21,6 +20,7 @@ private:
 	vector<vec3> vertices;
 	vector<Face> faces;
 	vector<vec3> normals;
+	vector<vec2> vTex;
 	bool drawBox;
 	bool drawVertexNormal;
 	bool drawNormal;
@@ -43,8 +43,9 @@ private:
 	vec4* _kDifuseArray;
 	vec4* _kSpecularArray;
 	float* _shineArray;
-	GLuint _buffer[6];
-	
+	vec2* _vtArray;
+
+	GLuint _vao;
 	mat4 _world_transform;
 	GLuint GLkAmbient;
 	GLuint GLkDiffuse;
@@ -59,8 +60,10 @@ public:
 	void addVertex(vec3& vertex);
 	void addFace(Face& face);
 	void addNormal(vec3& normal);
+	void addVT(vec2 vt);
 	vec3& getVertexByNumber(int id);
 	vec3& getNormalByNumber(int id);
+	vec2& getVTByNumber(int id);
 	void draw(Renderer& renderer);
 	void draw(GLuint program);
 	GLfloat getMinX();
@@ -88,6 +91,10 @@ public:
 	{
 		return normals.size();
 	}
+	int getVTsize()
+	{
+		return vTex.size();
+	}
 	vec3 getMidPoint();
 
 	bool getDrawBox() { return drawBox; };
@@ -110,6 +117,9 @@ public:
 		_shine = shine;
 		_world_transform = world;
 	}
-	void reDraw(GLuint program);
+	void reDraw(GLuint program,int type);
+	void drawSilhoette();
+	void drawTexture(GLuint program,GLuint textureID,GLint textid);
+
 };
 
