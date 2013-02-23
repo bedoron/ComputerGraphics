@@ -14,6 +14,7 @@ out vec4 color;
 
 void main()
 {
+	vec4 ambiantIntesity = vec4(0,0,0,1);
 	vec4 intesity = vec4(1,1,1,1);
 	vec3 n = normalize(normal);
 	vec4 diffuse = vec4(0.0);
@@ -30,7 +31,7 @@ void main()
 	specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
 
 
-	color = (diffuse + specular)*intesity;
+		color = (diffuse + specular)*intesity + ambiantIntesity * _Kambiant;
 	
 	if(color.x > 0.95)
 		color.x = 1;

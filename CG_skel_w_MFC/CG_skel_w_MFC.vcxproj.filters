@@ -222,5 +222,35 @@
     <None Include="vshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="NormalMapFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="NormalMapVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="PhongFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="PhongVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="SilhouetteShaderF.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="SilhouetteShaderV.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="TextureFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="TextureVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ToonFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ToonVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -172,9 +172,9 @@ void MeshModel::generateBuffers() {
 	glBufferData( GL_ARRAY_BUFFER, sizeof(GLfloat)*points, _shineArray, GL_STATIC_DRAW );
 	_shader->shininessPointer((GLubyte*)0);
 	
-	//glBindBuffer(GL_ARRAY_BUFFER, VBOs["vtexture"]);
-	//glBufferData( GL_ARRAY_BUFFER, sizeof(vec2)*sizeof(*_vtArray), _vtArray, GL_STATIC_DRAW );
-	//_shader->texturePointer((GLubyte*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs["vtexture"]);
+	glBufferData( GL_ARRAY_BUFFER, sizeof(vec2)*points, _vtArray, GL_STATIC_DRAW );
+	_shader->texturePointer((GLubyte*)0);
 
 }
 

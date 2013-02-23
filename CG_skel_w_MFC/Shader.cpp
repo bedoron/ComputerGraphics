@@ -1,14 +1,15 @@
 #include "stdafx.h"
 #include "Shader.h"
 #include "InitShader.h"
+#include "pngLib/PngWrapper.h"
 #include <exception>
 #include <cassert>
-
+#define INDEX_PNG(width,x,y,c) (((y)+(x)*(width))*3+(c))
 using std::exception;
 using std::cerr;
 
 Shader::Shader(string vertexShader, string fragmentShader): _vertexShader(vertexShader), _fragmentShader(fragmentShader), _programHandle(0), _vPosition(0), _tCoor(0), _vNormal(0), _kAmbiant(0), 
-	_kDiffuse(0), _kSpecular(0), _shininess(0), _projection(0), _cameraView(0), _modelView(0) {}
+	_kDiffuse(0), _kSpecular(0), _shininess(0), _projection(0), _cameraView(0), _modelView(0) ,textures(){}
 
 GLuint Shader::getProgram() {
 	return _programHandle; 
@@ -24,14 +25,17 @@ void Shader::loadProgram() {
 	glUseProgram(_programHandle);
 	glEnable(GL_DEPTH_TEST);
 
+	
 
 	_vPosition = glGetAttribLocation(_programHandle, "vPosition");
 	
 	_vNormal = glGetAttribLocation(_programHandle, "vNormal");
 	checkError();
 	assert(_vNormal != -1);
-	//_tCoor = glGetAttribLocation(_tCoor, "tCoor");
-	_kAmbiant = glGetAttribLocation(_programHandle, "kambiant");
+	_tCoor = glGetAttribLocation(_programHandle, "tCoor");
+	checkError();
+	assert(_tCoor != -1);
+	_kAmbiant = glGetAttribLocation(_programHandle,"kambiant");
 	checkError();
 	assert(_kAmbiant != -1);
 	_kDiffuse = glGetAttribLocation(_programHandle, "kdiffuse");
@@ -79,7 +83,7 @@ void Shader::unbind() {
 void Shader::enableDataPointers()  {
 	glEnableVertexAttribArray(_vPosition);
 	glEnableVertexAttribArray(_vNormal);
-	//glEnableVertexAttribArray(_tCoor);
+	glEnableVertexAttribArray(_tCoor);
 	glEnableVertexAttribArray(_kAmbiant);
 	glEnableVertexAttribArray(_kDiffuse);
 	glEnableVertexAttribArray(_shininess);
@@ -88,7 +92,7 @@ void Shader::enableDataPointers()  {
 void Shader::disableDataPointers() {
 	glDisableVertexAttribArray(_vPosition);
 	glDisableVertexAttribArray(_vNormal);
-	/*glDisableVertexAttribArray(_tCoor);*/
+	glDisableVertexAttribArray(_tCoor);
 	glDisableVertexAttribArray(_kAmbiant);
 	glDisableVertexAttribArray(_kDiffuse);
 	glDisableVertexAttribArray(_shininess);
@@ -137,4 +141,29 @@ void Shader::updateCamera() {
 void Shader::updateModelView() {
 	glUniformMatrix4fv(	_modelView, 1, GL_TRUE, modelViewMatrix );
 	checkError();
+}
+void Shader::loadPng (const char* fileName)
+{
+	GLuint texture;
+	PngWrapper pngFile(fileName);
+	pngFile.ReadPng();
+	int width = pngFile.GetWidth();
+	int height = pngFile.GetHeight();
+	GLubyte* texels = new GLubyte[width*height*3];
+	for (int i=0; i< height; ++i)
+	{
+		for (int j=0; j< width; j++)
+		{
+			int value = pngFile.GetValue(j, height -i -1);
+			texels[INDEX_PNG(width, i, j ,0)] = GET_R(value);
+			texels[INDEX_PNG(width, i, j ,1)] = GET_G(value);
+			texels[INDEX_PNG(width, i, j ,2)] = GET_B(value);
+		}
+	}
+	glGenTextures(1,&texture);
+	glBindTexture(GL_TEXTURE_2D,texture);
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,texels);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+	textures.push_back(texture);
 }

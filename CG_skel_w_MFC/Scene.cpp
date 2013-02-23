@@ -71,7 +71,7 @@ void Scene::initShaders() {
 	Shader *tmp;
 	for(int i=0; i<total; ++i) {
 		tmp = new Shader(shader_files[2*i], shader_files[2*i+1]);
-		shaders.push_front(tmp);
+		shaders.push_back(tmp);
 	}
 	shaders.front()->loadProgram();
 	shaders.front()->bind(); // Activate first shader

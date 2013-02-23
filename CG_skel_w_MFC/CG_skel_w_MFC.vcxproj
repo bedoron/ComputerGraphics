@@ -176,6 +176,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="fshader.glsl" />
+    <None Include="NormalMapFshader.glsl" />
+    <None Include="NormalMapVshader.glsl" />
+    <None Include="PhongFshader.glsl" />
+    <None Include="PhongVshader.glsl" />
+    <None Include="SilhouetteShaderF.glsl" />
+    <None Include="SilhouetteShaderV.glsl" />
+    <None Include="TextureFshader.glsl" />
+    <None Include="TextureVshader.glsl" />
+    <None Include="ToonFshader.glsl" />
+    <None Include="ToonVshader.glsl" />
     <None Include="vshader.glsl" />
   </ItemGroup>
   <ItemGroup>

@@ -39,16 +39,23 @@ vec3& Face::getVnZ() {
 	return _vn3;
 }
 
-vec2& Face::getVtX() {
-	return _vt1;
+vec2& Face::getVtX()
+{
+	if(_vt1.x!=0 && _vt1.y!=0)
+		return _vt1;
+	return vec2(abs(_x.x + _x.z/2) ,abs(_x.y + _x.z/2));
 }
-
-vec2& Face::getVtY() {
-	return _vt2;
+vec2& Face::getVtY()
+{
+	if(_vt2.x!=0 && _vt2.y!=0)
+		return _vt2;
+	return vec2(abs(_y.x + _y.z/2) ,abs(_y.y + _y.z/2));
 }
-
-vec2& Face::getVtZ() {
-	return _vt3;
+vec2& Face::getVtZ()
+{
+	if(_vt3.x!=0 && _vt3.y!=0)
+		return _vt3;
+	return vec2(abs(_z.x + _z.z/2) ,abs(_z.y + _z.z/2));
 }
 
 mat3 Face::getNormalLine()

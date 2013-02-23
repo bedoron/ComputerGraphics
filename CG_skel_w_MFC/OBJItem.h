@@ -29,6 +29,8 @@ public:
 	vec3 _color;
 	bool calcNormals;
 	int renderMode;
+	vector<vec2> vTex;
+
 public:
 	OBJItem(void);
 	OBJItem(const OBJItem& item);
@@ -64,5 +66,17 @@ public:
 	void setColor(vec3 color){_color = color;}
 	void setCalcNormals(bool val){calcNormals = val;}
 	void setRenderType(int val){renderMode = val;}
+	int getVTsize()
+	{
+		return vTex.size();
+	}
+	vec2& getVTByNumber(int id)
+	{
+		return vTex[id];
+	}
+	void addVT(vec2 vt)
+	{
+		vTex.push_back(vt);
+	}
 };
 

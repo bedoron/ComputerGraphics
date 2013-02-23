@@ -31,9 +31,12 @@ class Shader
 	mat4 cameraMatrix;
 	mat4 modelViewMatrix;
 
+	vector<GLuint> textures;
 	void updateProjection();
 	void updateCamera();
 	void updateModelView();
+
+
 
 public:
 	Shader(string vertexShader, string fragmentShader);
@@ -87,5 +90,6 @@ public:
 	~Shader(void);
 
 	const string& getName() { return _vertexShader; }
+	void loadPng (const char* fileName);
 };
 
