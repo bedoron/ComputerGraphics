@@ -169,6 +169,18 @@
     <None Include="NormalMapVshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="EnviromentMapFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="EnviromentMapVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="BackgroundFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="BackgroundVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

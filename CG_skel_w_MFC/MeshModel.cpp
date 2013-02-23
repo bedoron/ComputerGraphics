@@ -115,3 +115,7 @@ void MeshModel::drawTexture(GLuint program,GLuint textureID,GLint textid)
 	objItem.setKvalue(_kAmbiant,_kDiffuze,_kspecular,shine,_world_transform);
 	objItem.drawTexture(program,textureID,textid);
 }
+void MeshModel::drawEnviroment(GLuint program,GLuint enviroment,GLuint textureid)
+{
+	objItem.drawEnviroment(program,enviroment,textureid);
+}

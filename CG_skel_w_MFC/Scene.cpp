@@ -8,6 +8,7 @@
 #include "InitShader.h"
 using namespace std;
 #define INDEX_PNG(width,x,y,c) (((y)+(x)*(width))*3+(c))
+
 void Scene::loadOBJModel(MeshModel* model)
 {
 	_activeModel = model;
@@ -52,6 +53,7 @@ void Scene::initDefaultLight()
 Scene::Scene():models(),_currentProgram(program_Phong),_programChanged(true)
 {
 	loadTexture();
+	tex_index =0;
 }
 void Scene::setFrustum(float left,float right,float top,float bottom,float zNear,float zFar)
 {
@@ -152,7 +154,8 @@ void Scene::draw()
 	case program_NormalMapping:
 		{
 			program = InitShader( "NormalMapVshader.glsl","NormalMapFshader.glsl");
-			break;
+			texture();
+			return;
 		}
 	case program_Silhouette:
 		{
@@ -168,7 +171,14 @@ void Scene::draw()
 	}
 	case program_Texture:
 	{
+		program = InitShader( "TextureVshader.glsl","TextureFshader.glsl");
 		texture();
+		return;
+	}
+	case program_enviroment:
+	{
+		program = InitShader( "EnviromentMapVshader.glsl","EnviromentMapFshader.glsl");
+		enviroment();
 		return;
 	}
 	}
@@ -194,8 +204,7 @@ void Scene::draw()
 }
 void Scene::texture()
 {
-	//program = InitShader( "TextureVshader.glsl","TextureFshader.glsl");
-	program = InitShader( "NormalMapVshader.glsl","NormalMapFshader.glsl");
+		
 	glEnable(GL_TEXTURE_2D);
 	
 	GLuint Camera_view = glGetUniformLocation(program,"CameraView");
@@ -204,10 +213,28 @@ void Scene::texture()
 	glUniformMatrix4fv(projection, 1, GL_TRUE, _current_Projection);
 	glUniformMatrix4fv(Camera_view, 1, GL_TRUE, _currentCamera);
 	glUniform4f(eyeLocation,eye.x,eye.y,eye.z,eye.w);
-	int tex_index =1;
+	
 	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  
 	{
 		(*it)->drawTexture(program,_texturesIds[tex_index],_textids[tex_index]);
+	}
+
+}
+void Scene::enviroment()
+{
+		
+	glEnable(GL_TEXTURE_2D);
+	
+	GLuint Camera_view = glGetUniformLocation(program,"CameraView");
+	GLuint projection = glGetUniformLocation( program, "Projection");
+	GLuint eyeLocation = glGetUniformLocation( program, "eye");
+	glUniformMatrix4fv(projection, 1, GL_TRUE, _current_Projection);
+	glUniformMatrix4fv(Camera_view, 1, GL_TRUE, _currentCamera);
+	glUniform4f(eyeLocation,eye.x,eye.y,eye.z,eye.w);
+	
+	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  
+	{
+		(*it)->drawEnviroment(program,_texturesIds[6],_texturesIds[tex_index]);
 	}
 
 }
@@ -215,10 +242,62 @@ void Scene::redraw()
 {
 	if(_programChanged)
 		draw();
+	
+	/*if(_currentProgram==program_enviroment)
+	{
+		glClear(GL_DEPTH_BUFFER_BIT);
+		background();
+		return;
+	}
+	else*/
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  
 	{
 		(*it)->reDraw(program,_currentProgram);
 	}
+}
+
+void Scene::background()
+{
+	vec2 squareVertices[] = {
+	vec2( -1.0, -1.0),
+    vec2(1.0f, -1.0f),
+    vec2(-1.0f,  1.0f),
+    vec2(1.0f,  1.0f)
+};
+	vec2 texCoords[] = {
+    vec2( 0.125, 1.0),
+    vec2(0.875, 1.0),
+    vec2(0.125, 0.0),
+    vec2(0.875, 0.0)
+};
+	
+	GLuint background_program = InitShader( "BackgroundVshader.glsl","BackgroundFshader.glsl");
+	
+	glUseProgram( background_program );
+	GLuint buffer[2];
+	glGenBuffers(2,buffer);
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+	glBufferData( GL_ARRAY_BUFFER,4* sizeof(vec2), squareVertices, GL_STATIC_DRAW);
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+	glBufferData( GL_ARRAY_BUFFER,4* sizeof(vec2), texCoords, GL_STATIC_DRAW);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+	GLuint vPosition = glGetAttribLocation( background_program, "vPosition");
+	glEnableVertexAttribArray(vPosition);
+	glVertexAttribPointer( vPosition/*atrib*/, 2/*size*/, GL_FLOAT/*type*/,
+		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+	GLuint tcoor = glGetAttribLocation( background_program, "tCoor");
+	glEnableVertexAttribArray(tcoor);
+	glVertexAttribPointer( tcoor/*atrib*/, 2/*size*/, GL_FLOAT/*type*/,
+		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+	glActiveTexture(GL_TEXTURE2);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,_texturesIds[6]);
+	GLuint tex_loc = glGetUniformLocation(background_program,"texMap"); 
+	glUniform1i(tex_loc,2);
+	glDrawArrays(GL_QUADS,0,1);
 }
 void Scene::transformActiveModel(mat4 translation)
 {
@@ -246,11 +325,25 @@ void Scene::drawSilhoette()
 }
 void Scene::loadTexture()
 {
-	loadPng ("..\\obj\\brick.png",GL_TEXTURE0 ,0);
-	loadPng ("..\\obj\\cowUV.png",GL_TEXTURE1 ,1);
+	loadPng ("..\\obj\\cowUV.png",GL_TEXTURE0 ,0);
+	loadPng ("..\\obj\\s.png",GL_TEXTURE1 ,1);
 	loadPng ("..\\obj\\normalMap.png",GL_TEXTURE2, 2);
-	loadPng ("..\\obj\\shirt.png",GL_TEXTURE3 ,3);
-	loadPng ("..\\obj\\brick.png",GL_TEXTURE4, 4);
+	loadPng ("..\\obj\\brick.png",GL_TEXTURE3 ,3);
+	loadPng ("..\\obj\\normal.png",GL_TEXTURE4, 4);
+	loadMarble(GL_TEXTURE5, 5);
+	loadPng ("..\\obj\\wallpaper.png",GL_TEXTURE5, 6);
+	loadPng ("..\\obj\\shirt.png",GL_TEXTURE5, 7);
+}
+void Scene::loadMarble(const int textureUnit, const int textureNumber)
+{
+	GLubyte* texels = Utils::getInstance().marble();
+	_textids[textureNumber]=textureUnit;
+	glActiveTexture(textureUnit);
+	glGenTextures(1,&_texturesIds[textureNumber]);
+	glBindTexture(GL_TEXTURE_2D,_texturesIds[textureNumber]);
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,noiseWidth,noiseHeight,0,GL_RGB,GL_UNSIGNED_BYTE,texels);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
 }
 void Scene::loadPng (const char* fileName, const int textureUnit, const int textureNumber)
 {
@@ -269,11 +362,22 @@ void Scene::loadPng (const char* fileName, const int textureUnit, const int text
 			texels[INDEX_PNG(width, i, j ,2)] = GET_B(value);
 		}
 	}
-	_textids[textureNumber]=textureUnit;
-	glActiveTexture(textureUnit);
+	/*_textids[textureNumber]=textureUnit;
+	glActiveTexture(textureUnit);*/
 	glGenTextures(1,&_texturesIds[textureNumber]);
 	glBindTexture(GL_TEXTURE_2D,_texturesIds[textureNumber]);
 	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,texels);
+
 	glGenerateMipmap(GL_TEXTURE_2D);
 	
+}
+
+void Scene::nextTexture()
+{
+	tex_index = (++tex_index)%8;
+	_programChanged = true;
+}
+void Scene::setTextureNum(int num)
+{
+	tex_index=num;
 }

@@ -12,6 +12,7 @@ uniform mat4 Projection;
 uniform mat4 CameraView;
 uniform mat4 ModelView;
 
+
 out vec3 vpos;
 out vec3 normal;
 out vec4 _kambiant;
@@ -19,9 +20,9 @@ out vec4 _kdiffuse;
 out vec4 _kspecular;
 out float _shininess;
 out vec2 st;
-
 void main()
 {
+
 	gl_Position =  Projection * CameraView * ModelView * vPosition;
 	vec4 vtransfromedVN = vPosition + vNormal;
 	vec4 vNormalOut = (ModelView * vtransfromedVN)-(ModelView * vPosition);

@@ -36,7 +36,7 @@ enum MENU_ELEMENTS {
 	, Main_Clear , Main_selectM , Main_Move_Interval, MAIN_DEBUG, OBJECT_REMOVE_ACTIVE, 
 	CAMERA_ADD, CAMERA_REMOVE_ACTIVE,CAMERA_SELECT_MODEL_AT, SELECT_OPERATION_FRAME,Main_Frustum,
 	Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING,menu_normalMapping,menu_Silhouette,menu_Phong,
-	menu_toon,menu_texture
+	menu_toon,menu_texture,menu_enviroment
 };
 
 
@@ -70,51 +70,51 @@ GLuint  projection; // projection matrix uniform shader variable location
 int Index = 0;
 
 // OpenGL initialization
-void
-	init()
-{
-	
-	GLuint vao;
-	glGenVertexArrays(1 ,&vao);
-	glBindVertexArray( vao );
-	item.copyData();
-	vec4* points = item.getFacesAsArray();
-	vec4* colors = item.getNormalsAsArray();
-	NumVertices = item.getFacesSize()*3;
-
-	GLuint buffer[2];
-	glGenBuffers(2, buffer);
-	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
-	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), points, GL_STATIC_DRAW);
-
-	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
-	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), colors, GL_STATIC_DRAW);
-
-	GLuint program = InitShader("tmp.glsl", "fshader.glsl");
-	glUseProgram( program );
-
-
-	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
-	GLuint vPosition = glGetAttribLocation( program, "vPosition");
-	glEnableVertexAttribArray(vPosition);
-
-
-	glVertexAttribPointer( vPosition/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
-		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
-
-	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
-	GLuint vColor= glGetAttribLocation( program, "vNormal");
-	glEnableVertexAttribArray(vColor);
-
-	glVertexAttribPointer( vColor/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
-		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
-
-	model_view = glGetUniformLocation( program, "ModelView");
-	Camera_view = glGetUniformLocation(program,"CameraView");
-	projection = glGetUniformLocation( program, "Projection");
-	glEnable(GL_DEPTH_TEST);
-	glClearColor(1,1,1,1);
-}
+//void
+//	init()
+//{
+//	
+//	GLuint vao;
+//	glGenVertexArrays(1 ,&vao);
+//	glBindVertexArray( vao );
+//	item.copyData();
+//	vec4* points = item.getFacesAsArray();
+//	vec4* colors = item.getNormalsAsArray();
+//	NumVertices = item.getFacesSize()*3;
+//
+//	GLuint buffer[2];
+//	glGenBuffers(2, buffer);
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), points, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), colors, GL_STATIC_DRAW);
+//
+//	GLuint program = InitShader("tmp.glsl", "fshader.glsl");
+//	glUseProgram( program );
+//
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+//	GLuint vPosition = glGetAttribLocation( program, "vPosition");
+//	glEnableVertexAttribArray(vPosition);
+//
+//
+//	glVertexAttribPointer( vPosition/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+//	GLuint vColor= glGetAttribLocation( program, "vNormal");
+//	glEnableVertexAttribArray(vColor);
+//
+//	glVertexAttribPointer( vColor/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	model_view = glGetUniformLocation( program, "ModelView");
+//	Camera_view = glGetUniformLocation(program,"CameraView");
+//	projection = glGetUniformLocation( program, "Projection");
+//	glEnable(GL_DEPTH_TEST);
+//	glClearColor(1,1,1,1);
+//}
 
 //----------------------------------------------------------------------------
 
@@ -134,8 +134,9 @@ void
 	glUniformMatrix4fv(projection, 1, GL_TRUE, p);
 	glDrawArrays( GL_TRIANGLES, 0, NumVertices);
 	glutSwapBuffers();*/
+		//Clear information from last draw
 	scene->redraw();
-	glutSwapBuffers();
+	//glutSwapBuffers();
 
 }
 
@@ -161,7 +162,12 @@ void
 	case '2':
 		scene->transformActiveModel(Translate(0,-1,0));
 		break;
-
+	case 't':
+		{
+			scene->nextTexture();
+			glutPostRedisplay();
+			break;
+		}
 	}
 
 	glutPostRedisplay();
@@ -172,7 +178,21 @@ void
 void
 	reshape( int width, int height )
 {
-	 glViewport (0, 0, (GLsizei)width, (GLsizei)height);
+	glViewport(0, 0, width, height);
+
+	glMatrixMode(GL_PROJECTION); //Switch to setting the camera perspective
+
+	//Set the camera perspective
+
+	glLoadIdentity(); //Reset the camera
+
+	gluPerspective(45.0,                  //The camera angle
+
+		(double)width/ (double)height, //The width-to-height ratio
+
+				   1.0,                   //The near z clipping coordinate
+
+				   200.0);            
 }
 void mouse(int button, int state, int x, int y)
 {
@@ -322,6 +342,35 @@ void mainMenu(int id)
 		scene->setProgramType(program_Texture);
 		break;
 	}
+	case menu_enviroment:
+	{
+		OPENFILENAME ofn;       // common dialog box structure
+			char szFile[260];       // buffer for file name
+			ZeroMemory( &ofn , sizeof( ofn));
+			ofn.lStructSize = sizeof ( ofn );
+			ofn.hwndOwner = NULL ;
+			ofn.lpstrFile = szFile ;
+			ofn.lpstrFile[0] = '\0';
+			ofn.nMaxFile = sizeof( szFile );
+			ofn.lpstrFilter = "PNG\0*.png\0";
+			ofn.nFilterIndex =1;
+			ofn.lpstrFileTitle = NULL ;
+			ofn.nMaxFileTitle = 0 ;
+			ofn.lpstrInitialDir=NULL ;
+			ofn.Flags = OFN_PATHMUSTEXIST|OFN_FILEMUSTEXIST|OFN_NOCHANGEDIR ;
+			// Display the Open dialog box. 
+
+			if (GetOpenFileName(&ofn)==TRUE) 
+			{
+				std::string s(ofn.lpstrFile);
+				scene->loadPng(s.c_str(),GL_TEXTURE6,6);
+				scene->setTextureNum(6);
+				scene->setProgramType(program_enviroment);
+				
+			}
+	
+		break;
+	}
 	}
 
 }
@@ -338,6 +387,7 @@ void initMenu()
 	glutAddMenuEntry("Silhouette",menu_Silhouette);
 	glutAddMenuEntry("Toon",menu_toon);
 	glutAddMenuEntry("Texture",menu_texture);
+	glutAddMenuEntry("Enviroment",menu_enviroment);
 	glutAddMenuEntry("About",MAIN_ABOUT);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
@@ -352,7 +402,7 @@ int
 	glutInit( &argc, argv );
 	//glutInitDisplayMode( GLUT_RGBA| GLUT_DOUBLE);
 	glutInitWindowSize( 1000, 1000 );
-	glutInitContextVersion( 3, 2 );
+	/*glutInitContextVersion( 3, 2 );*/
 	//glutInitContextProfile( GLUT_CORE_PROFILE );
 	glutCreateWindow( "Color Cube" );
 	glewExperimental = GL_TRUE;

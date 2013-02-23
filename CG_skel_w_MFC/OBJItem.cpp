@@ -338,9 +338,6 @@ void OBJItem::draw(GLuint program)
 void OBJItem::reDraw(GLuint program,int type)
 {
 	programType type1 = (programType)type;
-	
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
 	GLuint model_view = glGetUniformLocation( program, "ModelView");
 	glUniformMatrix4fv(model_view, 1, GL_TRUE, _world_transform);
 	
@@ -352,6 +349,7 @@ void OBJItem::drawSilhoette()
 {
 	
 }
+
 void OBJItem::drawTexture(GLuint program,GLuint textureID,GLint textid)
 {
 	GLuint a= glGetError();
@@ -359,7 +357,11 @@ void OBJItem::drawTexture(GLuint program,GLuint textureID,GLint textid)
 	glBindVertexArray(_vao);
 	glUseProgram( program );
 
-
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glGenerateMipmap( GL_TEXTURE_2D );
 	int NumVertices = getFacesSize()*3;
 	GLuint buffer[7];
 	glGenBuffers(7, buffer);
@@ -435,12 +437,78 @@ void OBJItem::drawTexture(GLuint program,GLuint textureID,GLint textid)
 	glEnableVertexAttribArray(tCoor);
 	glVertexAttribPointer( tCoor/*atrib*/, 2/*size*/, GL_FLOAT/*type*/,
 		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+	/*glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);*/
+	glActiveTexture(GL_TEXTURE0);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,textureID);
+	GLuint tex_loc = glGetUniformLocation(program,"texMap"); 
+	glUniform1i(tex_loc,0);
+	
+
+	glDrawArrays(GL_TRIANGLES,0,NumVertices);
+}
+void OBJItem::drawEnviroment(GLuint program,GLuint enviroment,GLuint textureid)
+{
+		glBindVertexArray(_vao);
+	glUseProgram( program );
+
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glGenerateMipmap( GL_TEXTURE_2D );
+	int NumVertices = getFacesSize()*3;
+	GLuint buffer[7];
+	glGenBuffers(7, buffer);
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), verticesArray4, GL_STATIC_DRAW);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), normalsArray4, GL_STATIC_DRAW);
+
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[2]);
+	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec2), _vtArray, GL_STATIC_DRAW);
+
+
 
 	
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+	GLuint vPosition = glGetAttribLocation( program, "vPosition");
+	glEnableVertexAttribArray(vPosition);
+
+
+	glVertexAttribPointer( vPosition/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+	GLuint vColor= glGetAttribLocation( program, "vNormal");
+	glEnableVertexAttribArray(vColor);
+
+	glVertexAttribPointer( vColor/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+
 	
+	glBindBuffer( GL_ARRAY_BUFFER, buffer[2]);
+	GLuint tCoor = glGetAttribLocation( program, "tCoor");	
+	glEnableVertexAttribArray(tCoor);
+	glVertexAttribPointer( tCoor/*atrib*/, 2/*size*/, GL_FLOAT/*type*/,
+		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+	
+	glActiveTexture(GL_TEXTURE0);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,textureid);
 	GLuint tex_loc = glGetUniformLocation(program,"texMap"); 
-	glUniform1i(tex_loc,textureID);
-	glBindTexture(GL_TEXTURE_2D,textureID);
+	glUniform1i(tex_loc,0);
+	
+	glActiveTexture(GL_TEXTURE2);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,enviroment);
+	GLuint env_loc = glGetUniformLocation(program,"envMap"); 
+	glUniform1i(tex_loc,2);
 
 	glDrawArrays(GL_TRIANGLES,0,NumVertices);
 }

@@ -9,7 +9,7 @@
 #include "Light.h"
 #include "pngLib/PngWrapper.h"
 using namespace std;
-enum programType {program_Phong,program_NormalMapping,program_Silhouette,program_toon,program_Texture};
+enum programType {program_Phong,program_NormalMapping,program_Silhouette,program_toon,program_Texture,program_enviroment};
 enum ActiveEntity_t { WORLD_ACTIVE, MODEL_ACTIVE, CAMERA_ACTIVE };
 
 class CModelData;
@@ -26,6 +26,7 @@ public:
 	mat4 virtual getObjectTransform()=0;
 	vec3 virtual getModelCenter()=0;
 	void virtual drawTexture(GLuint program,GLuint textureID,GLint textid)=0;
+	void virtual drawEnviroment(GLuint program,GLuint enviroment,GLuint textureid) =0;
 	const string& getName() const { return name; };
 	const string& setName(const string &newName) { name = newName; return name; };
 };
@@ -48,8 +49,9 @@ class Scene {
 	projectionType _currentPtype;
 	programType _currentProgram;
 	GLfloat _left,_right,_top,_bottom,_zfar,_znear,_fovy,_aspect;
-	GLuint _texturesIds[5];
-	GLint _textids[5];
+	GLuint _texturesIds[8];
+	GLint _textids[8];
+	int tex_index;
 public:
 	Scene();
 	void LookAt( const vec4& eye, const vec4& at, const vec4& up );
@@ -67,5 +69,11 @@ public:
 	void drawSilhoette();
 	void loadPng(const char* fileName, const int textureUnit, const int textureNumber);
 	void texture();
+	void enviroment();
 	void loadTexture();
+	void nextTexture();
+	void setTextureNum(int num);
+	void background();
+	void loadMarble(const int textureUnit, const int textureNumber);
+	
 };

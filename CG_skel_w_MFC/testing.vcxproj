@@ -142,6 +142,10 @@
     <ResourceCompile Include="CG_skel_w_MFC.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="BackgroundFshader.glsl" />
+    <None Include="BackgroundVshader.glsl" />
+    <None Include="EnviromentMapFshader.glsl" />
+    <None Include="EnviromentMapVshader.glsl" />
     <None Include="fshader.glsl" />
     <None Include="NormalMapFshader.glsl" />
     <None Include="NormalMapVshader.glsl" />

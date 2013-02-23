@@ -46,6 +46,7 @@ private:
 	vec2* _vtArray;
 
 	GLuint _vao;
+
 	mat4 _world_transform;
 	GLuint GLkAmbient;
 	GLuint GLkDiffuse;
@@ -120,6 +121,6 @@ public:
 	void reDraw(GLuint program,int type);
 	void drawSilhoette();
 	void drawTexture(GLuint program,GLuint textureID,GLint textid);
-
+	void drawEnviroment(GLuint program,GLuint enviroment,GLuint textureid);
 };
 

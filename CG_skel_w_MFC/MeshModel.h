@@ -56,4 +56,5 @@ public:
 	void drawNormal(GLuint program);
 	void drawSilhoette();
 	void drawTexture(GLuint program,GLuint textureID,GLint textid);
+	void drawEnviroment(GLuint program,GLuint enviroment,GLuint textureid);
 };
