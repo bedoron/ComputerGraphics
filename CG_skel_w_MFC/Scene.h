@@ -7,6 +7,10 @@
 #include "Utils.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Shader.h"
+#include <list>
+#include <deque>
+
 using namespace std;
 enum ActiveEntity_t { WORLD_ACTIVE, MODEL_ACTIVE, CAMERA_ACTIVE };
 class CModelData;
@@ -16,7 +20,7 @@ protected:
 	string name;
 	virtual ~Model() {}
 public:
-	void virtual draw(Renderer& renderer)=0;
+	void virtual draw(Shader *shader)=0;
 	void virtual setObjectTransform(mat4 worldTransform)=0;
 	mat4 virtual getObjectTransform()=0;
 	vec3 virtual getModelCenter()=0;
@@ -49,23 +53,31 @@ class Scene {
 	bool _renderCamera;
 	bool _addFog;
 	int _width,_height;
-public:
-	Scene();
+	deque<Shader*> shaders;
 
 	Scene(Renderer *renderer); 
-	Scene(Renderer *renderer, CModelData& win);
+	Scene();
+public:
+	
+
+	
+	Scene(/*Renderer *renderer, */ CModelData& win);
 
 	void initDefaultCamera();
 	void initDefaultLight();
+	void initShaders();
+
+	void initHook();
 	void loadOBJModel(string fileName,string id);
 
 	void setAntialiasing(bool val) { 
-		if(val == m_renderer->getAntialiasing()) return;
+		/*if(val == m_renderer->getAntialiasing()) return;
 		m_renderer->setAntialiasing(val); 
-		draw();
+		draw();*/
+		// Do nothing
 	}
 
-	bool getAntialiasing() { return m_renderer->getAntialiasing(); }
+	bool getAntialiasing() { return false; /*return m_renderer->getAntialiasing();*/ }
 
 	void drawDebug(vec4 eye = vec4(2,5,-10,1)); //
 	void draw(vec3 rotation);

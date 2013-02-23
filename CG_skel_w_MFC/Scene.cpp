@@ -20,6 +20,9 @@ void Scene::loadOBJModel(string fileName,string id)
 	}
 	names.push_back(id);
 	MeshModel *model = new MeshModel(item);
+
+	model->setShader(shaders.front());
+	model->buildVAO();
 	models.push_back(model);
 	model->setName(id);
 	setActiveModel(models.size()-1);
@@ -32,14 +35,15 @@ void Scene::initDefaultCamera() {
 	m_activeCamera->LookAt(vec4(5,5,5,1),vec4(0,0,0,1),vec4(0,1,0,1));	
 	_left = _bottom = _znear = 1;
 	_right = _top = -5;
-	_zfar = 20;
+	_zfar = 50;
 	_fovy = 45;
 	_aspect=1;
 	m_activeCamera->Perspective(45,1,_znear,_zfar);
-	m_renderer->SetProjection(m_activeCamera->getProjection());
+	//m_renderer->SetProjection(m_activeCamera->getProjection());
+	shaders.front()->setProjection(m_activeCamera->getProjection());
 	
-	_height = m_renderer->getHeight();
-	_width = m_renderer->getWidth();
+	//_height = m_renderer->getHeight();
+	//_width = m_renderer->getWidth();
 	currentView = prespective;
 	setActiveCamera(1);
 }
@@ -52,33 +56,49 @@ void Scene::initDefaultLight()
 	m_activeLight->setIntencity(vec3(255,255,255));
 	lights.push_back(m_activeLight);
 	
-	m_renderer->addLight(m_activeLight);
+	//m_renderer->addLight(m_activeLight);
+	
+	
+
 	activeLight=m_activeLight;
 	
 }
-Scene::Scene():models(),cameras(), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0),lights(),_addFog(false)
-{
-//	axes= new AxesModel(); 
-//	activeEntity = WORLD_ACTIVE;
-//	model_win = 0;
+
+void Scene::initShaders() {
+	//const char *shader_files[] = { "..\\CG_skel_w_MFC\\PhongVshader.glsl", "..\\CG_skel_w_MFC\\PhongFshader.glsl"};
+	const char *shader_files[] = { "PhongVshader.glsl", "PhongFshader.glsl", "ToonVshader.glsl" , "ToonFshader.glsl"};
+	const int total = 2;
+	Shader *tmp;
+	for(int i=0; i<total; ++i) {
+		tmp = new Shader(shader_files[2*i], shader_files[2*i+1]);
+		shaders.push_front(tmp);
+	}
+	shaders.front()->loadProgram();
+	shaders.front()->bind(); // Activate first shader
+}
+
+void Scene::initHook() {
+	initShaders(); // None will work without this
 	initDefaultCamera();
-	initDefaultLight();
+//	initDefaultLight();
+	moveInterval=1;
+}
+
+Scene::Scene():models(),cameras(), axes(0), activeEntity(WORLD_ACTIVE), model_win(0),lights(),_addFog(false)
+{
+	initHook();
 }
 Scene::Scene(Renderer *renderer) : m_renderer(renderer),names(),m_activeModel(-1),size(0),models(),cameras(),
-	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(0),lights(),_addFog(false)
+	activeCamera(0), axes(0), activeEntity(WORLD_ACTIVE), model_win(0),lights(),_addFog(false)
 {
-	moveInterval=1;
-	initDefaultCamera();
-	initDefaultLight();
+	initHook();
 };
 
-Scene::Scene(Renderer *renderer, CModelData& win) : m_renderer(renderer),names(),m_activeModel(-1),size(0),models(),cameras(),
-	activeCamera(0), axes(new AxesModel()), activeEntity(WORLD_ACTIVE), model_win(&win),lights(),_addFog(false)
+Scene::Scene(/*Renderer *renderer, */ CModelData& win) : m_renderer(0),names(),m_activeModel(-1),size(0),models(),cameras(),
+	activeCamera(0), axes(0), activeEntity(WORLD_ACTIVE), model_win(&win),lights(),_addFog(false)
 {
-	model_win->setScene(this);
-	initDefaultCamera();
-	initDefaultLight();
-	moveInterval=1;
+//	model_win->setScene(this); -- This should be revised because it uses the renderer :(
+	initHook();
 };
 
 void Scene::refreshModelWindow() {
@@ -109,7 +129,7 @@ Model* Scene::setActiveModel(int id) {
 	refreshModelWindow();
 	
 	cerr << active->getName() << "\n" << active->getObjectTransform() << "\n";
-	cerr << "Center transformed to :\n" << m_renderer->calculateMvpPCTransformation(vec4(active->getModelCenter())) << "\n";
+//	cerr << "Center transformed to :\n" << m_renderer->calculateMvpPCTransformation(vec4(active->getModelCenter())) << "\n";
 	return active;
 }
 
@@ -141,26 +161,37 @@ void Scene::draw(mat4 translation)
 		oTransform =translation *  oTransform ; 
 		models[m_activeModel]->setObjectTransform(oTransform);
 	}
-	m_renderer->resetZBuffer();
-	m_renderer->SetProjection(m_activeCamera->getProjection());
-	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 
-	
-	m_renderer->ClearColorBuffer();
-	m_renderer->drawAxis();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	shaders.front()->setCameraParams(m_activeCamera);
 	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  //2
 	{
-		(*it)->draw(*m_renderer);
+		//(*it)->draw(*m_renderer);
+		(*it)->draw(shaders.front());
 	}
+
+	//shaders.front()->swapBuffers();
 	
-	/*m_renderer->SetObjectMatrices(axes->getObjectTransform());
-	axes->draw(*m_renderer);*/
-	if (_renderCamera)
-		drawCameras();
-	if(_addFog)
-		m_renderer->addFog();
-	m_renderer->SwapBuffers();
-	refreshModelWindow(); // IMPORTANT HOOK !
+	//m_renderer->resetZBuffer();
+	//m_renderer->SetProjection(m_activeCamera->getProjection());
+	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
+
+	//
+	//m_renderer->ClearColorBuffer();
+	//m_renderer->drawAxis();
+	//for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  //2
+	//{
+	//	(*it)->draw(*m_renderer);
+	//}
+	//
+	///*m_renderer->SetObjectMatrices(axes->getObjectTransform());
+	//axes->draw(*m_renderer);*/
+	//if (_renderCamera)
+	//	drawCameras();
+	//if(_addFog)
+	//	m_renderer->addFog();
+	//m_renderer->SwapBuffers();
+	//refreshModelWindow(); // IMPORTANT HOOK !
 }
 
 Model* Scene::nextModel() {
@@ -169,8 +200,8 @@ Model* Scene::nextModel() {
 
 void Scene::drawDemo()
 {
-	m_renderer->SetDemoBuffer();
-	m_renderer->SwapBuffers();
+	//m_renderer->SetDemoBuffer();
+	//m_renderer->SwapBuffers();
 }
 
 GLfloat Scene::getSize()
@@ -179,7 +210,8 @@ GLfloat Scene::getSize()
 }
 void Scene::setNormal(bool normal)
 {
-	m_renderer->setDrawnormal(normal);
+	//m_renderer->setDrawnormal(normal);
+	throw string("Not implemented");
 }
 
 void Scene::clearScene()
@@ -187,8 +219,11 @@ void Scene::clearScene()
 	names.clear();
 	models.clear();
 	model_win->ShowWindow(SW_HIDE);
+	throw string("Implement this crap");
+/*
 	m_renderer->ClearColorBuffer();
 	m_renderer->SwapBuffers();
+	*/
 }
 
 int Scene::getModelCount()
@@ -213,7 +248,8 @@ std::vector<string> Scene::getCameraNames() {
 void Scene::pointCameraAt()
 {
 	cameras[activeCamera]->pointCameraAt(vec4(models[m_activeModel]->getModelCenter()));
-	m_renderer->SetCameraTransform(cameras[activeCamera]->getInverseTransformation());
+	shaders.front()->setCamera(cameras[activeCamera]->getInverseTransformation());
+	//m_renderer->SetCameraTransform(cameras[activeCamera]->getInverseTransformation());
 	draw(mat4(1));
 }
 
@@ -225,10 +261,15 @@ bool Scene::setActiveCamera(int num)
 		activeCamera = num-1;
 	m_activeCamera = cameras[activeCamera];
 	std::cerr << "camera number "<< num << " was selected\n";
+	Shader *shader = shaders.front();
+	shader->setCamera(cameras[activeCamera]->getInverseTransformation());
+	shader->setProjection(cameras[activeCamera]->getProjection());
+/*
 	m_renderer->SetCameraTransform(cameras[activeCamera]->getInverseTransformation());
 	m_renderer->SetProjection(cameras[activeCamera]->getProjection());
 	m_renderer->setActiveCamera(m_activeCamera);
 	activateCamera();
+	*/
 	draw(mat4(1));
 	return true;
 }
@@ -238,7 +279,7 @@ void Scene::addCamera(vec4 eye,vec4 at,vec4 up)
 	Camera* newCamera = new Camera();
 	newCamera->LookAt(eye,at,up);
 	cameras.push_back(newCamera);
-	newCamera->setProjection(m_renderer->getProjection());
+	newCamera->setProjection( cameras[activeCamera]->getProjection() ); // moo
 	activeCamera = cameras.size();
 	if (!setActiveCamera(activeCamera)) {
 		std::cerr << "Failed setting active camera " << activeCamera << "\n";
@@ -248,17 +289,21 @@ void Scene::addCamera(vec4 eye,vec4 at,vec4 up)
 }
 void Scene::drawCameras()
 {
+	/*
 	m_renderer->SetObjectMatrices(mat4(1));
 	for(std::vector<Camera*>::iterator it = cameras.begin(); it != cameras.end(); ++it) 
 	{
 		(*it)->draw(*m_renderer);
 	}
+	*/
+	throw string("never ever call this piece of crap");
 }
 void Scene::setFrustum(float left,float right,float top,float down,float zNear,float zFar)
 {
 	m_activeCamera->Frustum(left,right,down,top,zNear,zFar);
-	m_renderer->SetProjection(m_activeCamera->getProjection());
-	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
+	shaders.front()->setCameraParams(m_activeCamera);
+	//m_renderer->SetProjection(m_activeCamera->getProjection());
+	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	draw();
 	_left= left;
 	_right = right;
@@ -267,15 +312,16 @@ void Scene::setFrustum(float left,float right,float top,float down,float zNear,f
 	_znear = zNear;
 	_zfar= zFar;
 	currentView = frusum;
-	m_renderer->setZdistance(abs(_znear-_zfar));
-	m_renderer->setZFar(_zfar);
-	m_renderer->setZNear(_znear);
+//	m_renderer->setZdistance(abs(_znear-_zfar)); // WHY ?!
+//	m_renderer->setZFar(_zfar);// WHY ?!
+//	m_renderer->setZNear(_znear);// WHY ?!
 }
 void Scene::setOrtho(float left,float right,float top,float down,float zNear,float zFar)
 {
 	m_activeCamera->Ortho(left,right,down,top,zNear,zFar);
-	m_renderer->SetProjection(m_activeCamera->getProjection());
-	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
+	shaders.front()->setCameraParams(m_activeCamera);
+	//m_renderer->SetProjection(m_activeCamera->getProjection());
+	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	currentView = ortho;
 	_left= left;
 	_right = right;
@@ -283,24 +329,25 @@ void Scene::setOrtho(float left,float right,float top,float down,float zNear,flo
 	_bottom = down;
 	_znear = zNear;
 	_zfar= zFar;
-	m_renderer->setZdistance(abs(_znear-_zfar));
-	m_renderer->setZFar(_zfar);
-	m_renderer->setZNear(_znear);
+	//m_renderer->setZdistance(abs(_znear-_zfar));
+	//m_renderer->setZFar(_zfar);
+	//m_renderer->setZNear(_znear);
 	draw();
 }
 void Scene::setPrespective(float fovy,float aspect,float znear, float zfar)
 {
 	m_activeCamera->Perspective(fovy,aspect,znear,zfar);
-	m_renderer->SetProjection(m_activeCamera->getProjection());
-	m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
+	shaders.front()->setCameraParams(m_activeCamera);
+	//m_renderer->SetProjection(m_activeCamera->getProjection());
+	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	currentView= prespective;
 	_fovy = fovy;
 	_aspect = aspect;
 	_znear = znear;
 	_zfar= zfar;
-	m_renderer->setZdistance(abs(_znear-_zfar));
-	m_renderer->setZFar(_zfar);
-	m_renderer->setZNear(_znear);
+	//m_renderer->setZdistance(abs(_znear-_zfar));
+	//m_renderer->setZFar(_zfar);
+	//m_renderer->setZNear(_znear);
 	draw();
 }
 
@@ -315,75 +362,79 @@ void Scene::removeActiveModel() {
 }
 
 void Scene::removeActiveCamera() {
-
-
+	throw string("Not implemented :(");
 }
 
 
 void Scene::setRenderer(int width , int height)
 {
-	mat4 Projection = m_renderer->getProjection();
-	int oldWidth = m_renderer->getWidth();
-	int oldHeight = m_renderer->getHeight();
-	GLfloat dx = width-oldWidth;
-	GLfloat dy = height - oldHeight;
-	GLfloat dxPercent = (GLfloat)(abs(((GLfloat)dx)/((GLfloat)oldWidth)));
-	GLfloat dyPercent = (GLfloat)(abs(((GLfloat)dy)/((GLfloat)oldHeight)));
-	GLfloat newAspect = (GLfloat)((GLfloat)width)/((GLfloat)height);
-	
-	delete(m_renderer);
-	m_renderer = new Renderer(width,height);
-	m_renderer->addLights(lights);
-	m_renderer->setActiveCamera(m_activeCamera);
-	if(dx>0) // X got bigger
-	{
-		GLfloat deltaViewX = (_right-_left)*dxPercent;
-		GLfloat halfDeltaViewX = deltaViewX/2;
-		_left -= halfDeltaViewX;
-		_right += halfDeltaViewX;
-	}
-	if (dx < 0)
-	{
-		GLfloat deltaViewX = (_right-_left)*dxPercent;
-		GLfloat halfDeltaViewX = deltaViewX/2;
-		_left += halfDeltaViewX;
-		_right -= halfDeltaViewX;
-	}
-	if (dy > 0)
-	{
-		GLfloat oldViewY = _top-_bottom;
-		GLfloat deltaViewY = ( _top-_bottom)*dyPercent;
-		GLfloat halfDeltaViewY = deltaViewY/2;
-		_bottom -= halfDeltaViewY;
-		_top += halfDeltaViewY;
-	}
+	return; // Do nothing for now
 
-	if (dy < 0)
-	{
-		GLfloat oldViewY = _top-_bottom;
-		GLfloat deltaViewY = ( _top-_bottom)*dyPercent;
-		GLfloat halfDeltaViewY = deltaViewY/2;
-		_bottom += halfDeltaViewY;
-		_top -= halfDeltaViewY;
-	}
-	switch(currentView)
-	{
-	case ortho:
-		{
-			setOrtho(_left,_right,_top,_bottom, _znear, _zfar);
-			break;
-		}
-	case frusum:
-		{
-			setFrustum(_left,_right,_top,_bottom, _znear, _zfar);
-			break;
-		}
-	case prespective:
-		{
-			setPrespective(_fovy,newAspect,_znear,_zfar);
-			break;
-		}
-	}
+	//mat4 Projection = shaders.front()->getProjection();
+	//int oldWidth = shaders.front()->getWidth();
+	//int oldHeight = shaders.front()->getHeight();	
+	////mat4 Projection = m_renderer->getProjection();
+	////int oldWidth = m_renderer->getWidth();
+	////int oldHeight = m_renderer->getHeight();
+	//GLfloat dx = width-oldWidth;
+	//GLfloat dy = height - oldHeight;
+	//GLfloat dxPercent = (GLfloat)(abs(((GLfloat)dx)/((GLfloat)oldWidth)));
+	//GLfloat dyPercent = (GLfloat)(abs(((GLfloat)dy)/((GLfloat)oldHeight)));
+	//GLfloat newAspect = (GLfloat)((GLfloat)width)/((GLfloat)height);
+	//
+	//delete(m_renderer);
+	//m_renderer = new Renderer(width,height);
+	//m_renderer->addLights(lights);
+	//m_renderer->setActiveCamera(m_activeCamera);
+	//if(dx>0) // X got bigger
+	//{
+	//	GLfloat deltaViewX = (_right-_left)*dxPercent;
+	//	GLfloat halfDeltaViewX = deltaViewX/2;
+	//	_left -= halfDeltaViewX;
+	//	_right += halfDeltaViewX;
+	//}
+	//if (dx < 0)
+	//{
+	//	GLfloat deltaViewX = (_right-_left)*dxPercent;
+	//	GLfloat halfDeltaViewX = deltaViewX/2;
+	//	_left += halfDeltaViewX;
+	//	_right -= halfDeltaViewX;
+	//}
+	//if (dy > 0)
+	//{
+	//	GLfloat oldViewY = _top-_bottom;
+	//	GLfloat deltaViewY = ( _top-_bottom)*dyPercent;
+	//	GLfloat halfDeltaViewY = deltaViewY/2;
+	//	_bottom -= halfDeltaViewY;
+	//	_top += halfDeltaViewY;
+	//}
+
+	//if (dy < 0)
+	//{
+	//	GLfloat oldViewY = _top-_bottom;
+	//	GLfloat deltaViewY = ( _top-_bottom)*dyPercent;
+	//	GLfloat halfDeltaViewY = deltaViewY/2;
+	//	_bottom += halfDeltaViewY;
+	//	_top -= halfDeltaViewY;
+	//}
+	//switch(currentView)
+	//{
+	//case ortho:
+	//	{
+	//		setOrtho(_left,_right,_top,_bottom, _znear, _zfar);
+	//		break;
+	//	}
+	//case frusum:
+	//	{
+	//		setFrustum(_left,_right,_top,_bottom, _znear, _zfar);
+	//		break;
+	//	}
+	//case prespective:
+	//	{
+	//		setPrespective(_fovy,newAspect,_znear,_zfar);
+	//		break;
+	//	}
+	//}
 }
 void Scene::setZoom(GLfloat zoom)
 {
@@ -417,37 +468,38 @@ void Scene::setZoom(GLfloat zoom)
 }
 void Scene::addCube()
 {
-	Model* cube = new CubeModel(-1,1,-1,1,-1,1);
+	throw string("Not implemented!");
+/*	Model* cube = new CubeModel(-1,1,-1,1,-1,1); -- Changed function in Model class. need to add it here too
 	models.push_back(cube);
 	names.push_back("Cube");
-	setActiveModel(models.size()-1);
+	setActiveModel(models.size()-1);*/
 }
 void Scene::addLight(Light* newLight)
 {
-	lights.push_back(newLight);
-	m_renderer->addLights(lights);
-	activeLight = newLight;
-	draw();
+	//lights.push_back(newLight);
+	//m_renderer->addLights(lights);
+	//activeLight = newLight;
+	//draw();
 }
 void Scene::changeLightDirection(mat4 rotation)
 {
-	vec4 newDirection = rotation*activeLight->getDirection();
-	activeLight->setDirection(vec3(newDirection.x,newDirection.y,newDirection.z));
-	cerr << " light direction is " << activeLight->getDirection() << "\n";
-	draw();
+	//vec4 newDirection = rotation*activeLight->getDirection();
+	//activeLight->setDirection(vec3(newDirection.x,newDirection.y,newDirection.z));
+	//cerr << " light direction is " << activeLight->getDirection() << "\n";
+	//draw();
 }
 void Scene::changeLightLocation(mat4 rotation)
 {
-	vec4 newLocation = rotation*activeLight->getLocation();
-	activeLight->setLocation(vec3(newLocation.x,newLocation.y,newLocation.z));
-	cerr << " light location is " << activeLight->getLocation() << "\n";
+	//vec4 newLocation = rotation*activeLight->getLocation();
+	//activeLight->setLocation(vec3(newLocation.x,newLocation.y,newLocation.z));
+	//cerr << " light location is " << activeLight->getLocation() << "\n";
 }
 void Scene::setFog(vec3 fogColor,GLfloat density)
 {
-	if(density)
-		m_renderer->setFog(fogColor,density);
-	else
-		m_renderer->clearFog();
-	_addFog = density !=0;
-	draw();
+	//if(density)
+	//	m_renderer->setFog(fogColor,density);
+	//else
+	//	m_renderer->clearFog();
+	//_addFog = density !=0;
+	//draw();
 }

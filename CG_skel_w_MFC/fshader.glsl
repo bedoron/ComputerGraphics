@@ -1,15 +1,15 @@
 
 #version 150
 
-in  vec2 texCoord;
+//in  vec2 texCoord;
 
-out vec4 fColor;
+out vec3 fColor;
 
-uniform sampler2D texture;
+//uniform sampler2D texture;
 
 void main() 
 { 
-   fColor = textureLod( texture, texCoord, 0 );
-   //fColor = vec4(0,0,1,1);
+   //fColor = textureLod( texture, texCoord, 0 );
+   fColor = vec3(1,0,0);
 } 
 

@@ -11,7 +11,7 @@ using namespace std;
 
 class OBJItem
 {
-private:
+public:
 	GLfloat minX;
 	GLfloat minY;
 	GLfloat minZ;

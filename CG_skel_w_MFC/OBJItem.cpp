@@ -66,10 +66,11 @@ vec3& OBJItem::getNormalByNumber(int id)
 void OBJItem::draw(Renderer& renderer)
 {
 	//draw bounding box
+	
 	if(drawBox) {
-		CubeModel stupidCube = CubeModel(minX,maxX,minY,maxY,minZ,maxZ);
-		stupidCube.setObjectTransform(renderer.getObjectMatrices());
-		stupidCube.draw(renderer);
+		//CubeModel stupidCube = CubeModel(minX,maxX,minY,maxY,minZ,maxZ);
+		//stupidCube.setObjectTransform(renderer.getObjectMatrices());
+		//stupidCube.draw(renderer);
 	}
 
 			
@@ -88,32 +89,32 @@ void OBJItem::draw(Renderer& renderer)
 			//draw triangle
 			if(!curentface.isMaterial())
 			{
-				renderer.setKAbmbiant(curentface.getKAmbiant());
-				renderer.setKDiffuze(curentface.getKDiffuze());
-				renderer.setKspecular(curentface.getKSpecular());
-				renderer.setShine(curentface.getNS());
+				//renderer.setKAbmbiant(curentface.getKAmbiant());
+				//renderer.setKDiffuze(curentface.getKDiffuze());
+				//renderer.setKspecular(curentface.getKSpecular());
+				//renderer.setShine(curentface.getNS());
 			}
 			switch(renderMode)
 			{
 			case Flat:
 				{
-					renderer.DrawTriangle(curentface,_color,true);
+					//renderer.DrawTriangle(curentface,_color,true);
 					break;
 				}
 			case french:
 				{
-					renderer.DrawTriangleFrech(curentface,_color);
+					//renderer.DrawTriangleFrech(curentface,_color);
 					break;
 				}
 			case Phong:
 				{
-					renderer.DrawTriangle(curentface,_color);
+					//renderer.DrawTriangle(curentface,_color);
 					break;
 				}
 
 			}
 			
-			renderer.DrawTriangle(curentface,_color);
+			//renderer.DrawTriangle(curentface,_color);
 			/*{
 			renderer.drawLineByVectors((*it).getVecX() ,(*it).getVecY() ,(unsigned int) RED);
 			renderer.drawLineByVectors((*it).getVecY() ,(*it).getVecZ() ,(unsigned int) RED);
@@ -121,12 +122,12 @@ void OBJItem::draw(Renderer& renderer)
 			}*/
 			//draw normal
 			if(drawNormal)
-				renderer.drawLineByVectors((*it).getNormalLine()[0] ,(*it).getNormalLine()[1] ,(unsigned int)BLUE);
+				//renderer.drawLineByVectors((*it).getNormalLine()[0] ,(*it).getNormalLine()[1] ,(unsigned int)BLUE);
 			if(drawVertexNormal)
 			{
-				renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecX()+curentface.getVnX(),(unsigned int)GREEN);
-				renderer.drawLineByVectors(curentface.getVecY(),curentface.getVecY()+curentface.getVnY(),(unsigned int)GREEN);
-				renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecZ()+curentface.getVnZ(),(unsigned int)GREEN);
+				//renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecX()+curentface.getVnX(),(unsigned int)GREEN);
+				//renderer.drawLineByVectors(curentface.getVecY(),curentface.getVecY()+curentface.getVnY(),(unsigned int)GREEN);
+				//renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecZ()+curentface.getVnZ(),(unsigned int)GREEN);
 			}
 		}
 		catch(exception& e)
@@ -135,6 +136,7 @@ void OBJItem::draw(Renderer& renderer)
 		}
 		
 	}
+	
 }
 vec3 OBJItem::getMidPoint()
 {
@@ -156,12 +158,11 @@ GLfloat OBJItem::getWidth()
 {
 	return maxX - minX;
 }
-GLfloat OBJItem::getHeight()
-{
+GLfloat OBJItem::getHeight() {
 	return maxY- minY;
 }
-vec3 OBJItem::getCalculatedNormal(int id)
-{
+
+vec3 OBJItem::getCalculatedNormal(int id) {
 	Vertex v (id);
 	GLfloat totalArea=0.0;
 	vec3 out(0,0,0);

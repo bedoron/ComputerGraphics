@@ -14,7 +14,7 @@ public:
 	virtual ~CModelData();
 
 // Dialog Data
-	enum { IDD = IDD_MODELDATA };
+	enum { IDD = 103 /*IDD = IDD_MODELDATA*/ };
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

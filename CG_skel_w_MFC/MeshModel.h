@@ -5,10 +5,15 @@
 #include <string>
 #include "Renderer.h"
 #include "Utils.h"
+#include <map>
+#include "Shader.h"
+
 using namespace std;
 
 class MeshModel : public Model
 {
+//	GLuint vaoID;
+//	GLuint vboID[7];
 protected :
 	MeshModel() {}
 	vec3 *_vertices;
@@ -24,12 +29,34 @@ protected :
 	int _numOfColors;
 	bool _cartoonize;
 	int renderMode;
-public:
+
+	vec4 *verticesArray4;
+	vec4 *normalsArray4;
+	vec4 *_kAmbiantArray;
+	vec4 *_kDifuseArray;
+	vec4 *_kSpecularArray;
+	float *_shineArray;
+	vec2 *_vtArray;
+	//vec3* normalsArray; // ?!
+
+	map<string, GLuint> VBOs;
+	GLuint _vao;
+	Shader *_shader;
+
+	void copyData(); // flatten all data structures
+	void generateBuffers(); // generate VBOs and bind copied data
 	
+
+	void loadBuffers();
+	void bindBuffers();
+public:
+	void buildVAO();
+	void setShader(Shader* shader);
 	MeshModel(OBJItem item);
 	~MeshModel(void);
 	void loadFile(string item);
-	void draw(Renderer& renderer);
+	//void draw(Renderer& renderer);
+	void draw(Shader *shader);
 	void setObjectTransform(mat4 worldTransform);
 	mat4 getObjectTransform();
 	vec3 getModelCenter();
@@ -37,6 +64,7 @@ public:
 	void scale(const vec3& scaler);
 	void rotate(const vec3& rotors);
 
+// These needs to be revised
 	void setDrawBox(bool val) { objItem.setDrawBox(val); } // Bummer
 	void setVertexNormal(bool val){ objItem.setDrawVertexNormal(val);}
 	bool getNormal() {return objItem.getNormal();}

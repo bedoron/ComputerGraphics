@@ -2,8 +2,8 @@
 #include "Face.h"
 #include "Renderer.h"
 
-Face::Face(vec3 x,vec3 y,vec3 z,vec3 vertices,vec3 vn1,vec3 vn2,vec3 vn3):_x(x),_y(y),_z(z),_vertices(vertices) ,normalLine(),_vn1(vn1),_vn2(vn2),_vn3(vn3),matrial(true)
-	,_kambiant(vec3(0)),_kdiffuze(vec3(0)),_kspecular(vec3(0))
+Face::Face(vec3 x,vec3 y,vec3 z,vec3 vertices,vec3 vn1,vec3 vn2,vec3 vn3,vec2 vt1,vec2 vt2,vec2 vt3):_x(x),_y(y),_z(z),_vertices(vertices) ,normalLine(),_vn1(vn1),_vn2(vn2),_vn3(vn3),matrial(true)
+	,_kambiant(vec3(1)),_kdiffuze(vec3(1)),_kspecular(vec3(1)),_ns(25),_vt1(vt1),_vt2(vt2),_vt3(vt3)
 {
 	_normalVec= normalize(cross(x-y,x-z)) ;
 	vec3 center = (x+y+z)/3;
@@ -35,10 +35,22 @@ vec3& Face::getVnY()
 {
 	return _vn2;
 }
-vec3& Face::getVnZ()
-{
+vec3& Face::getVnZ() {
 	return _vn3;
 }
+
+vec2& Face::getVtX() {
+	return _vt1;
+}
+
+vec2& Face::getVtY() {
+	return _vt2;
+}
+
+vec2& Face::getVtZ() {
+	return _vt3;
+}
+
 mat3 Face::getNormalLine()
 {
 	return normalLine;
@@ -58,6 +70,8 @@ vec3 Face::getNormal()
 {
 	return _normalVec;
 }
+
+/*
 Face Face::transformFace(Renderer& renderer, bool mode)
 {
 	vec3 newX = renderer.calculateMvpPCTransformation(_x,mode);
@@ -68,3 +82,4 @@ Face Face::transformFace(Renderer& renderer, bool mode)
 	vec3 newvn3 = renderer.calculateMvpPCTransformation(_z+_vn3,mode);
 	return Face(newX,newY,newZ,_vertices,newvn1-newX,newvn2-newY,newvn3-newZ);
 }
+*/

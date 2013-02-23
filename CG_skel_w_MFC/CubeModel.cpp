@@ -15,20 +15,20 @@ CubeModel::~CubeModel(void)
 }
 void CubeModel::draw(Renderer& renderer)
 {
-	renderer.SetObjectMatrices(_object_transform);
-	renderer.drawLineByVectors(vec3(_minX,_minY,_minZ),vec3(_maxX,_minY,_minZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_minX,_minY,_minZ),vec3(_minX,_maxY,_minZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_minX,_maxY,_minZ),vec3(_maxX,_maxY,_minZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_maxX,_minY,_minZ),vec3(_maxX,_maxY,_minZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_minX,_minY,_maxZ),vec3(_maxX,_minY,_maxZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_minX,_minY,_maxZ),vec3(_minX,_maxY,_maxZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_minX,_maxY,_maxZ),vec3(_maxX,_maxY,_maxZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_maxX,_minY,_maxZ),vec3(_maxX,_maxY,_maxZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_minX,_minY,_minZ),vec3(_minX,_minY,_maxZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_maxX,_minY,_minZ),vec3(_maxX,_minY,_maxZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_minX,_maxY,_minZ),vec3(_minX,_maxY,_maxZ),(unsigned int)RED);
-	renderer.drawLineByVectors(vec3(_maxX,_maxY,_minZ),vec3(_maxX,_maxY,_maxZ),(unsigned int)RED);
-
+	//renderer.SetObjectMatrices(_object_transform);
+	//renderer.drawLineByVectors(vec3(_minX,_minY,_minZ),vec3(_maxX,_minY,_minZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_minX,_minY,_minZ),vec3(_minX,_maxY,_minZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_minX,_maxY,_minZ),vec3(_maxX,_maxY,_minZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_maxX,_minY,_minZ),vec3(_maxX,_maxY,_minZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_minX,_minY,_maxZ),vec3(_maxX,_minY,_maxZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_minX,_minY,_maxZ),vec3(_minX,_maxY,_maxZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_minX,_maxY,_maxZ),vec3(_maxX,_maxY,_maxZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_maxX,_minY,_maxZ),vec3(_maxX,_maxY,_maxZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_minX,_minY,_minZ),vec3(_minX,_minY,_maxZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_maxX,_minY,_minZ),vec3(_maxX,_minY,_maxZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_minX,_maxY,_minZ),vec3(_minX,_maxY,_maxZ),(unsigned int)RED);
+	//renderer.drawLineByVectors(vec3(_maxX,_maxY,_minZ),vec3(_maxX,_maxY,_maxZ),(unsigned int)RED);
+	throw string("Not implemented");
 }
 void CubeModel::setObjectTransform(mat4 worldTransform)
 {
