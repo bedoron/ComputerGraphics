@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "MeshModel.h"
 #include <string>
-#include "Utils.h"
+
 #include "CubeModel.h"
 #include "AxesModel.h"
 #include "ModelData.h"
@@ -24,6 +24,7 @@ void Scene::loadOBJModel(string fileName,string id)
 	model->setShader(shaders.front());
 	model->buildVAO();
 	models.push_back(model);
+	
 	model->setName(id);
 	setActiveModel(models.size()-1);
 }
@@ -66,12 +67,14 @@ void Scene::initDefaultLight()
 
 void Scene::initShaders() {
 	//const char *shader_files[] = { "..\\CG_skel_w_MFC\\PhongVshader.glsl", "..\\CG_skel_w_MFC\\PhongFshader.glsl"};
-	const char *shader_files[] = { "PhongVshader.glsl", "PhongFshader.glsl", "ToonVshader.glsl" , "ToonFshader.glsl"};
+	const char *shader_files[] = { "PhongVshader.glsl", "PhongFshader.glsl", "TextureVshader.glsl" , "TextureFshader.glsl"};
+	bool shader_Types[2] = {false,true};
+	
 	const int total = 2;
 	Shader *tmp;
 	for(int i=0; i<total; ++i) {
-		tmp = new Shader(shader_files[2*i], shader_files[2*i+1]);
-		shaders.push_back(tmp);
+		tmp = new Shader(shader_files[2*i], shader_files[2*i+1],shader_Types[i]);
+		shaders.push_front(tmp);
 	}
 	shaders.front()->loadProgram();
 	shaders.front()->bind(); // Activate first shader

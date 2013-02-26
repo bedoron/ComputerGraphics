@@ -80,6 +80,7 @@ void MeshModel::draw(Shader *shader) {
 
 	_shader->setModelView(_world_transform);
 	glBindVertexArray(_vao);
+
 	_shader->checkError();
 	//glDrawElements(GL_TRIANGLE_FAN, objItem.faces.size() /*count*/, GL_UNSIGNED_INT, 0);
 	glDrawArrays(GL_TRIANGLES,0,objItem.faces.size()*3);
@@ -172,9 +173,13 @@ void MeshModel::generateBuffers() {
 	glBufferData( GL_ARRAY_BUFFER, sizeof(GLfloat)*points, _shineArray, GL_STATIC_DRAW );
 	_shader->shininessPointer((GLubyte*)0);
 	
-	glBindBuffer(GL_ARRAY_BUFFER, VBOs["vtexture"]);
-	glBufferData( GL_ARRAY_BUFFER, sizeof(vec2)*points, _vtArray, GL_STATIC_DRAW );
-	_shader->texturePointer((GLubyte*)0);
+	if(_shader->isTexture())
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, VBOs["vtexture"]);
+		glBufferData( GL_ARRAY_BUFFER, sizeof(vec2)*points, _vtArray, GL_STATIC_DRAW );
+		_shader->texturePointer((GLubyte*)0);
+		_shader->bindTexture();
+	}
 
 }
 
@@ -183,11 +188,14 @@ void MeshModel::buildVAO() {
 	glBindVertexArray(_vao); 
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	
+	if(_shader->isTexture())
+		glEnable(GL_TEXTURE_2D);
+	else
+		glEnable(GL_DEPTH_TEST);
 	generateBuffers(); // Create VBOs
+
 	_shader->enableDataPointers(); // Create Buffers
 	
-	glEnable(GL_DEPTH_TEST);
 
 	glBindVertexArray(0);
 }

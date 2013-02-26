@@ -123,6 +123,7 @@
     <ClCompile Include="ModelData.cpp" />
     <ClCompile Include="MoveInterval.cpp" />
     <ClCompile Include="OBJItem.cpp" />
+    <ClCompile Include="pngLib\PngWrapper.cpp" />
     <ClCompile Include="PresModel.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -158,6 +159,12 @@
     <ClInclude Include="ModelData.h" />
     <ClInclude Include="MoveInterval.h" />
     <ClInclude Include="OBJItem.h" />
+    <ClInclude Include="pngLib\png.h" />
+    <ClInclude Include="pngLib\pngasmrd.h" />
+    <ClInclude Include="pngLib\pngconf.h" />
+    <ClInclude Include="pngLib\PngWrapper.h" />
+    <ClInclude Include="pngLib\zconf.h" />
+    <ClInclude Include="pngLib\zlib.h" />
     <ClInclude Include="PresModel.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="Renderer.h" />
@@ -200,6 +207,10 @@
     <ProjectReference Include="..\glew\glew.vcxproj">
       <Project>{e354a711-c2d4-4492-a756-1000564dccb8}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="pngLib\libpng.lib" />
+    <Library Include="pngLib\zlib.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,8 +8,12 @@
 using std::exception;
 using std::cerr;
 
-Shader::Shader(string vertexShader, string fragmentShader): _vertexShader(vertexShader), _fragmentShader(fragmentShader), _programHandle(0), _vPosition(0), _tCoor(0), _vNormal(0), _kAmbiant(0), 
-	_kDiffuse(0), _kSpecular(0), _shininess(0), _projection(0), _cameraView(0), _modelView(0) ,textures(){}
+Shader::Shader(string vertexShader, string fragmentShader,bool _hasTexture): _vertexShader(vertexShader), _fragmentShader(fragmentShader),hasTexture(_hasTexture), _programHandle(0), _vPosition(0), _tCoor(0), _vNormal(0), _kAmbiant(0), 
+	_kDiffuse(0), _kSpecular(0), _shininess(0), _projection(0), _cameraView(0), _modelView(0) 
+{
+	if(_hasTexture)
+		loadPng();
+}
 
 GLuint Shader::getProgram() {
 	return _programHandle; 
@@ -31,30 +35,33 @@ void Shader::loadProgram() {
 	
 	_vNormal = glGetAttribLocation(_programHandle, "vNormal");
 	checkError();
-	assert(_vNormal != -1);
-	_tCoor = glGetAttribLocation(_programHandle, "tCoor");
-	checkError();
-	assert(_tCoor != -1);
+	//assert(_vNormal != -1);
+	if(hasTexture)
+	{
+		_tCoor = glGetAttribLocation(_programHandle, "tCoor");
+		checkError();
+		//assert(_tCoor != -1);
+	}
 	_kAmbiant = glGetAttribLocation(_programHandle,"kambiant");
 	checkError();
-	assert(_kAmbiant != -1);
+	//assert(_kAmbiant != -1);
 	_kDiffuse = glGetAttribLocation(_programHandle, "kdiffuse");
 	checkError();
-	assert(_kDiffuse != -1);
+	//assert(_kDiffuse != -1);
 	_kSpecular = glGetAttribLocation(_programHandle, "kspecular");
 	checkError();
-	assert(_kSpecular != -1);
+	//assert(_kSpecular != -1);
 	_shininess = glGetAttribLocation(_programHandle, "shininess");
 	checkError();
-	assert(_vNormal != -1);
+	//assert(_vNormal != -1);
 	_projection =  glGetUniformLocation(_programHandle, "Projection");
-	assert(_projection != -1);
+	//assert(_projection != -1);
 	checkError();
 	_cameraView = glGetUniformLocation(_programHandle, "CameraView");
-	assert(_cameraView != -1);
+	//assert(_cameraView != -1);
 	checkError();
 	_modelView = glGetUniformLocation(_programHandle, "ModelView");
-	assert(_modelView != -1);
+	//assert(_modelView != -1);
 	checkError();
 }
 
@@ -83,7 +90,8 @@ void Shader::unbind() {
 void Shader::enableDataPointers()  {
 	glEnableVertexAttribArray(_vPosition);
 	glEnableVertexAttribArray(_vNormal);
-	glEnableVertexAttribArray(_tCoor);
+	if(hasTexture)
+		glEnableVertexAttribArray(_tCoor);
 	glEnableVertexAttribArray(_kAmbiant);
 	glEnableVertexAttribArray(_kDiffuse);
 	glEnableVertexAttribArray(_shininess);
@@ -92,7 +100,8 @@ void Shader::enableDataPointers()  {
 void Shader::disableDataPointers() {
 	glDisableVertexAttribArray(_vPosition);
 	glDisableVertexAttribArray(_vNormal);
-	glDisableVertexAttribArray(_tCoor);
+	if(hasTexture)
+		glDisableVertexAttribArray(_tCoor);
 	glDisableVertexAttribArray(_kAmbiant);
 	glDisableVertexAttribArray(_kDiffuse);
 	glDisableVertexAttribArray(_shininess);
@@ -123,7 +132,14 @@ void Shader::kSpecularPointer(const GLvoid *data) {
 void Shader::shininessPointer(const GLvoid *data) {
 	glVertexAttribPointer( _shininess, 1, GL_FLOAT, GL_FALSE, 0, data );
 }
-
+void Shader::bindTexture()
+{
+	glActiveTexture(GL_TEXTURE0);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,textureID);
+	tex_loc= glGetUniformLocation(_programHandle,"texMap"); 
+	glUniform1i(tex_loc,0);
+}
 Shader::~Shader(void) {
 }
 
@@ -142,28 +158,35 @@ void Shader::updateModelView() {
 	glUniformMatrix4fv(	_modelView, 1, GL_TRUE, modelViewMatrix );
 	checkError();
 }
-void Shader::loadPng (const char* fileName)
+void Shader::loadPng()
 {
-	GLuint texture;
-	PngWrapper pngFile(fileName);
-	pngFile.ReadPng();
-	int width = pngFile.GetWidth();
-	int height = pngFile.GetHeight();
-	GLubyte* texels = new GLubyte[width*height*3];
-	for (int i=0; i< height; ++i)
-	{
-		for (int j=0; j< width; j++)
-		{
-			int value = pngFile.GetValue(j, height -i -1);
-			texels[INDEX_PNG(width, i, j ,0)] = GET_R(value);
-			texels[INDEX_PNG(width, i, j ,1)] = GET_G(value);
-			texels[INDEX_PNG(width, i, j ,2)] = GET_B(value);
-		}
-	}
-	glGenTextures(1,&texture);
-	glBindTexture(GL_TEXTURE_2D,texture);
-	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,texels);
 
-	glGenerateMipmap(GL_TEXTURE_2D);
-	textures.push_back(texture);
+	CFileDialog dlg(TRUE,_T(".png"),NULL,NULL,_T("*.png|*.*")); 
+	if(dlg.DoModal()==IDOK) 
+	{
+		const char* fileName = dlg.GetPathName();
+		PngWrapper pngFile(fileName);
+		pngFile.ReadPng();
+		int width = pngFile.GetWidth();
+		int height = pngFile.GetHeight();
+		GLubyte* texels = new GLubyte[width*height*3];
+		for (int i=0; i< height; ++i)
+		{
+			for (int j=0; j< width; j++)
+			{
+				int value = pngFile.GetValue(j, height -i -1);
+				texels[INDEX_PNG(width, i, j ,0)] = GET_R(value);
+				texels[INDEX_PNG(width, i, j ,1)] = GET_G(value);
+				texels[INDEX_PNG(width, i, j ,2)] = GET_B(value);
+			}
+		}
+		glActiveTexture(GL_TEXTURE0);
+		glGenTextures(1,&textureID);
+		glBindTexture(GL_TEXTURE_2D,textureID);
+		glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,texels);
+
+		glGenerateMipmap(GL_TEXTURE_2D);
+	
+	}	
+	
 }

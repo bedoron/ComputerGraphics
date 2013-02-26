@@ -13,6 +13,7 @@ out vec4 color;
 
 void main()
 {
+	vec4 ambiantIntesity = vec4(0,0,0,1);
 	vec4 intesity = vec4(1,1,1,1);
 	vec3 n = normalize(normal);
 	vec4 diffuse = vec4(0.0);
@@ -30,6 +31,6 @@ void main()
 
 	vec4 textureColor = texture2D(texMap,st);
 	
-	color = (diffuse+specular)*intesity*textureColor;
+	color = ((diffuse+specular)*intesity + ambiantIntesity * _kambiant)*textureColor;
 	
 }

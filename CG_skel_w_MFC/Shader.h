@@ -22,7 +22,7 @@ class Shader
 	GLuint _kDiffuse;
 	GLuint _kSpecular;
 	GLuint _shininess;
-
+	GLuint tex_loc;
 	GLuint _projection;
 	GLuint _cameraView;
 	GLuint _modelView;
@@ -31,7 +31,8 @@ class Shader
 	mat4 cameraMatrix;
 	mat4 modelViewMatrix;
 
-	vector<GLuint> textures;
+	bool hasTexture;
+	GLuint textureID;
 	void updateProjection();
 	void updateCamera();
 	void updateModelView();
@@ -39,7 +40,7 @@ class Shader
 
 
 public:
-	Shader(string vertexShader, string fragmentShader);
+	Shader(string vertexShader, string fragmentShader,bool hasTexture);
 	void loadProgram();
 
 	void enableDataPointers();
@@ -90,6 +91,11 @@ public:
 	~Shader(void);
 
 	const string& getName() { return _vertexShader; }
-	void loadPng (const char* fileName);
+	void loadPng();
+	void bindTexture();
+	bool isTexture()
+	{
+		return hasTexture;
+	}
 };
 

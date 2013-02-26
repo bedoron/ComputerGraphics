@@ -102,6 +102,9 @@
     <ClCompile Include="CGApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pngLib\PngWrapper.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CG_skel_w_MFC.h">
@@ -209,6 +212,24 @@
     <ClInclude Include="CGApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pngLib\PngWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\png.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\pngasmrd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\pngconf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\zconf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\zlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CG_skel_w_MFC.rc">
@@ -252,5 +273,9 @@
     <None Include="ToonVshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="pngLib\libpng.lib" />
+    <Library Include="pngLib\zlib.lib" />
   </ItemGroup>
 </Project>

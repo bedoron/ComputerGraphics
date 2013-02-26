@@ -396,7 +396,7 @@ void objectMenuHandler(int id) {
 	initMenu(true);	// Destroy menu
 	switch(id) {
 	case FILE_OPEN: {
-		CFileDialog dlg(TRUE,_T(".obj"),NULL,NULL,_T("*.obj|*.*")); // WTF ?
+		CFileDialog dlg(TRUE,_T(".obj"),NULL,NULL,_T("*.obj|*.*")); 
 		if(dlg.DoModal()==IDOK) {
 			std::string s((LPCTSTR)dlg.GetPathName());
 			scene->loadOBJModel((LPCTSTR)dlg.GetPathName(), (LPCTSTR)dlg.GetFileName());

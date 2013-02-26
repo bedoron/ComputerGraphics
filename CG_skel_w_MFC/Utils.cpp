@@ -14,10 +14,6 @@ using std::string;
 using std::ifstream;
 using std::istringstream;
 
-#define GET_RED(x) (((x)&0xff000000)>>24)
-#define GET_GREEN(x) (((x)&0x00ff0000)>>16)
-#define GET_BLUE(x) (((x)&0x0000ff00)>>8)
-#define INDEX_PNG(width,x,y,c) (((y)+(x)*(width))*3+(c))
 
 Utils::Utils()
 {
@@ -264,6 +260,7 @@ OBJItem Utils::parseOBJ(string filename,string fileID) {
 			objitem.addVT(vnormal);
 		}
 	}
+	
 	return objitem;
 }
 
@@ -350,13 +347,13 @@ GLubyte* Utils::marble()
 	{
 		for (int j=0; j< noiseWidth; j++)
 		{
-			
+			/*
 			int value =j+ turbulence(i,j,8);
 			double factor = sin(value);
 			int color = factor*brown + (1-factor)*black;
 			texels[INDEX_PNG(noiseWidth, i, j ,0)] = GET_RED(color);
 			texels[INDEX_PNG(noiseWidth, i, j ,1)] = GET_GREEN(color);
-			texels[INDEX_PNG(noiseWidth, i, j ,2)] = GET_BLUE(color);
+			texels[INDEX_PNG(noiseWidth, i, j ,2)] = GET_BLUE(color);*/
 		}
 	}
 	return texels;
