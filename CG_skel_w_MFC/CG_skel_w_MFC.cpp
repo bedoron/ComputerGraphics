@@ -36,6 +36,9 @@ using std::cerr;
 #include <string>
 #include "InputDialog.h"
 #include "AddCamera.h"
+#include <map>
+
+using std::map;
 #define BUFFER_OFFSET( offset )   ((GLvoid*) (offset))
 
 #define MAXIMUM_MENUS 8
@@ -45,7 +48,9 @@ enum MENU_ELEMENTS {
 OBJECTS_NAMESPACE_BEGIN = 0,
 OBJECTS_NAMESPACE_END = 999,
 CAMERAS_NAMESPACE_BEGIN = 1000,
-CAMERAS_NAMESPACE_END = 1999,
+CAMERAS_NAMESPACE_END = 1100,
+SHADERS_NAMESPACE_BEGIN = 1101,
+SHADERS_NAMESPACE_END = 1130,
 OBJECTS_OVERFLOW_BUFFER = 2500, /* if you got here you suck */
 FILE_OPEN, MAIN_DEMO , MAIN_ABOUT , Main_BOUNDS 
 , Main_Clear , Main_selectM , Main_Move_Interval, MAIN_DEBUG, OBJECT_REMOVE_ACTIVE, 
@@ -75,6 +80,7 @@ bool normals=true;
 float moveInterval=1;
 bool ctrlPressed = false;
 
+map<int, string> shader_id_to_name;
 
 //----------------------------------------------------------------------------
 // Callbacks
@@ -409,10 +415,21 @@ void objectMenuHandler(int id) {
 		scene->removeActiveModel();
 		break;
 	default:  // Object # id - OBJECT_NAMESPACE_BEGIN was selected
-		int objectSelected = id - OBJECTS_NAMESPACE_BEGIN;
-		scene->setActiveModel(objectSelected);
-		scene->showModelWindow();
-		std::cerr << "Setting object " << objectSelected << "\n";
+		if(id >= OBJECTS_NAMESPACE_BEGIN && id <= OBJECTS_NAMESPACE_END) {
+			int objectSelected = id - OBJECTS_NAMESPACE_BEGIN;
+			scene->setActiveModel(objectSelected);
+			scene->showModelWindow();
+			std::cerr << "Setting object " << objectSelected << "\n";
+		} else if(id>= SHADERS_NAMESPACE_BEGIN && id <= SHADERS_NAMESPACE_END) { 
+			int shaderSelected = id - SHADERS_NAMESPACE_BEGIN;
+			string shader_name = shader_id_to_name[shaderSelected];
+			try {
+				scene->getActiveModel()->setShader(scene->getShader(shader_name));
+			} catch(...) {
+				cerr << "Couldn't select shader id " << shaderSelected << "\n";
+			}
+			//cerr << "Selecting shader " << shaderSelected << " with name " << shader_id_to_name[shaderSelected] << "\n";	
+		}
 		break;
 
 	}
@@ -502,7 +519,15 @@ int createObjectsMenu() {
 			glutAddMenuEntry((*it).c_str(), OBJECTS_NAMESPACE_BEGIN + it - names.begin());
 		}
 	} 
-
+	names = scene->listShaders();
+	shader_id_to_name.clear();
+	for(vector<string>::iterator it = names.begin(); it != names.end(); ++it) {
+		string entry = *it;
+		glutAddMenuEntry(entry.c_str(), SHADERS_NAMESPACE_BEGIN + (it - names.begin()));
+		if(' ' == entry[0])
+			entry = entry.erase(0,2);
+		shader_id_to_name[it - names.begin()] = entry; // Strip space
+	}
 	return objectMenu;
 }
 int createViewMenu()

@@ -9,6 +9,7 @@
 #include "Light.h"
 #include "Shader.h"
 #include <list>
+#include <map>
 #include <deque>
 
 using namespace std;
@@ -24,6 +25,7 @@ public:
 	void virtual setObjectTransform(mat4 worldTransform)=0;
 	mat4 virtual getObjectTransform()=0;
 	vec3 virtual getModelCenter()=0;
+	virtual void setShader(Shader* shader) {};
 	const string& getName() const { return name; };
 	const string& setName(const string &newName) { name = newName; return name; };
 };
@@ -53,13 +55,15 @@ class Scene {
 	bool _renderCamera;
 	bool _addFog;
 	int _width,_height;
-	deque<Shader*> shaders;
+
+	map<string, Shader*> shaders;
+	Shader* shader;
 
 	Scene(Renderer *renderer); 
 	Scene();
 public:
 	
-
+	vector<string> listShaders();
 	
 	Scene(/*Renderer *renderer, */ CModelData& win);
 
@@ -127,5 +131,5 @@ public:
 	void changeLightDirection(mat4 rotation);
 	void changeLightLocation(mat4 rotation);
 	void setFog(vec3 fogColor,GLfloat density);
-	
+	Shader* getShader(const string& name);
 };

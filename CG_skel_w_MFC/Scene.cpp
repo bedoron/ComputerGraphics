@@ -21,7 +21,7 @@ void Scene::loadOBJModel(string fileName,string id)
 	names.push_back(id);
 	MeshModel *model = new MeshModel(item);
 
-	model->setShader(shaders.front());
+	model->setShader(shader);
 	model->buildVAO();
 	models.push_back(model);
 	model->setName(id);
@@ -40,7 +40,7 @@ void Scene::initDefaultCamera() {
 	_aspect=1;
 	m_activeCamera->Perspective(45,1,_znear,_zfar);
 	//m_renderer->SetProjection(m_activeCamera->getProjection());
-	shaders.front()->setProjection(m_activeCamera->getProjection());
+	shader->setProjection(m_activeCamera->getProjection());
 	
 	//_height = m_renderer->getHeight();
 	//_width = m_renderer->getWidth();
@@ -71,10 +71,23 @@ void Scene::initShaders() {
 	Shader *tmp;
 	for(int i=0; i<total; ++i) {
 		tmp = new Shader(shader_files[2*i], shader_files[2*i+1]);
-		shaders.push_front(tmp);
+		shaders[tmp->getName()] = tmp;
 	}
-	shaders.front()->loadProgram();
-	shaders.front()->bind(); // Activate first shader
+	shader = tmp;
+	shader->loadProgram();
+	shader->bind(); // Activate first shader
+}
+
+vector<string> Scene::listShaders() {
+	map<string,Shader*>::const_iterator it = shaders.begin();
+	vector<string> shadersQ;
+	for(;it!=shaders.end(); ++it) {
+		string name = (*it).first;
+		if(name == shader->getName())
+			name = "  " + name;
+		shadersQ.push_back(name);
+	}
+	return shadersQ;
 }
 
 void Scene::initHook() {
@@ -163,14 +176,14 @@ void Scene::draw(mat4 translation)
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	shaders.front()->setCameraParams(m_activeCamera);
+	shader->setCameraParams(m_activeCamera);
 	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  //2
 	{
 		//(*it)->draw(*m_renderer);
-		(*it)->draw(shaders.front());
+		(*it)->draw(shader);
 	}
 
-	//shaders.front()->swapBuffers();
+	//shader->swapBuffers();
 	
 	//m_renderer->resetZBuffer();
 	//m_renderer->SetProjection(m_activeCamera->getProjection());
@@ -248,7 +261,7 @@ std::vector<string> Scene::getCameraNames() {
 void Scene::pointCameraAt()
 {
 	cameras[activeCamera]->pointCameraAt(vec4(models[m_activeModel]->getModelCenter()));
-	shaders.front()->setCamera(cameras[activeCamera]->getInverseTransformation());
+	shader->setCamera(cameras[activeCamera]->getInverseTransformation());
 	//m_renderer->SetCameraTransform(cameras[activeCamera]->getInverseTransformation());
 	draw(mat4(1));
 }
@@ -261,7 +274,6 @@ bool Scene::setActiveCamera(int num)
 		activeCamera = num-1;
 	m_activeCamera = cameras[activeCamera];
 	std::cerr << "camera number "<< num << " was selected\n";
-	Shader *shader = shaders.front();
 	shader->setCamera(cameras[activeCamera]->getInverseTransformation());
 	shader->setProjection(cameras[activeCamera]->getProjection());
 /*
@@ -301,7 +313,7 @@ void Scene::drawCameras()
 void Scene::setFrustum(float left,float right,float top,float down,float zNear,float zFar)
 {
 	m_activeCamera->Frustum(left,right,down,top,zNear,zFar);
-	shaders.front()->setCameraParams(m_activeCamera);
+	shader->setCameraParams(m_activeCamera);
 	//m_renderer->SetProjection(m_activeCamera->getProjection());
 	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	draw();
@@ -319,7 +331,7 @@ void Scene::setFrustum(float left,float right,float top,float down,float zNear,f
 void Scene::setOrtho(float left,float right,float top,float down,float zNear,float zFar)
 {
 	m_activeCamera->Ortho(left,right,down,top,zNear,zFar);
-	shaders.front()->setCameraParams(m_activeCamera);
+	shader->setCameraParams(m_activeCamera);
 	//m_renderer->SetProjection(m_activeCamera->getProjection());
 	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	currentView = ortho;
@@ -337,7 +349,7 @@ void Scene::setOrtho(float left,float right,float top,float down,float zNear,flo
 void Scene::setPrespective(float fovy,float aspect,float znear, float zfar)
 {
 	m_activeCamera->Perspective(fovy,aspect,znear,zfar);
-	shaders.front()->setCameraParams(m_activeCamera);
+	shader->setCameraParams(m_activeCamera);
 	//m_renderer->SetProjection(m_activeCamera->getProjection());
 	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	currentView= prespective;
@@ -370,9 +382,9 @@ void Scene::setRenderer(int width , int height)
 {
 	return; // Do nothing for now
 
-	//mat4 Projection = shaders.front()->getProjection();
-	//int oldWidth = shaders.front()->getWidth();
-	//int oldHeight = shaders.front()->getHeight();	
+	//mat4 Projection = shader->getProjection();
+	//int oldWidth = shader->getWidth();
+	//int oldHeight = shader->getHeight();	
 	////mat4 Projection = m_renderer->getProjection();
 	////int oldWidth = m_renderer->getWidth();
 	////int oldHeight = m_renderer->getHeight();
@@ -466,6 +478,12 @@ void Scene::setZoom(GLfloat zoom)
 		}
 	}
 }
+
+Shader* Scene::getShader(const string& name) {
+	//shaders.at(name);
+	return shaders[name];
+}
+
 void Scene::addCube()
 {
 	throw string("Not implemented!");
