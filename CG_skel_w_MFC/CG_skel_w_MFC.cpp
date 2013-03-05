@@ -186,7 +186,7 @@ void keyboardSpecial(int key,int x,int y)
 		{
 			vec4 newEye = translatetion * scene->getActiveCamera()->getEye();
 			scene->getActiveCamera()->LookAt(newEye,scene->getActiveCamera()->getAt(),scene->getActiveCamera()->getUp());
-			scene->draw();
+			scene->refreshActiveCamera();
 			break;
 		}
 	case m_light:
@@ -309,9 +309,10 @@ void motion(int x, int y)
 			vec4 newEye =RotateY(-dx/3)*RotateX(-dy/3)*eye;
 			newEye += scene->getActiveCamera()->getAt();
 			scene->getActiveCamera()->LookAt(newEye,scene->getActiveCamera()->getAt(),scene->getActiveCamera()->getUp());
-			scene->draw();
-			cerr << "dx is: " << dx/3 << "\n";
-			cerr << "dy is: " << dy/3 << "\n";
+			scene->refreshActiveCamera(); // will also draw
+//			scene->draw();
+//			cerr << "dx is: " << dx/3 << "\n";
+//			cerr << "dy is: " << dy/3 << "\n";
 			break;
 		}
 	case m_light:

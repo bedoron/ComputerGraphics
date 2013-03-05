@@ -58,11 +58,12 @@ class Scene {
 
 	map<string, Shader*> shaders;
 	Shader* shader;
+	void updateCameraInAllShaders(Camera *camera);
 
 	Scene(Renderer *renderer); 
 	Scene();
 public:
-	
+	void refreshActiveCamera();
 	vector<string> listShaders();
 	
 	Scene(/*Renderer *renderer, */ CModelData& win);

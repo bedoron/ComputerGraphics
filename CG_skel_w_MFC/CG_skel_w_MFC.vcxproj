@@ -176,6 +176,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="fshader.glsl" />
+    <None Include="PhongFshader.glsl" />
+    <None Include="PhongVshader.glsl" />
     <None Include="ToonFshader.glsl" />
     <None Include="ToonVshader.glsl" />
     <None Include="vshader.glsl" />

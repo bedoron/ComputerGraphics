@@ -231,13 +231,16 @@ std::vector<string> Scene::getCameraNames() {
 	return cameraNames;
 }
 
+void Scene::refreshActiveCamera() {
+	updateCameraInAllShaders(cameras[activeCamera]);
+	draw(mat4(1));
+}
+
 void Scene::pointCameraAt()
 {
 	cameras[activeCamera]->pointCameraAt(vec4(models[m_activeModel]->getModelCenter()));
-	// TODO: update for all shaders
 	
-	shader->setCameraParams(cameras[activeCamera]);
-	
+	updateCameraInAllShaders(cameras[activeCamera]);
 	
 	draw(mat4(1));
 }
@@ -252,16 +255,21 @@ bool Scene::setActiveCamera(int num)
 	std::cerr << "camera number "<< num << " was selected\n";
 
 	// Set active camera for all shaders
-	map<string, Shader*>::iterator it;
-	for(it = shaders.begin(); it != shaders.end(); ++it) {
-		it->second->setCameraParams(cameras[activeCamera]);
-	}
+	updateCameraInAllShaders(cameras[activeCamera]);
 
-	shader->setCameraParams(cameras[activeCamera]); // Set projection + Transformation
+//	shader->setCameraParams(cameras[activeCamera]); // Set projection + Transformation
 
 	draw(mat4(1));
 	return true;
 }
+
+void Scene::updateCameraInAllShaders(Camera *camera) {
+	map<string, Shader*>::iterator it;
+	for(it = shaders.begin(); it != shaders.end(); ++it) {
+		it->second->setCameraParams(camera);
+	}
+}
+
 
 void Scene::addCamera(vec4 eye,vec4 at,vec4 up)
 {

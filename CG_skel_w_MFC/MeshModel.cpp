@@ -73,10 +73,6 @@ MeshModel::~MeshModel(void)
 }
 
 void MeshModel::draw(Shader *shader) {
-	if(_shader != shader) {
-		/* Houston, do we have a problem ? */
-		printf("Different shader, expect horrors!\n");
-	}
 	_shader->bind();
 	_shader->setModelView(_world_transform);
 
@@ -87,29 +83,6 @@ void MeshModel::draw(Shader *shader) {
 	glBindVertexArray(0);
 }
 
-//void MeshModel::draw(Renderer& renderer)
-//{
-//	/*
-//	glBindVertexArray(vaoID);
-//	assert((objItem.vertices.size()%3)==0); // Sanity test
-//	glDrawArrays(GL_TRIANGLES,0, objItem.vertices.size()/3);
-//	glBindVertexArray(0);
-//	*/
-//	//throw exception(); // TODO: add buffer stuff here
-//	/*
-//	renderer.SetObjectMatrices(_world_transform);
-//	objItem.setColor(_color);
-//	renderer.setKAbmbiant(_kAmbiant);
-//	renderer.setKDiffuze(_kDiffuze);
-//	renderer.setKspecular(_kspecular);
-//	renderer.setShine(shine);
-//	objItem.setCalcNormals(useNormals);
-//	renderer.setColors(_numOfColors);
-//	renderer.setCartoon(_cartoonize);
-//	objItem.setRenderType(renderMode);
-//	objItem.draw(renderer);
-//	*/
-//}
 void MeshModel::setObjectTransform(mat4 worldTransform)
 {
 	_world_transform = worldTransform;
@@ -176,7 +149,6 @@ void MeshModel::generateBuffers() {
 	
 	//glBindBuffer(GL_ARRAY_BUFFER, VBOs["vtexture"]);
 	//glBufferData( GL_ARRAY_BUFFER, sizeof(vec2)*sizeof(*_vtArray), _vtArray, GL_STATIC_DRAW );
-
 }
 
 void MeshModel::buildVAO() { // happens per Shader. VAO per (Model, Shader) pair

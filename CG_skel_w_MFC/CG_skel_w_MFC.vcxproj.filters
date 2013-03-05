@@ -228,5 +228,11 @@
     <None Include="ToonVshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="PhongFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="PhongVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
