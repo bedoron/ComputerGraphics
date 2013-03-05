@@ -425,6 +425,7 @@ void objectMenuHandler(int id) {
 			string shader_name = shader_id_to_name[shaderSelected];
 			try {
 				scene->getActiveModel()->setShader(scene->getShader(shader_name));
+				scene->draw();
 			} catch(...) {
 				cerr << "Couldn't select shader id " << shaderSelected << "\n";
 			}

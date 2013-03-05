@@ -14,44 +14,58 @@ GLuint Shader::getProgram() {
 	return _programHandle; 
 }
 
+void Shader::buildConversionTable() {
+	vars["vertices"]	= "vPosition";
+	vars["normals"]		= "vNormal";
+	vars["ambient"]		= "kambiant";
+	vars["diffuse"]		= "kdiffuse";
+	vars["specular"]	= "kspecular";
+	vars["shine"]		= "shininess";
+	vars["projection"]	= "Projection";
+	vars["camera"]		= "CameraView";
+	vars["model"]		= "ModelView";
+}
+
 void Shader::loadProgram() {
 	_programHandle = InitShader(_vertexShader.c_str(), _fragmentShader.c_str()); /* this WILL load the shader as active */
 	GLenum error = glGetError();
 	if(error != GL_NO_ERROR) {
 		throw exception();
 	}
-	
+	buildConversionTable();
+
 	glUseProgram(_programHandle);
 	glEnable(GL_DEPTH_TEST);
 
-
-	_vPosition = glGetAttribLocation(_programHandle, "vPosition");
+	_vPosition = glGetAttribLocation(_programHandle, vars["vertices"].c_str());
 	
-	_vNormal = glGetAttribLocation(_programHandle, "vNormal");
+	_vNormal = glGetAttribLocation(_programHandle, vars["normals"].c_str());
 	checkError();
 	assert(_vNormal != -1);
 	//_tCoor = glGetAttribLocation(_tCoor, "tCoor");
-	_kAmbiant = glGetAttribLocation(_programHandle, "kambiant");
+	_kAmbiant = glGetAttribLocation(_programHandle, vars["ambient"].c_str());
 	checkError();
 	assert(_kAmbiant != -1);
-	_kDiffuse = glGetAttribLocation(_programHandle, "kdiffuse");
+	_kDiffuse = glGetAttribLocation(_programHandle, vars["diffuse"].c_str());
 	checkError();
 	assert(_kDiffuse != -1);
-	_kSpecular = glGetAttribLocation(_programHandle, "kspecular");
+	_kSpecular = glGetAttribLocation(_programHandle, vars["specular"].c_str());
 	checkError();
 	assert(_kSpecular != -1);
-	_shininess = glGetAttribLocation(_programHandle, "shininess");
+	_shininess = glGetAttribLocation(_programHandle, vars["shine"].c_str());
 	checkError();
 	assert(_vNormal != -1);
-	_projection =  glGetUniformLocation(_programHandle, "Projection");
+	_projection =  glGetUniformLocation(_programHandle, vars["projection"].c_str());
 	assert(_projection != -1);
 	checkError();
-	_cameraView = glGetUniformLocation(_programHandle, "CameraView");
+	_cameraView = glGetUniformLocation(_programHandle, vars["camera"].c_str());
 	assert(_cameraView != -1);
 	checkError();
-	_modelView = glGetUniformLocation(_programHandle, "ModelView");
+	_modelView = glGetUniformLocation(_programHandle, vars["model"].c_str());
 	assert(_modelView != -1);
 	checkError();
+
+	glUseProgram(0); // unload
 }
 
 void Shader::swapBuffers() {
@@ -94,6 +108,50 @@ void Shader::disableDataPointers() {
 	glDisableVertexAttribArray(_shininess);
 }
 
+
+GLuint Shader::buildVAO(const map<string, GLuint>& VBOs) {
+	map<GLuint,GLuint> vars_to_vbos;
+	map<GLuint,GLuint>::const_iterator vtvit;
+	bind();
+	
+	// Find variables for VBOs and map them
+	for(map<string, GLuint>::const_iterator it=VBOs.begin(); it != VBOs.end(); ++it) {
+		GLuint handle;
+		const char* name ; // Convert app name to shader name
+		try {
+			const string& appName = it->first;
+			name = vars.at(appName).c_str(); 
+		} catch(out_of_range e) { // skip variables that this shader doesn't support
+			continue;
+		}
+		switch(it->first[0]) {
+		case 'u':	handle = glGetUniformLocation(_programHandle, name);	break;	/* uniform variables */
+		case 't':   throw exception();										break; /* texture sampler - not implemented yet */
+		default:	handle = glGetAttribLocation(_programHandle, name);		break;	/* all others */
+		}
+		checkError();
+		vars_to_vbos[handle] = it->second;
+	}
+
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao); 
+	checkError();
+	enableDataPointers();
+	checkError();
+
+	for(vtvit=vars_to_vbos.begin(); vtvit != vars_to_vbos.end(); ++vtvit) {
+		glBindBuffer(GL_ARRAY_BUFFER, vtvit->second);
+		checkError();
+		glVertexAttribPointer( vtvit->first, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		checkError();
+	}
+
+	glEnable(GL_DEPTH_TEST);
+	glBindVertexArray(0);
+	return vao;
+}
+
 void Shader::vPositionPointer(const GLvoid *data) {
 	glVertexAttribPointer( _vPosition, 4, GL_FLOAT, GL_FALSE, 0, data );
 }
@@ -125,11 +183,14 @@ Shader::~Shader(void) {
 
 
 void Shader::updateProjection() {
+	//GLenum error = glGetError();
+	//bind();
 	glUniformMatrix4fv(	_projection, 1, GL_TRUE, projectionMatrix );
 	checkError();
 }
 
 void Shader::updateCamera() {
+	//bind();
 	glUniformMatrix4fv(	_cameraView, 1, GL_TRUE, cameraMatrix);
 	checkError();
 }

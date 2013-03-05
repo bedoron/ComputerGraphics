@@ -65,6 +65,7 @@ MeshModel::MeshModel(OBJItem modelItem):objItem(modelItem),_world_transform(mat4
 	_kAmbiant(vec3(1,1,1)),_kDiffuze(vec3(1,1,1)),_kspecular(vec3(1,1,1)),shine(18),_numOfColors(255),_cartoonize(false)
 {
 	copyData();
+	generateBuffers();
 }
 
 MeshModel::~MeshModel(void)
@@ -76,14 +77,14 @@ void MeshModel::draw(Shader *shader) {
 		/* Houston, do we have a problem ? */
 		printf("Different shader, expect horrors!\n");
 	}
-	glPushMatrix();
-
+	_shader->bind();
 	_shader->setModelView(_world_transform);
+
 	glBindVertexArray(_vao);
 	_shader->checkError();
-	//glDrawElements(GL_TRIANGLE_FAN, objItem.faces.size() /*count*/, GL_UNSIGNED_INT, 0);
 	glDrawArrays(GL_TRIANGLES,0,objItem.faces.size()*3);
-	glPopMatrix();
+	_shader->checkError();
+	glBindVertexArray(0);
 }
 
 //void MeshModel::draw(Renderer& renderer)
@@ -132,6 +133,14 @@ void MeshModel::rotate(const vec3& rotors) {
 
 void MeshModel::setShader(Shader* shader) {
 	_shader = shader;
+	pair<Shader*, GLuint> *shaderVaoPair;
+	try{
+		shaderVaoPair = &vaos.at(shader->getName());
+		_vao = shaderVaoPair->second; // Shader already has a VAO
+	} catch(out_of_range e) { // build this vao and set it as active
+		buildVAO();
+		vaos[shader->getName()] = pair<Shader*, GLuint>(shader, _vao);
+	} 
 }
 
 void MeshModel::generateBuffers() {
@@ -146,50 +155,35 @@ void MeshModel::generateBuffers() {
 	VBOs["shine"] = buffers[5];
 	VBOs["vtexture"] = buffers[6];
 
-
 	int points = objItem.faces.size()*3;
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs["vertices"]);
 	glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*points, verticesArray4, GL_STATIC_DRAW );
-	_shader->vPositionPointer((GLubyte*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs["normals"]);
 	glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*points, normalsArray4, GL_STATIC_DRAW );
-	_shader->vNormalPointer((GLubyte*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs["ambient"]);
 	glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*points, _kAmbiantArray, GL_STATIC_DRAW );
-	_shader->kAmbiantPointer((GLubyte*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs["diffuse"]);
 	glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*points, _kDifuseArray, GL_STATIC_DRAW );
-	_shader->kDiffusePointer((GLubyte*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs["specular"]);
 	glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*points, _kSpecularArray, GL_STATIC_DRAW );
-	_shader->kSpecularPointer((GLubyte*)0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs["shine"]);
 	glBufferData( GL_ARRAY_BUFFER, sizeof(GLfloat)*points, _shineArray, GL_STATIC_DRAW );
-	_shader->shininessPointer((GLubyte*)0);
 	
 	//glBindBuffer(GL_ARRAY_BUFFER, VBOs["vtexture"]);
 	//glBufferData( GL_ARRAY_BUFFER, sizeof(vec2)*sizeof(*_vtArray), _vtArray, GL_STATIC_DRAW );
-	//_shader->texturePointer((GLubyte*)0);
 
 }
 
-void MeshModel::buildVAO() {
-	glGenVertexArrays(1, &_vao);
-	glBindVertexArray(_vao); 
+void MeshModel::buildVAO() { // happens per Shader. VAO per (Model, Shader) pair
+	if(_shader == NULL)
+		throw exception();
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	
-	generateBuffers(); // Create VBOs
-	_shader->enableDataPointers(); // Create Buffers
-	
-	glEnable(GL_DEPTH_TEST);
-
-	glBindVertexArray(0);
+	_vao = _shader->buildVAO(VBOs);
 }
 
 void MeshModel::copyData()

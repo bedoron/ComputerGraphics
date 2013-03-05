@@ -22,7 +22,6 @@ void Scene::loadOBJModel(string fileName,string id)
 	MeshModel *model = new MeshModel(item);
 
 	model->setShader(shader);
-	model->buildVAO();
 	models.push_back(model);
 	model->setName(id);
 	setActiveModel(models.size()-1);
@@ -65,16 +64,17 @@ void Scene::initDefaultLight()
 }
 
 void Scene::initShaders() {
-	//const char *shader_files[] = { "..\\CG_skel_w_MFC\\PhongVshader.glsl", "..\\CG_skel_w_MFC\\PhongFshader.glsl"};
 	const char *shader_files[] = { "PhongVshader.glsl", "PhongFshader.glsl", "ToonVshader.glsl" , "ToonFshader.glsl"};
+//	const char *shader_files[] = { "PhongVshader.glsl", "PhongFshader.glsl"};
 	const int total = 2;
 	Shader *tmp;
 	for(int i=0; i<total; ++i) {
 		tmp = new Shader(shader_files[2*i], shader_files[2*i+1]);
+		tmp->loadProgram();
 		shaders[tmp->getName()] = tmp;
 	}
 	shader = tmp;
-	shader->loadProgram();
+//	shader->loadProgram();
 	shader->bind(); // Activate first shader
 }
 
@@ -176,34 +176,12 @@ void Scene::draw(mat4 translation)
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	shader->setCameraParams(m_activeCamera);
+	//shader->setCameraParams(m_activeCamera);
 	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  //2
 	{
-		//(*it)->draw(*m_renderer);
 		(*it)->draw(shader);
 	}
 
-	//shader->swapBuffers();
-	
-	//m_renderer->resetZBuffer();
-	//m_renderer->SetProjection(m_activeCamera->getProjection());
-	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
-
-	//
-	//m_renderer->ClearColorBuffer();
-	//m_renderer->drawAxis();
-	//for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  //2
-	//{
-	//	(*it)->draw(*m_renderer);
-	//}
-	//
-	///*m_renderer->SetObjectMatrices(axes->getObjectTransform());
-	//axes->draw(*m_renderer);*/
-	//if (_renderCamera)
-	//	drawCameras();
-	//if(_addFog)
-	//	m_renderer->addFog();
-	//m_renderer->SwapBuffers();
 	//refreshModelWindow(); // IMPORTANT HOOK !
 }
 
@@ -213,8 +191,7 @@ Model* Scene::nextModel() {
 
 void Scene::drawDemo()
 {
-	//m_renderer->SetDemoBuffer();
-	//m_renderer->SwapBuffers();
+	throw string("Nigger");
 }
 
 GLfloat Scene::getSize()
@@ -223,8 +200,8 @@ GLfloat Scene::getSize()
 }
 void Scene::setNormal(bool normal)
 {
-	//m_renderer->setDrawnormal(normal);
 	throw string("Not implemented");
+	// Iterate all elements and tell them to draw their normals
 }
 
 void Scene::clearScene()
@@ -232,11 +209,7 @@ void Scene::clearScene()
 	names.clear();
 	models.clear();
 	model_win->ShowWindow(SW_HIDE);
-	throw string("Implement this crap");
-/*
-	m_renderer->ClearColorBuffer();
-	m_renderer->SwapBuffers();
-	*/
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // TODO: Check if its enough
 }
 
 int Scene::getModelCount()
@@ -261,8 +234,11 @@ std::vector<string> Scene::getCameraNames() {
 void Scene::pointCameraAt()
 {
 	cameras[activeCamera]->pointCameraAt(vec4(models[m_activeModel]->getModelCenter()));
-	shader->setCamera(cameras[activeCamera]->getInverseTransformation());
-	//m_renderer->SetCameraTransform(cameras[activeCamera]->getInverseTransformation());
+	// TODO: update for all shaders
+	
+	shader->setCameraParams(cameras[activeCamera]);
+	
+	
 	draw(mat4(1));
 }
 
@@ -274,14 +250,15 @@ bool Scene::setActiveCamera(int num)
 		activeCamera = num-1;
 	m_activeCamera = cameras[activeCamera];
 	std::cerr << "camera number "<< num << " was selected\n";
-	shader->setCamera(cameras[activeCamera]->getInverseTransformation());
-	shader->setProjection(cameras[activeCamera]->getProjection());
-/*
-	m_renderer->SetCameraTransform(cameras[activeCamera]->getInverseTransformation());
-	m_renderer->SetProjection(cameras[activeCamera]->getProjection());
-	m_renderer->setActiveCamera(m_activeCamera);
-	activateCamera();
-	*/
+
+	// Set active camera for all shaders
+	map<string, Shader*>::iterator it;
+	for(it = shaders.begin(); it != shaders.end(); ++it) {
+		it->second->setCameraParams(cameras[activeCamera]);
+	}
+
+	shader->setCameraParams(cameras[activeCamera]); // Set projection + Transformation
+
 	draw(mat4(1));
 	return true;
 }

@@ -222,5 +222,11 @@
     <None Include="vshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="ToonFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ToonVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

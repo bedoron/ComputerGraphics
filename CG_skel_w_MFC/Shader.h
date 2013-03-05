@@ -6,7 +6,9 @@
 #include "mat.h"
 #include "Camera.h"
 #include <iostream>
+#include <map>
 
+using std::map;
 using std::string;
 
 class Shader
@@ -35,6 +37,8 @@ class Shader
 	void updateCamera();
 	void updateModelView();
 
+	map<string, string> vars; /* Mapping between application var names to shader var names, this can change between shaders*/
+	virtual void buildConversionTable();
 public:
 	Shader(string vertexShader, string fragmentShader);
 	void loadProgram();
@@ -62,8 +66,10 @@ public:
 	}
 
 	void setCameraParams(Camera *camera) {
+		bind();
 		setProjection(camera->getProjection());
 		setCamera(camera->getInverseTransformation());
+		unbind();
 	}
 
 	void setModelView(mat4 modelView) {
@@ -82,6 +88,8 @@ public:
 	void kSpecularPointer(const GLvoid *data);
 
 	void shininessPointer(const GLvoid *data);
+
+	GLuint buildVAO(const map<string, GLuint>& VBOs);
 
 	void checkError(bool except = true);
 	~Shader(void);

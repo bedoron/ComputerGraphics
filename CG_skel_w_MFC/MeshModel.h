@@ -3,7 +3,7 @@
 #include "vec.h"
 #include "mat.h"
 #include <string>
-#include "Renderer.h"
+//#include "Renderer.h"
 #include "Utils.h"
 #include <map>
 #include "Shader.h"
@@ -40,6 +40,8 @@ protected :
 	//vec3* normalsArray; // ?!
 
 	map<string, GLuint> VBOs;
+	map<string, pair<Shader*, GLuint>> vaos; // Shader name --> Vao mapping
+
 	GLuint _vao;
 	Shader *_shader;
 
@@ -49,8 +51,9 @@ protected :
 
 	void loadBuffers();
 	void bindBuffers();
-public:
+	
 	void buildVAO();
+public:
 	void setShader(Shader* shader);
 	MeshModel(OBJItem item);
 	~MeshModel(void);
