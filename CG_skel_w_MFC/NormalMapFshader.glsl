@@ -11,11 +11,12 @@ in float _shininess;
 uniform mat4 ModelView;
 uniform vec4 eye;
 uniform sampler2D texMap;
+uniform sampler2D colorMap;
 out vec4 color;
 
 void main()
 {
-	
+	vec4 tColor = texture2D(colorMap,st);
 	vec4 textureNormal = texture2D(texMap,st);
 	vec3 n = normalize(2*textureNormal.xyz-1);
 	
@@ -35,7 +36,6 @@ void main()
 
 	specular= _kspecular * max(pow(dot(n,normalize(h)),_shininess),0);
 	
-
-	color = (diffuse+specular)*intesity;
+	color = (diffuse+specular)*intesity*tColor;
 	
 }

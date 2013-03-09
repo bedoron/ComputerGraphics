@@ -6,7 +6,7 @@
 #include "ModelData.h"
 #include "afxdialogex.h"
 #include "vec.h"
-#include "MeshModel.h"
+#include "Model.h"
 
 
 // CModelData dialog
@@ -110,9 +110,9 @@ void CModelData::refreshModelData() {
 	// Set Default values
 	readAndClearRotation();
 	readAndClearScale();
-	draw_box.SetCheck((static_cast<MeshModel*>(m_model)->getDrawBox())?BST_CHECKED:BST_UNCHECKED);
-	draw_normals.SetCheck((static_cast<MeshModel*>(m_model)->getNormal())?BST_CHECKED:BST_UNCHECKED);
-	draw_vnormals.SetCheck((static_cast<MeshModel*>(m_model)->getVertexNormal())?BST_CHECKED:BST_UNCHECKED);
+	draw_box.SetCheck((static_cast<Model*>(m_model)->getDrawBox())?BST_CHECKED:BST_UNCHECKED);
+	draw_normals.SetCheck((static_cast<Model*>(m_model)->getNormal())?BST_CHECKED:BST_UNCHECKED);
+	draw_vnormals.SetCheck((static_cast<Model*>(m_model)->getVertexNormal())?BST_CHECKED:BST_UNCHECKED);
 	// Get center Coords
 	updateCenter();
 	UpdateData(true);
@@ -180,9 +180,9 @@ void CModelData::OnBnClickedOk()
 	float newXRot, newYRot, newZRot;
 	float newScale;
 	// Deal with Checkboxes
-	static_cast<MeshModel*>(m_model)->setDrawBox(draw_box.GetCheck()==BST_CHECKED);
-	static_cast<MeshModel*>(m_model)->setVertexNormal(draw_vnormals.GetCheck()==BST_CHECKED);
-	static_cast<MeshModel*>(m_model)->setNormal(draw_normals.GetCheck()==BST_CHECKED);
+	static_cast<Model*>(m_model)->setDrawBox(draw_box.GetCheck()==BST_CHECKED);
+	static_cast<Model*>(m_model)->setVertexNormal(draw_vnormals.GetCheck()==BST_CHECKED);
+	static_cast<Model*>(m_model)->setNormal(draw_normals.GetCheck()==BST_CHECKED);
 
 	char colorBufferX[5];
 	_colorX.GetWindowTextA(colorBufferX, 5);
@@ -190,26 +190,26 @@ void CModelData::OnBnClickedOk()
 	_colorY.GetWindowTextA(colorBufferY, 5);
 	char colorBufferZ[5];
 	_colorZ.GetWindowTextA(colorBufferZ, 5);
-	static_cast<MeshModel*>(m_model)->setColor(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+	static_cast<Model*>(m_model)->setColor(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
 	_diffX.GetWindowTextA(colorBufferX, 5);
 	_diffY.GetWindowTextA(colorBufferY, 5);
 	_diffZ.GetWindowTextA(colorBufferZ, 5);
-	static_cast<MeshModel*>(m_model)->setKDiffuze(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+	static_cast<Model*>(m_model)->setKDiffuze(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
 	_ambX.GetWindowTextA(colorBufferX, 5);
 	_ambY.GetWindowTextA(colorBufferY, 5);
 	_ambZ.GetWindowTextA(colorBufferZ, 5);
-	static_cast<MeshModel*>(m_model)->setKAbmbiant(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+	static_cast<Model*>(m_model)->setKAbmbiant(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
 	_spcX.GetWindowTextA(colorBufferX, 5);
 	_spcY.GetWindowTextA(colorBufferY, 5);
 	_spcZ.GetWindowTextA(colorBufferZ, 5);
-	static_cast<MeshModel*>(m_model)->setKspecular(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+	static_cast<Model*>(m_model)->setKspecular(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
 	_shine.GetWindowTextA(colorBufferX,5);
-	static_cast<MeshModel*>(m_model)->setShininess(atof(colorBufferX));
-	static_cast<MeshModel*>(m_model)->setVNormal(_calcNrml.GetCheck()==BST_CHECKED);
-	static_cast<MeshModel*>(m_model)->setCartoonize(_cartoonize.GetCheck()==BST_CHECKED);
+	static_cast<Model*>(m_model)->setShininess(atof(colorBufferX));
+	static_cast<Model*>(m_model)->setVNormal(_calcNrml.GetCheck()==BST_CHECKED);
+	static_cast<Model*>(m_model)->setCartoonize(_cartoonize.GetCheck()==BST_CHECKED);
 	_colors.GetWindowTextA(colorBufferX,5);
-	static_cast<MeshModel*>(m_model)->setColor(atoi(colorBufferX));
-	static_cast<MeshModel*>(m_model)->setRenderType(renderMode);
+	static_cast<Model*>(m_model)->setColor(atoi(colorBufferX));
+	static_cast<Model*>(m_model)->setRenderType(renderMode);
 	// Deal with rotation
 	bool dontTranslate;
 	rotateModel(readAndClearRotation(dontTranslate));
@@ -231,7 +231,7 @@ void CModelData::OnBnClickedOk()
 	objCenter.z = -(objCenter.z-newZ);
 	
 	// Set center coords and scale
-	static_cast<MeshModel*>(m_model)->scale(scaler);
+	static_cast<Model*>(m_model)->scale(scaler);
 	
 	mat4 moveModel;
 	if(!dontTranslate) // When rotating element the data from the input box is invalid

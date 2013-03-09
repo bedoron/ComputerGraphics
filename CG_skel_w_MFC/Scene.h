@@ -3,34 +3,22 @@
 #include "gl/glew.h"
 #include <vector>
 #include <string>
-#include "Renderer.h"
+//#include "Renderer.h"
 #include "Utils.h"
 #include "Camera.h"
 #include "Light.h"
+
+#include "Model.h"
+#include "Texture.h"
 #include "Shader.h"
 #include <list>
 #include <map>
 #include <deque>
 
+
 using namespace std;
 enum ActiveEntity_t { WORLD_ACTIVE, MODEL_ACTIVE, CAMERA_ACTIVE };
 class CModelData;
-
-class Model {
-protected:
-	string name;
-	virtual ~Model() {}
-public:
-	void virtual draw(Shader *shader)=0;
-	void virtual setObjectTransform(mat4 worldTransform)=0;
-	mat4 virtual getObjectTransform()=0;
-	vec3 virtual getModelCenter()=0;
-	virtual void setShader(Shader* shader) {};
-	const string& getName() const { return name; };
-	const string& setName(const string &newName) { name = newName; return name; };
-};
-
-//
 
 class Scene {
 
@@ -57,6 +45,8 @@ class Scene {
 	int _width,_height;
 
 	map<string, Shader*> shaders;
+	map<string, Texture*> textures;
+
 	Shader* shader;
 	void updateCameraInAllShaders(Camera *camera);
 
@@ -71,6 +61,7 @@ public:
 	void initDefaultCamera();
 	void initDefaultLight();
 	void initShaders();
+	void initTextures();
 
 	void initHook();
 	void loadOBJModel(string fileName,string id);

@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "Scene.h"
-#include "MeshModel.h"
+#include "ShaderTexture.h"
 #include <string>
 #include "Utils.h"
-#include "CubeModel.h"
-#include "AxesModel.h"
 #include "ModelData.h"
+#include "ShadersDB.h"
+#include <cstring>
 using namespace std;
 
 void Scene::loadOBJModel(string fileName,string id)
@@ -19,7 +19,7 @@ void Scene::loadOBJModel(string fileName,string id)
 		cerr << err.what()<<endl;
 	}
 	names.push_back(id);
-	MeshModel *model = new MeshModel(item);
+	Model *model = new Model(item);
 
 	model->setShader(shader);
 	models.push_back(model);
@@ -64,18 +64,36 @@ void Scene::initDefaultLight()
 }
 
 void Scene::initShaders() {
-	const char *shader_files[] = { "PhongVshader.glsl", "PhongFshader.glsl", "ToonVshader.glsl" , "ToonFshader.glsl"};
-//	const char *shader_files[] = { "PhongVshader.glsl", "PhongFshader.glsl"};
-	const int total = 2;
+	INIT_SHADERS_DB(database); // if you are Arik, Dont touch this !
+
 	Shader *tmp;
-	for(int i=0; i<total; ++i) {
-		tmp = new Shader(shader_files[2*i], shader_files[2*i+1]);
+	for(s_shader_entry *entry = database; strcmp(entry->name, "")!=0; ++entry) {
+		if(entry->hasTexture) {
+			ShaderTexture *ttmp = new ShaderTexture(entry->name, entry->vertex_shader_file_name, entry->fragment_shader_file_name, textures);
+			// Attach default shaders
+			tmp = ttmp;
+		} else 
+			tmp = new Shader(entry->name, entry->vertex_shader_file_name, entry->fragment_shader_file_name);
+		tmp->checkError();
 		tmp->loadProgram();
+		tmp->checkError();
 		shaders[tmp->getName()] = tmp;
 	}
+	// Create default shader
 	shader = tmp;
-//	shader->loadProgram();
-	shader->bind(); // Activate first shader
+	shader->bind();
+	shader->checkError();
+}
+
+void Scene::initTextures() {
+	INIT_TEXTURES_DB(database); // if you are Arik, Dont touch this !
+
+	Texture *texture;
+	for(const char **entry = database; strcmp(*entry, ""); ++entry) {
+		string name(*entry);
+		texture = new Texture(name);
+		textures[texture->getName()] = texture;
+	}
 }
 
 vector<string> Scene::listShaders() {
@@ -91,6 +109,7 @@ vector<string> Scene::listShaders() {
 }
 
 void Scene::initHook() {
+	initTextures();
 	initShaders(); // None will work without this
 	initDefaultCamera();
 //	initDefaultLight();
@@ -179,7 +198,7 @@ void Scene::draw(mat4 translation)
 	//shader->setCameraParams(m_activeCamera);
 	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  //2
 	{
-		(*it)->draw(shader);
+		(*it)->draw();
 	}
 
 	//refreshModelWindow(); // IMPORTANT HOOK !
@@ -266,7 +285,9 @@ bool Scene::setActiveCamera(int num)
 void Scene::updateCameraInAllShaders(Camera *camera) {
 	map<string, Shader*>::iterator it;
 	for(it = shaders.begin(); it != shaders.end(); ++it) {
+		it->second->checkError();
 		it->second->setCameraParams(camera);
+		it->second->checkError();
 	}
 }
 

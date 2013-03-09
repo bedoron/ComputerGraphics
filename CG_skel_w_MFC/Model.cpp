@@ -1,5 +1,5 @@
 #include "StdAfx.h"
-#include "MeshModel.h"
+#include "Model.h"
 #include "vec.h"
 #include <string>
 #include <iostream>
@@ -61,50 +61,48 @@ vec2 vec2fFromStream(std::istream & aStream)
 	return vec2(x, y);
 }
 
-MeshModel::MeshModel(OBJItem modelItem):objItem(modelItem),_world_transform(mat4()),_color(vec3(255,255,255)),
+Model::Model(OBJItem modelItem):objItem(modelItem),_world_transform(mat4()),_color(vec3(255,255,255)),
 	_kAmbiant(vec3(1,1,1)),_kDiffuze(vec3(1,1,1)),_kspecular(vec3(1,1,1)),shine(18),_numOfColors(255),_cartoonize(false)
 {
 	copyData();
 	generateBuffers();
 }
 
-MeshModel::~MeshModel(void)
+Model::~Model(void)
 {
 }
 
-void MeshModel::draw(Shader *shader) {
-	_shader->bind();
-	_shader->setModelView(_world_transform);
-
-	glBindVertexArray(_vao);
-	_shader->checkError();
-	glDrawArrays(GL_TRIANGLES,0,objItem.faces.size()*3);
-	_shader->checkError();
-	glBindVertexArray(0);
+GLuint Model::getVAO() {
+	return _vao;
 }
 
-void MeshModel::setObjectTransform(mat4 worldTransform)
+void Model::draw(Shader *shader) {
+	if(_shader == 0) throw exception();
+	_shader->draw(this);
+}
+
+void Model::setObjectTransform(mat4 worldTransform)
 {
 	_world_transform = worldTransform;
 }
-mat4 MeshModel::getObjectTransform()
+mat4 Model::getObjectTransform()
 {
 	return _world_transform;
 }
-vec3 MeshModel::getModelCenter()
+vec3 Model::getModelCenter()
 {
 	return vec3(_world_transform[0][3],_world_transform[1][3],_world_transform[2][3]);
 }
 
-void MeshModel::scale(const vec3& scaler) {
+void Model::scale(const vec3& scaler) {
 	_world_transform = _world_transform * Scale(scaler);
 }
 
-void MeshModel::rotate(const vec3& rotors) {
+void Model::rotate(const vec3& rotors) {
 	_world_transform = _world_transform * RotateX(rotors.x) * RotateY(rotors.y) * RotateZ(rotors.z);
 }
 
-void MeshModel::setShader(Shader* shader) {
+void Model::setShader(Shader* shader) {
 	_shader = shader;
 	pair<Shader*, GLuint> *shaderVaoPair;
 	try{
@@ -116,7 +114,16 @@ void MeshModel::setShader(Shader* shader) {
 	} 
 }
 
-void MeshModel::generateBuffers() {
+void Model::setTexture(const string &sampler, Texture* texture) {
+	textures[sampler] = texture;
+}
+
+const map<string, Texture*>& Model::getTextures() {
+	return textures;
+}
+
+
+void Model::generateBuffers() {
 	
 	GLuint buffers[7];
 	glGenBuffers(7, buffers);
@@ -147,18 +154,19 @@ void MeshModel::generateBuffers() {
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs["shine"]);
 	glBufferData( GL_ARRAY_BUFFER, sizeof(GLfloat)*points, _shineArray, GL_STATIC_DRAW );
 	
-	//glBindBuffer(GL_ARRAY_BUFFER, VBOs["vtexture"]);
-	//glBufferData( GL_ARRAY_BUFFER, sizeof(vec2)*sizeof(*_vtArray), _vtArray, GL_STATIC_DRAW );
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs["vtexture"]);
+	glBufferData( GL_ARRAY_BUFFER, sizeof(vec2)*points, _vtArray, GL_STATIC_DRAW );
+	
 }
 
-void MeshModel::buildVAO() { // happens per Shader. VAO per (Model, Shader) pair
+
+void Model::buildVAO() { // happens per Shader. VAO per (Model, Shader) pair
 	if(_shader == NULL)
 		throw exception();
-
 	_vao = _shader->buildVAO(VBOs);
 }
 
-void MeshModel::copyData()
+void Model::copyData()
 {
 	verticesArray4 = new vec4[objItem.faces.size()*3];
 	normalsArray4 = new vec4[objItem.faces.size()*3];
@@ -207,10 +215,10 @@ void MeshModel::copyData()
 	}
 }
 
-void MeshModel::loadBuffers() { // Load buffers into GPU
+void Model::loadBuffers() { // Load buffers into GPU
 
 }
 
-void MeshModel::bindBuffers() { // Make buffers active
+void Model::bindBuffers() { // Make buffers active
 
 }

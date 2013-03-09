@@ -56,7 +56,7 @@ void main()
 		color.z = 0.4;
 	else
 		color.z = 0.2;
-	if(dot(normal,normalize(eye.xyz-vpos))<0.25)
-		color = vec4(0,0,0,1);
+//	if(dot(normal,normalize(eye.xyz-vpos))<0.25)
+//		color = vec4(0,0,0,1);
 	
 }

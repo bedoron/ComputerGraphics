@@ -2,7 +2,7 @@
 #include "afxwin.h"
 #include "Scene.h"
 #include "vec.h"
-
+#include "Model.h"
 // CModelData dialog
 
 class CModelData : public CDialogEx

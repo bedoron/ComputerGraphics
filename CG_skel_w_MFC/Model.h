@@ -7,15 +7,16 @@
 #include "Utils.h"
 #include <map>
 #include "Shader.h"
+#include "Texture.h"
 
 using namespace std;
 
-class MeshModel : public Model
-{
+class Model {
 //	GLuint vaoID;
 //	GLuint vboID[7];
 protected :
-	MeshModel() {}
+	Model() {}
+
 	vec3 *_vertices;
 	//add more attributes
 	mat4 _world_transform;
@@ -40,10 +41,12 @@ protected :
 	//vec3* normalsArray; // ?!
 
 	map<string, GLuint> VBOs;
-	map<string, pair<Shader*, GLuint>> vaos; // Shader name --> Vao mapping
+	map<string, pair<Shader*, GLuint>> vaos; // Shader name --> (Shader itself, Vao mapping)
+	map<string, Texture*> textures; // Shader sampler name --> Texture to use with this sampler
 
 	GLuint _vao;
 	Shader *_shader;
+	string name;
 
 	void copyData(); // flatten all data structures
 	void generateBuffers(); // generate VBOs and bind copied data
@@ -54,20 +57,27 @@ protected :
 	
 	void buildVAO();
 public:
+	const string& getName() const { return name; };
+	const string& setName(const string &newName) { name = newName; return name; };
+
 	void setShader(Shader* shader);
-	MeshModel(OBJItem item);
-	~MeshModel(void);
+	void setTexture(const string &sampler, Texture* texture);
+	const map<string, Texture*>& getTextures();
+
+	Model(OBJItem item);
+	~Model(void);
 	void loadFile(string item);
-	//void draw(Renderer& renderer);
-	void draw(Shader *shader);
+	void draw(Shader *shader = 0);
 	void setObjectTransform(mat4 worldTransform);
 	mat4 getObjectTransform();
 	vec3 getModelCenter();
 	bool useNormals;
 	void scale(const vec3& scaler);
 	void rotate(const vec3& rotors);
+	GLuint getVAO();
 
 // These needs to be revised
+	int getNumOfVertices() { return objItem.faces.size() * 3; }
 	void setDrawBox(bool val) { objItem.setDrawBox(val); } // Bummer
 	void setVertexNormal(bool val){ objItem.setDrawVertexNormal(val);}
 	bool getNormal() {return objItem.getNormal();}
