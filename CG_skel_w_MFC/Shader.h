@@ -37,6 +37,8 @@ class Shader
 
 	map<string, GLuint> handlers; // Handlers for all variables
 	map<string, int>	vboElmSize; /* Mapping between application var to their Pointer attribute size, this shouldn't change */
+
+	void checkHandler(const string& var, const GLuint handle);
 protected:
 	map<string, string> vars;		/* Mapping between application var names to shader var names, this can change between shaders*/
 	map<string, string> textures;	/* Mapping between application texture names to shader texture names */

@@ -4,8 +4,11 @@
 #include <exception>
 #include <cassert>
 #include "Model.h"
+#include <sstream>
 
+using std::stringstream;
 using std::exception;
+using std::runtime_error;
 using std::cerr;
 
 Shader::Shader(string name, string vertexShader, string fragmentShader, bool textures): 
@@ -53,7 +56,18 @@ void Shader::postBuildConversionTable() {
 	// Removal/Addition of redundant attributes should occur here
 };
 
+void Shader::checkHandler(const string& var, const GLuint handle) {
+	if(handle == -1)
+		throw runtime_error(var + " Initialization failed, handler is -1");
+	try {
+		checkError();
+	} catch(exception &e) {
+		throw runtime_error(var + " Initialization failed, OPENGL died with " + e.what());
+	}
+}
+
 void Shader::loadProgram() {
+	cerr << "loading " << _vertexShader << " & " << _fragmentShader << "\n";
 	_programHandle = InitShader(_vertexShader.c_str(), _fragmentShader.c_str()); /* this WILL load the shader as active */
 	GLenum error = glGetError();
 	if(error != GL_NO_ERROR) {
@@ -67,22 +81,19 @@ void Shader::loadProgram() {
 	map<string, string>::const_iterator it;
 	for(it=vars.begin(); it != vars.end(); ++it) {
 		GLuint handle = glGetAttribLocation(_programHandle, it->second.c_str());
-		assert(handle != -1);
-		checkError();
+		checkHandler(it->second, handle);
 		handlers[it->first] = handle; 
 	}
 
 	for(it=uniforms.begin(); it != uniforms.end(); ++it) {
 		GLuint handle = glGetUniformLocation(_programHandle, it->second.c_str());
-		assert(handle != -1);
-		checkError();
+		checkHandler(it->second, handle);
 		handlers[it->first] = handle; 
 	}
 
 	for(it=textures.begin(); it != textures.end(); ++it) {
 		GLuint handle = glGetUniformLocation(_programHandle, it->second.c_str());
-		assert(handle != -1);
-		checkError();
+		checkHandler(it->second, handle);
 		handlers[it->first] = handle;
 	}
 	glUseProgram(0); // unload
@@ -95,9 +106,11 @@ void Shader::swapBuffers() {
 void Shader::checkError(bool except) {
 	GLenum error = glGetError();
 	if(error != GL_NO_ERROR) {
-		cerr << "GLError " << error << "\n";
+		stringstream errstr; 
+		errstr << "GLError " << error;
+		cerr <<  errstr.str() << "\n";
 		if(except)
-			throw exception();
+			throw exception(errstr.str().c_str());
 	}
 }
 
@@ -232,6 +245,7 @@ void Shader::bindTextures(const map<string, Texture*>& modelTexture) {
 		GLuint samplerHandle = handlers[textureIterator->first];
 		GLuint texUnit = textureIterator->second->getTextureUnit();
 		glUniform1i(samplerHandle, texUnit);
+		textureIterator->second->bind();
 		checkError();
 	}
 

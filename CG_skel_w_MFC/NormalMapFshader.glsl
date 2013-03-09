@@ -28,7 +28,9 @@ void main()
 	// diffuse term
 	vec3 lightDir = normalize(vec3(1,0.1,0.8));
 	float NdotL = dot(n, lightDir);
-	
+
+	//vec4 tmpkambiant = vec4(1,1,1,1) + _kambiant;
+
 	if (NdotL > 0.0)
 		diffuse = _kdiffuse * NdotL;
 		
@@ -36,6 +38,6 @@ void main()
 
 	specular= _kspecular * max(pow(dot(n,normalize(h)),_shininess),0);
 	
-	color = (diffuse+specular)*intesity*tColor;
+	color = (diffuse+specular)*intesity*tColor + _kambiant;
 	
 }

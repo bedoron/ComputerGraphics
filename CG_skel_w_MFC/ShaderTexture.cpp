@@ -15,16 +15,19 @@ ShaderTexture::~ShaderTexture(void) {
 }
 
 void ShaderTexture::postBuildConversionTable() {
-	vars["texture"]		= "tCoor";
+	vars["vtexture"]		= "tCoor";
 }
 
 void ShaderTexture::setTextures(Model* model) {
 	const map<string, Texture*> &modelTexture = model->getTextures();
 	
 	// Check to see if we have all needed texture units defined, if not, set defaults
+	map<string, Texture*>::const_iterator defs = _defaults.begin();
 	for(map<string, string>::iterator it = textures.begin(); it != textures.end(); ++it) {
-		if(modelTexture.find(it->first)==modelTexture.end())
-			model->setTexture(it->first, _defaults.begin()->second); // Set some arbitrary default
+		if(modelTexture.find(it->first)==modelTexture.end()) {
+			model->setTexture(it->first,  (defs++)->second); // Set some arbitrary default
+			//model->setTexture(it->first, _defaults.begin()->second); // Set some arbitrary default
+		}
 	}
 }
 

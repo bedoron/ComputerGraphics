@@ -22,7 +22,7 @@ Texture::Texture(const string& file): name(file), handler(-1), width(0), height(
 	width = png.GetWidth();
 	height = png.GetHeight();
 	
-	GLubyte *image = new GLubyte[width*height*3];
+	image = new GLubyte[width*height*3];
 	for(int i=0; i < width; ++i) {
 		for(int j=0; j < height; ++j) {
 			int color = png.GetValue(i, j);
@@ -37,32 +37,40 @@ Texture::Texture(const string& file): name(file), handler(-1), width(0), height(
 		throw runtime_error("Couldn't generate texture handler");
 	
 	glBindTexture(GL_TEXTURE_2D, handler);
-	checkError();
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	checkError();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	checkError();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	checkError();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	checkError();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	checkError();
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Allow texture to coexist with fragments
-	checkError();
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+
 	checkError();
+//
+////	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+//	checkError();
+//	
+//	checkError();
+//	
+//	checkError();
+//	
+//	checkError();
+//	
+//	checkError();
+//	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Allow texture to coexist with fragments
+//	checkError();
+
 	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
+	
 	checkError();
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 	// p
 	textureUnit = TEXTURE_UNIT++; 
 	// v
-	glActiveTexture( GL_TEXTURE0 + textureUnit);
-	checkError();
-	glBindTexture(GL_TEXTURE_2D, handler);
-	checkError();
-	delete[] image;
+	//glActiveTexture( GL_TEXTURE0 + textureUnit);
+	//checkError();
+	//glBindTexture(GL_TEXTURE_2D, handler);
+	//checkError();
 }
 
 void Texture::checkError(bool except) {
@@ -78,10 +86,13 @@ void Texture::checkError(bool except) {
 Texture::~Texture(void)
 {
 	glDeleteTextures(1, &handler);
+	delete[] image;
 }
 
 void Texture::bind() {
+	glActiveTexture( GL_TEXTURE0 + textureUnit);
 	glBindTexture(GL_TEXTURE_2D, handler);
+	checkError();
 }
 
 void Texture::unbind() {

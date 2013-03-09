@@ -12,7 +12,7 @@ class Texture
 	int width;
 	int height;
 	GLuint textureUnit;
-	
+	GLubyte *image;
 public:
 	Texture(const string& file);
 	~Texture(void);

@@ -30,7 +30,7 @@ void main()
 	specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
 
 
-	color = (diffuse + specular)*intesity;
+	color = (diffuse + specular)*intesity + _kambiant;
 	
 	if(color.x > 0.95)
 		color.x = 1;
