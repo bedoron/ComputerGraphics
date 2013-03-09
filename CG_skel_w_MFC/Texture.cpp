@@ -14,8 +14,8 @@ using std::vector;
 
 Texture::Texture(const string& file): name(file), handler(-1), width(0), height(0), textureUnit(-1)  {
 	static int TEXTURE_UNIT = 0; // Texture unit enumerator
-
-	PngWrapper png(name.c_str());
+	string texturesPath = "..\\Textures\\";
+	PngWrapper png((texturesPath + name).c_str());
 	if(!png.ReadPng()) // Gigiddy gigiddy allright!
 		throw runtime_error("Couldn't read PNG file");
 

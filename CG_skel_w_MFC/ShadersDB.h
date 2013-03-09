@@ -8,9 +8,13 @@
 { SHADER_DB_ENTRY(NormalMap, true), "texMap", "colorMap" },		\
 { SHADER_DB_ENTRY(Toon, false),		NO_TEX		}	
 
-
+// Last element ("") is terminator.
 #define TEXTURE_DB \
-"cowUV.png", "giraffe.png", "normalMap.png"
+"cowUV.png", "giraffe.png", "normalMap.png", "5821-normal.png", "BorntoRule-ColorMap.png", \
+"BorntoRule-NormalMap.png", "brick.png", "BubbleGrip-ColorMap.png", "BubbleGrip-NormalMap.png", \
+"BubblyBricks-ColorMap.png", "BubblyBricks-ColorMap.png", "CarvedSandstone-ColorMap.png", \
+"CarvedSandstone-NormalMap.png", "GraniteWall-ColorMap.png", "GraniteWall-NormalMap.png", \
+"tree.png", ""
 
 
 
