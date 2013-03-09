@@ -2,6 +2,9 @@
 #include "ShaderTexture.h"
 #include "Texture.h"
 #include "Model.h"
+#include <sstream>
+
+using std::stringstream;
 
 ShaderTexture::ShaderTexture(string name, string vertexShader, string fragmentShader,map<string, Texture*> &defaults): 
 	Shader(name, vertexShader, fragmentShader, true), _defaults(defaults) {
@@ -13,9 +16,6 @@ ShaderTexture::~ShaderTexture(void) {
 
 void ShaderTexture::postBuildConversionTable() {
 	vars["texture"]		= "tCoor";
-	
-	textures["sampler0"]	= "shader_sampler_0";
-	textures["sampler1"]	= "shader_sampler_1";
 }
 
 void ShaderTexture::setTextures(Model* model) {
@@ -26,4 +26,13 @@ void ShaderTexture::setTextures(Model* model) {
 		if(modelTexture.find(it->first)==modelTexture.end())
 			model->setTexture(it->first, _defaults.begin()->second); // Set some arbitrary default
 	}
+}
+
+void ShaderTexture::setTextureRealName(const string& shader_name) {
+	if(vars.size()!=0)
+		throw runtime_error("Shader already initialized!");
+	stringstream name;
+	name << "sampler" << textures.size() ;
+
+	textures[name.str()] = shader_name;
 }

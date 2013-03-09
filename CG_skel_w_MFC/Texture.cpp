@@ -3,7 +3,12 @@
 #include "Texture.h"
 #include "pngLib\PngWrapper.h"
 #include <vector>
+#include <exception>
+#include <iostream>
+#include <string>
 
+using std::string;
+using std::cerr;
 using std::runtime_error;
 using std::vector;
 
@@ -32,25 +37,41 @@ Texture::Texture(const string& file): name(file), handler(-1), width(0), height(
 		throw runtime_error("Couldn't generate texture handler");
 	
 	glBindTexture(GL_TEXTURE_2D, handler);
+	checkError();
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	checkError();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	checkError();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	checkError();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	checkError();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
+	checkError();
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Allow texture to coexist with fragments
-
+	checkError();
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-
+	checkError();
 	glGenerateMipmap(GL_TEXTURE_2D);
+	checkError();
 	glBindTexture(GL_TEXTURE_2D, 0);
 	// p
 	textureUnit = TEXTURE_UNIT++; 
 	// v
 	glActiveTexture( GL_TEXTURE0 + textureUnit);
+	checkError();
 	glBindTexture(GL_TEXTURE_2D, handler);
-
+	checkError();
 	delete[] image;
+}
+
+void Texture::checkError(bool except) {
+	GLenum error = glGetError();
+	if(error != GL_NO_ERROR) {
+		cerr << "GLError " << error << "\n";
+		if(except)
+			throw runtime_error("Error GL");
+	}
 }
 
 

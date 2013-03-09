@@ -617,6 +617,7 @@ int my_main( int argc, char **argv )
 	glClearColor(0.5,0.5,0.5,0);
 	//glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	err = glGetError();

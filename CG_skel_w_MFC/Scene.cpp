@@ -70,7 +70,13 @@ void Scene::initShaders() {
 	for(s_shader_entry *entry = database; strcmp(entry->name, "")!=0; ++entry) {
 		if(entry->hasTexture) {
 			ShaderTexture *ttmp = new ShaderTexture(entry->name, entry->vertex_shader_file_name, entry->fragment_shader_file_name, textures);
-			// Attach default shaders
+			const char **samplers = &(entry->smapler0);
+			for(int i=0; i < MAX_SAMPLERS; ++i) {
+				const char *sampler = *(samplers + i);
+				if(sampler!=NULL)
+					ttmp->setTextureRealName(sampler);
+			}
+			// Attach default shaders from entry->smaplers[]
 			tmp = ttmp;
 		} else 
 			tmp = new Shader(entry->name, entry->vertex_shader_file_name, entry->fragment_shader_file_name);

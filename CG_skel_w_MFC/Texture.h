@@ -22,5 +22,7 @@ public:
 
 	GLuint getTextureUnit() { return textureUnit; }
 	const string& getName() { return name; }
+
+	void checkError(bool except = true);
 };
 

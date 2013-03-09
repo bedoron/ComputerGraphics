@@ -16,5 +16,7 @@ protected:
 public:
 	ShaderTexture(string name, string vertexShader, string fragmentShader, map<string, Texture*> &defaults);
 	~ShaderTexture(void);
+
+	void setTextureRealName(const string& shader_name);
 };
 

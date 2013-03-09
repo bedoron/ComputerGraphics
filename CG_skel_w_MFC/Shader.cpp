@@ -232,6 +232,7 @@ void Shader::bindTextures(const map<string, Texture*>& modelTexture) {
 		GLuint samplerHandle = handlers[textureIterator->first];
 		GLuint texUnit = textureIterator->second->getTextureUnit();
 		glUniform1i(samplerHandle, texUnit);
+		checkError();
 	}
 
 }
