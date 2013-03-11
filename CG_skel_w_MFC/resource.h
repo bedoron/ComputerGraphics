@@ -108,6 +108,9 @@
 #define IDC_RD_frnch                    1077
 #define IDC_LIST1                       1078
 #define ShadersList                     1079
+#define SamplersList                    1080
+#define ShadersList3                    1081
+#define TexturesList                    1081
 
 // Next default values for new objects
 // 

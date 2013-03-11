@@ -62,6 +62,9 @@ public:
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnCbnSelchangeSelect();
 	afx_msg void OnShadersChange();
+	afx_msg void OnSamplerChange();
+	afx_msg void OnTextureChange();
+
 	CEdit xscale;
 	CEdit yscale;
 	CEdit zscale;
@@ -74,6 +77,8 @@ public:
 	CButton draw_normals;
 	CButton draw_vnormals;
 	CListBox shaders;
+	CListBox samplers;
+	CListBox textures;
 
 	void refreshModelData();
 	void initColors();

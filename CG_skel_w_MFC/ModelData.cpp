@@ -56,8 +56,9 @@ void CModelData::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_shine, _shine);
 	DDX_Control(pDX, IDC_colors, _colors);
 	DDX_Control(pDX, IDC_clc_nrml, _calcNrml);
-	DDX_Control(pDX, IDC_Cartoonize, _cartoonize);
 	DDX_Control(pDX, ShadersList, shaders);
+	DDX_Control(pDX, SamplersList, samplers);
+	DDX_Control(pDX, TexturesList, textures);
 }
 
 
@@ -70,6 +71,8 @@ BEGIN_MESSAGE_MAP(CModelData, CDialogEx)
 	ON_BN_CLICKED(IDC_RD_frnch, &CModelData::OnBnClickedRdfrnch)
 	ON_BN_CLICKED(IDC_RD_png, &CModelData::OnBnClickedRdpng)
 	ON_LBN_SELCHANGE(ShadersList, &CModelData::OnShadersChange)
+	ON_LBN_SELCHANGE(SamplersList, &CModelData::OnSamplerChange)
+	ON_LBN_SELCHANGE(TexturesList, &CModelData::OnTextureChange)
 END_MESSAGE_MAP()
 
 
@@ -237,7 +240,7 @@ void CModelData::OnBnClickedOk()
 	_shine.GetWindowTextA(colorBufferX,5);
 	static_cast<Model*>(m_model)->setShininess(atof(colorBufferX));
 	static_cast<Model*>(m_model)->setVNormal(_calcNrml.GetCheck()==BST_CHECKED);
-	static_cast<Model*>(m_model)->setCartoonize(_cartoonize.GetCheck()==BST_CHECKED);
+//	static_cast<Model*>(m_model)->setCartoonize(_cartoonize.GetCheck()==BST_CHECKED);
 	_colors.GetWindowTextA(colorBufferX,5);
 	static_cast<Model*>(m_model)->setColor(atoi(colorBufferX));
 	static_cast<Model*>(m_model)->setRenderType(renderMode);
@@ -279,6 +282,8 @@ void CModelData::OnBnClickedOk()
 }
 
 
+
+
 void CModelData::OnShadersChange() {
 	CString strText;
 	int index = shaders.GetCurSel();
@@ -290,6 +295,17 @@ void CModelData::OnShadersChange() {
 		m_scene->draw();
 	}
 }
+
+void CModelData::OnSamplerChange() { 
+// TODO: put code here
+}
+
+void CModelData::OnTextureChange() { 
+// TODO: put code here
+}
+
+
+
 
 void CModelData::updateCenter() {
 	UpdateData(false);
