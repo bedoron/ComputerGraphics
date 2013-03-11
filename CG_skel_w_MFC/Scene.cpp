@@ -135,8 +135,8 @@ Scene::Scene(Renderer *renderer) : m_renderer(renderer),names(),m_activeModel(-1
 Scene::Scene(/*Renderer *renderer, */ CModelData& win) : m_renderer(0),names(),m_activeModel(-1),size(0),models(),cameras(),
 	activeCamera(0), axes(0), activeEntity(WORLD_ACTIVE), model_win(&win),lights(),_addFog(false)
 {
-//	model_win->setScene(this); -- This should be revised because it uses the renderer :(
 	initHook();
+	model_win->setScene(this);
 };
 
 void Scene::refreshModelWindow() {
@@ -206,8 +206,8 @@ void Scene::draw(mat4 translation)
 	{
 		(*it)->draw();
 	}
-
-	//refreshModelWindow(); // IMPORTANT HOOK !
+	glFinish();
+	refreshModelWindow(); // IMPORTANT HOOK !
 }
 
 Model* Scene::nextModel() {
@@ -493,6 +493,10 @@ void Scene::setZoom(GLfloat zoom)
 
 Shader* Scene::getShader(const string& name) {
 	//shaders.at(name);
+	if(name[0] == ' ') {
+		string tmp = name.substr(2);
+		return shaders[name.substr(2)];
+	}
 	return shaders[name];
 }
 

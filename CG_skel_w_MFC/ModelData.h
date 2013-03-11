@@ -49,8 +49,8 @@ public:
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	Model* m_model;
 	Scene* m_scene;
-	void setModel(Model* model) { m_model = model; };
-	void setScene(Scene* scene) { m_scene = scene; };
+	void setModel(Model* model);
+	void setScene(Scene* scene);
 	void updateCenter();
 	CStatic model_name;
 	
@@ -61,6 +61,7 @@ public:
 	CComboBox rotation_select;
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnCbnSelchangeSelect();
+	afx_msg void OnShadersChange();
 	CEdit xscale;
 	CEdit yscale;
 	CEdit zscale;
@@ -72,6 +73,7 @@ public:
 	CButton draw_box;
 	CButton draw_normals;
 	CButton draw_vnormals;
+	CListBox shaders;
 
 	void refreshModelData();
 	void initColors();

@@ -41,6 +41,7 @@ protected :
 	//vec3* normalsArray; // ?!
 
 	map<string, GLuint> VBOs;
+	map<string, GLuint> originalVBOs;
 	map<string, pair<Shader*, GLuint>> vaos; // Shader name --> (Shader itself, Vao mapping)
 	map<string, Texture*> textures; // Shader sampler name --> Texture to use with this sampler
 
@@ -54,8 +55,9 @@ protected :
 
 	void loadBuffers();
 	void bindBuffers();
-	
+	void invalidateVAOs();
 	void buildVAO();
+	void changeVec4Buffer(const char* name, vec4 param);
 public:
 	const string& getName() const { return name; };
 	const string& setName(const string &newName) { name = newName; return name; };
@@ -75,7 +77,7 @@ public:
 	void scale(const vec3& scaler);
 	void rotate(const vec3& rotors);
 	GLuint getVAO();
-
+	Shader* getShader();
 // These needs to be revised
 	int getNumOfVertices() { return objItem.faces.size() * 3; }
 	void setDrawBox(bool val) { objItem.setDrawBox(val); } // Bummer
@@ -84,14 +86,15 @@ public:
 	void setNormal(bool normal) { objItem.setNormal(normal);}
 	bool getVertexNormal() {return objItem.getVertexNormal();}
 	bool getDrawBox() { return objItem.getDrawBox(); }
-	void setColor(vec3 color){_color = color;}
-	void setKAbmbiant(vec3 kambiant){_kAmbiant=kambiant;}
-	void setKDiffuze(vec3 kdiffuze){_kDiffuze=kdiffuze;}
-	void setKspecular(vec3 kspecular){_kspecular=kspecular;}
-	void setShininess(GLfloat s){shine = s;}
+	void setColor(vec3 color);
+	void setKAbmbiant(vec3 kambiant);
+	void setKDiffuze(vec3 kdiffuze);
+	void setKspecular(vec3 kspecular);
+	void setShininess(GLfloat s);
 	void setVNormal(bool nrml){useNormals = nrml;}
 	void setColor(int colors){_numOfColors = colors;}
 	void setCartoonize(bool val){_cartoonize=val;}
 	void setRenderType(int val){renderMode = val;}
 
+	void restoreDefaults(); // Restore VBOs
 };

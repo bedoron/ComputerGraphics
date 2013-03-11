@@ -57,6 +57,7 @@ void CModelData::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_colors, _colors);
 	DDX_Control(pDX, IDC_clc_nrml, _calcNrml);
 	DDX_Control(pDX, IDC_Cartoonize, _cartoonize);
+	DDX_Control(pDX, ShadersList, shaders);
 }
 
 
@@ -68,6 +69,7 @@ BEGIN_MESSAGE_MAP(CModelData, CDialogEx)
 	ON_BN_CLICKED(IDC_RD_flat, &CModelData::OnBnClickedRdflat)
 	ON_BN_CLICKED(IDC_RD_frnch, &CModelData::OnBnClickedRdfrnch)
 	ON_BN_CLICKED(IDC_RD_png, &CModelData::OnBnClickedRdpng)
+	ON_LBN_SELCHANGE(ShadersList, &CModelData::OnShadersChange)
 END_MESSAGE_MAP()
 
 
@@ -95,7 +97,36 @@ vec3 CModelData::readAndClearScale() {
 	zscale.SetWindowTextA(_T("1"));
 	return vec3(scalex, scaley, scalez);
 }
+void CModelData::setScene(Scene* scene) { 
+	m_scene = scene; 
+	vector<string> snames = scene->listShaders();
+	vector<string>::iterator it = snames.begin();
+	UpdateData(false);
+	for(; it != snames.end(); ++it) {
+		CString strText = _T(it->c_str());
+		shaders.AddString(strText);
+	}
+	UpdateData(true);
 
+};
+
+void CModelData::setModel(Model* model) { 
+	m_model = model; 
+	Shader* shader = m_model->getShader();
+	if(shader == NULL) return;
+
+	int i=0;
+	CString strText;
+	int size = m_scene->listShaders().size();
+	for(i=0; i < size; ++i) {
+		shaders.GetText(i, strText);
+		if(shader->getName() == strText.GetString())
+			break;
+	}
+	UpdateData(false);
+	shaders.SetSel(i);
+	UpdateData(true);
+}
 
 void CModelData::refreshModelData() {
 	UpdateData(false);
@@ -237,8 +268,27 @@ void CModelData::OnBnClickedOk()
 	if(!dontTranslate) // When rotating element the data from the input box is invalid
 		moveModel = Translate(objCenter); 
 
+
+//int index;
+//      CString strText;
+//      index = m_ctlListBox.GetCurSel();
+//      m_ctlListBox.GetText(index,strText);
+
 	m_scene->draw(moveModel);
 	//CDialogEx::OnOK();
+}
+
+
+void CModelData::OnShadersChange() {
+	CString strText;
+	int index = shaders.GetCurSel();
+	shaders.GetText(index, strText);
+
+	Shader* shader = m_scene->getShader(strText.GetString());
+	if(shader!=NULL) {
+		m_model->setShader(shader);
+		m_scene->draw();
+	}
 }
 
 void CModelData::updateCenter() {

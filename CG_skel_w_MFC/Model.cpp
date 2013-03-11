@@ -102,6 +102,14 @@ void Model::rotate(const vec3& rotors) {
 	_world_transform = _world_transform * RotateX(rotors.x) * RotateY(rotors.y) * RotateZ(rotors.z);
 }
 
+void Model::invalidateVAOs() {
+	map<string, pair<Shader*, GLuint>>::iterator it;
+	for(it = vaos.begin(); it != vaos.end(); ++it) {
+		glDeleteVertexArrays(1, &(it->second.second));
+	}
+	vaos.clear();
+}
+
 void Model::setShader(Shader* shader) {
 	_shader = shader;
 	pair<Shader*, GLuint> *shaderVaoPair;
@@ -114,12 +122,75 @@ void Model::setShader(Shader* shader) {
 	} 
 }
 
+Shader* Model::getShader() {
+	return _shader;
+}
+
 void Model::setTexture(const string &sampler, Texture* texture) {
 	textures[sampler] = texture;
 }
 
 const map<string, Texture*>& Model::getTextures() {
 	return textures;
+}
+
+void Model::setColor(vec3 color) {
+	_color = color;
+}
+
+void Model::restoreDefaults() {
+	invalidateVAOs();
+	VBOs = originalVBOs;
+	setShader(_shader);
+}
+
+void Model::setKAbmbiant(vec3 kambiant) {
+	_kAmbiant=kambiant;
+	invalidateVAOs();
+	changeVec4Buffer("ambient", kambiant);
+	setShader(_shader); // Build current shader VAO
+}
+
+void Model::setKDiffuze(vec3 kdiffuze) {
+	_kDiffuze=kdiffuze;
+	invalidateVAOs();
+	changeVec4Buffer("diffuse", kdiffuze);
+	setShader(_shader); // Build current shader VAO
+}
+
+void Model::setKspecular(vec3 kspecular) {
+	_kspecular=kspecular;
+	invalidateVAOs();
+	changeVec4Buffer("specular", kspecular);
+	setShader(_shader); // Build current shader VAO
+}
+
+void Model::setShininess(GLfloat s){
+	shine = s;
+
+	int points = objItem.faces.size()*3;
+	vec2 *tmpParam = new vec2[points];
+	for(int i=0; i < points; ++i) {
+		tmpParam[i] = s;
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs["shine"]);
+	glBufferData( GL_ARRAY_BUFFER, sizeof(GLfloat)*points,tmpParam, GL_STATIC_DRAW );
+	glFinish();
+	delete[] tmpParam; 
+}
+
+void Model::changeVec4Buffer(const char* name, vec4 param) {
+	int points = objItem.faces.size()*3;
+	vec4 *tmpParam = new vec4[points];
+	for(int i=0; i < points; ++i) {
+		tmpParam[i] = param;
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[name]);
+	glBufferData( GL_ARRAY_BUFFER, sizeof(vec4)*points, tmpParam, GL_STATIC_DRAW );
+	glFinish();
+	delete[] tmpParam; 
 }
 
 
@@ -134,6 +205,7 @@ void Model::generateBuffers() {
 	VBOs["specular"] = buffers[4];
 	VBOs["shine"] = buffers[5];
 	VBOs["vtexture"] = buffers[6];
+	originalVBOs = VBOs;
 
 	int points = objItem.faces.size()*3;
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs["vertices"]);
@@ -158,7 +230,6 @@ void Model::generateBuffers() {
 	glBufferData( GL_ARRAY_BUFFER, sizeof(vec2)*points, _vtArray, GL_STATIC_DRAW );
 	
 }
-
 
 void Model::buildVAO() { // happens per Shader. VAO per (Model, Shader) pair
 	if(_shader == NULL)

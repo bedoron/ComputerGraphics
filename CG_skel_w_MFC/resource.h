@@ -106,6 +106,8 @@
 #define IDC_RD_png                      1076
 #define IDC_Fog_density                 1077
 #define IDC_RD_frnch                    1077
+#define IDC_LIST1                       1078
+#define ShadersList                     1079
 
 // Next default values for new objects
 // 
@@ -113,7 +115,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112
 #define _APS_NEXT_COMMAND_VALUE         40002
-#define _APS_NEXT_CONTROL_VALUE         1078
+#define _APS_NEXT_CONTROL_VALUE         1080
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif

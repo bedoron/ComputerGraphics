@@ -118,9 +118,7 @@ BEGIN
     LTEXT           "Number Of colors for chanel",IDC_STATIC,175,206,90,8
     CONTROL         "cartoonize",IDC_Cartoonize,"Button",BS_AUTOCHECKBOX | BS_LEFTTEXT | WS_TABSTOP,175,241,49,10
     GROUPBOX        "Render Type",IDC_STATIC,314,178,75,75
-    CONTROL         "Flat",IDC_RD_flat,"Button",BS_AUTORADIOBUTTON,323,191,28,10
-    CONTROL         "French",IDC_RD_frnch,"Button",BS_AUTORADIOBUTTON,324,211,38,10
-    CONTROL         "Phong",IDC_RD_png,"Button",BS_AUTORADIOBUTTON,324,230,36,10
+    LISTBOX         ShadersList,318,189,66,59,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_DIALOG1 DIALOGEX 0, 0, 309, 177
