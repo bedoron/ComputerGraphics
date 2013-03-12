@@ -100,7 +100,40 @@ void Scene::initTextures() {
 		texture = new Texture(name);
 		textures[texture->getName()] = texture;
 	}
+	updateModelWinTex();
 }
+
+void Scene::updateModelWinTex() {
+	vector<const string> texNames;
+	for(map<string, Texture*>::const_iterator it = textures.begin(); it != textures.end(); ++it)
+		texNames.push_back(it->first);
+	model_win->updateTextures(texNames);
+}
+
+void Scene::updateModelSampler(Model *model, const string &samplerName, const string &textureName) {
+	map<string, Texture*>::const_iterator it = textures.find(textureName);
+	if(it == textures.end()) {
+		cerr << "Invalid texture selected\n";
+		return;
+	}
+	Texture *texture = it->second;
+	Shader *shader = model->getShader();
+	//string samplerAppName = shader->translateSamplerName(samplerName);
+	// samplerName is already in app name
+	model->setTexture(samplerName, texture);
+	draw();
+}
+
+void Scene::updateModelSampler(const string &samplerName, const string &textureName) {
+	Model *model = getActiveModel();
+	if(model == NULL) {
+		cerr << "Cant change sampler settings for active model as there is no active model\n";
+		return;
+	}
+
+	updateModelSampler(model, samplerName, textureName);
+}
+
 
 vector<string> Scene::listShaders() {
 	map<string,Shader*>::const_iterator it = shaders.begin();

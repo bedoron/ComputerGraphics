@@ -93,5 +93,6 @@ public:
 
 	const string& getName() { return _name; }
 	const map<string, string>& getSamplerNames() const;
+	const string translateSamplerName(const string& shader_name) const; // translate from shader file to app name
 };
 

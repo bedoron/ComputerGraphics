@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "vec.h"
 #include "Model.h"
+#include "Shader.h"
 // CModelData dialog
 
 class CModelData : public CDialogEx
@@ -12,7 +13,8 @@ class CModelData : public CDialogEx
 public:
 	CModelData(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CModelData();
-
+	Shader *currentShader;
+	string activeSamplerName;
 // Dialog Data
 	enum { IDD = 103 /*IDD = IDD_MODELDATA*/ };
 
@@ -73,6 +75,10 @@ public:
 	mat4 readAndClearRotation();
 	mat4 readAndClearRotation(bool& rotated);
 	void rotateModel(mat4 rotation);
+
+	void reloadModelData();
+	void updateTextures(const vector<const string>& texNames);
+
 	CButton draw_box;
 	CButton draw_normals;
 	CButton draw_vnormals;

@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 #include "vec.h"
 #include "Model.h"
-
+#include "Texture.h"
 
 // CModelData dialog
 
@@ -117,6 +117,7 @@ void CModelData::setModel(Model* model) {
 	m_model = model; 
 	Shader* shader = m_model->getShader();
 	if(shader == NULL) return;
+	currentShader = shader;
 
 	int i=0;
 	CString strText;
@@ -295,7 +296,7 @@ void CModelData::OnShadersChange() {
 
 	Shader* shader = m_scene->getShader(strText.GetString());
 	if(shader == NULL) return;
-
+	currentShader = shader;
 	const map<string, string> &shaderSamplers = shader->getSamplerNames();
 	map<string, string>::const_iterator it = shaderSamplers.begin();
 
@@ -316,11 +317,54 @@ void CModelData::OnShadersChange() {
 }
 
 void CModelData::OnSamplerChange() { 
-// TODO: put code here
+	CString strText;
+	int index = samplers.GetCurSel();
+	samplers.GetText(index, strText);
+	string appName = currentShader->translateSamplerName(strText.GetString());
+	activeSamplerName = appName;
+	if(appName == "") throw exception();
+
+	// Now check which texture is set for it
+	const map<string, Texture*>& model_tex = m_model->getTextures();
+	map<string, Texture*>::const_iterator it = model_tex.find(appName);
+	if(it == model_tex.end()) return;
+	const Texture *tex = it->second;
+	const string texName = tex->getName();
+
+	// Iterate textures and select texName
+	CString elm;
+	int elms = textures.GetCount();
+	for(int i=0; i< elms; ++i) {
+		textures.GetText(i, elm);
+		if(elm.GetString() == texName) {
+			UpdateData(false);
+			textures.SetCurSel(i);
+			break;
+		}
+	}
 }
 
+void CModelData::reloadModelData() {
+
+}
+
+void CModelData::updateTextures(const vector<const string>& texNames) {
+	UpdateData(false);
+	textures.ResetContent();
+	vector<const string>::const_iterator it = texNames.begin();
+	for(; it != texNames.end(); ++it) {
+		CString strText = _T(it->c_str());
+		textures.AddString(strText);
+	}
+}
+
+
 void CModelData::OnTextureChange() { 
-// TODO: put code here
+	CString strText;
+	int index = textures.GetCurSel();
+	textures.GetText(index, strText);
+
+	m_scene->updateModelSampler(m_model, activeSamplerName, strText.GetString());
 }
 
 

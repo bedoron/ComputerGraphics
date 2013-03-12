@@ -52,10 +52,15 @@ class Scene {
 
 	Scene(Renderer *renderer); 
 	Scene();
+	void updateModelWinTex(); // This should be called each time we add textures to the system
 public:
 	void refreshActiveCamera();
 	vector<string> listShaders();
 	
+	void updateModelSampler(Model *model, const string &samplerName, const string &textureName);
+	void updateModelSampler(const string &samplerName, const string &textureName);
+
+
 	Scene(/*Renderer *renderer, */ CModelData& win);
 
 	void initDefaultCamera();
@@ -124,4 +129,5 @@ public:
 	void changeLightLocation(mat4 rotation);
 	void setFog(vec3 fogColor,GLfloat density);
 	Shader* getShader(const string& name);
+	
 };

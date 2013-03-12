@@ -255,6 +255,15 @@ const map<string, string>& Shader::getSamplerNames() const {
 	return textures; 
 };
 
+const string Shader::translateSamplerName(const string& shader_name) const {
+	map<string, string>::const_iterator it = textures.begin();
+	for(;it != textures.end(); ++it) {
+		if(it->second == shader_name)
+			return it->first;
+	}
+	return string("");
+}
+
 /*************************** OLD FUNCTIONALITY AREA *****************************/
 mat4 Shader::getProjection() { return projectionMatrix; }
 mat4 Shader::getCamera() { return cameraMatrix; }

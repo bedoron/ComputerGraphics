@@ -21,7 +21,7 @@ public:
 	void unbind();
 
 	GLuint getTextureUnit() { return textureUnit; }
-	const string& getName() { return name; }
+	const string& getName() const { return name; }
 
 	void checkError(bool except = true);
 };
