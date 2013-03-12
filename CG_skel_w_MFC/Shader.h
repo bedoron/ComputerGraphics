@@ -92,5 +92,6 @@ public:
 	void draw(Model* model);
 
 	const string& getName() { return _name; }
+	const map<string, string>& getSamplerNames() const;
 };
 

@@ -121,14 +121,18 @@ void CModelData::setModel(Model* model) {
 	int i=0;
 	CString strText;
 	int size = m_scene->listShaders().size();
+	UpdateData(true);
 	for(i=0; i < size; ++i) {
 		shaders.GetText(i, strText);
-		if(shader->getName() == strText.GetString())
+		string theName = strText.GetString();
+		if(theName[0] == ' ')
+			theName = theName.substr(2);
+		if(shader->getName() == theName)
 			break;
 	}
 	UpdateData(false);
-	shaders.SetSel(i);
-	UpdateData(true);
+	shaders.UpdateData(false);
+	shaders.SetCurSel(i);
 }
 
 void CModelData::refreshModelData() {
@@ -290,10 +294,25 @@ void CModelData::OnShadersChange() {
 	shaders.GetText(index, strText);
 
 	Shader* shader = m_scene->getShader(strText.GetString());
-	if(shader!=NULL) {
-		m_model->setShader(shader);
-		m_scene->draw();
+	if(shader == NULL) return;
+
+	const map<string, string> &shaderSamplers = shader->getSamplerNames();
+	map<string, string>::const_iterator it = shaderSamplers.begin();
+
+	m_model->setShader(shader);
+
+
+	samplers.ResetContent();
+	UpdateData(false);
+	for(; it != shaderSamplers.end(); ++it) {
+		CString strText = _T(it->second.c_str());
+		samplers.AddString(strText);
 	}
+	UpdateData(true);
+
+
+
+	m_scene->draw();
 }
 
 void CModelData::OnSamplerChange() { 

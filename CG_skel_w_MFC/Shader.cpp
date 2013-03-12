@@ -251,6 +251,9 @@ void Shader::bindTextures(const map<string, Texture*>& modelTexture) {
 
 }
 
+const map<string, string>& Shader::getSamplerNames() const { 
+	return textures; 
+};
 
 /*************************** OLD FUNCTIONALITY AREA *****************************/
 mat4 Shader::getProjection() { return projectionMatrix; }
