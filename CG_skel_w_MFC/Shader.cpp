@@ -243,6 +243,7 @@ void Shader::bindTextures(const map<string, Texture*>& modelTexture) {
 	map<string, Texture*>::const_iterator textureIterator;
 	// iterate modelTexture (it should be updated now) and bind their uniform variables
 	for(textureIterator = modelTexture.begin(); textureIterator != modelTexture.end(); ++textureIterator) {
+		if(handlers.find(textureIterator->first)==handlers.end()) continue; // Skip samplers which are not supported
 		GLuint samplerHandle = handlers[textureIterator->first];
 		GLuint texUnit = textureIterator->second->getTextureUnit();
 		glUniform1i(samplerHandle, texUnit);
