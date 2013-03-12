@@ -200,6 +200,7 @@ Shader::~Shader(void) {
 }
 
 void Shader::updateEye() {
+	if(handlers.find("eye")==handlers.end()) return;
 	glUniform4fv( handlers["eye"], 1, cameraEye );
 	checkError();
 }

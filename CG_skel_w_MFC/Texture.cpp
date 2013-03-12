@@ -11,7 +11,7 @@ using std::string;
 using std::cerr;
 using std::runtime_error;
 using std::vector;
-
+#define INDEX_PNG(width,x,y,c) (((y)+(x)*(width))*3+(c))
 Texture::Texture(const string& file, const string& path): name(file), handler(-1), width(0), height(0), textureUnit(-1)  {
 	static int TEXTURE_UNIT = 0; // Texture unit enumerator
 	string texturesPath = path; 
@@ -25,12 +25,13 @@ Texture::Texture(const string& file, const string& path): name(file), handler(-1
 	height = png.GetHeight();
 	
 	image = new GLubyte[width*height*3];
-	for(int i=0; i < width; ++i) {
-		for(int j=0; j < height; ++j) {
-			int color = png.GetValue(i, j);
-			image[i*width + 3*j + 0] = GET_R(color);
-			image[i*width + 3*j + 1] = GET_G(color);
-			image[i*width + 3*j + 2] = GET_B(color);
+	for(int i=0; i < height; ++i) {
+		for(int j=0; j < width; ++j) {
+			int color = png.GetValue(j, height -i -1);
+			image[INDEX_PNG(width, i, j ,0)] = GET_R(color);
+			image[INDEX_PNG(width, i, j ,1)] = GET_G(color);
+			image[INDEX_PNG(width, i, j ,2)] = GET_B(color);
+			
 		}
 	}
 
@@ -39,10 +40,10 @@ Texture::Texture(const string& file, const string& path): name(file), handler(-1
 		throw runtime_error("Couldn't generate texture handler");
 	
 	glBindTexture(GL_TEXTURE_2D, handler);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//gltexparameterf(gl_texture_2d, gl_texture_min_filter, gl_linear_mipmap_nearest);
+	//gltexparameterf(gl_texture_2d, gl_texture_mag_filter, gl_linear);
+	//gltexparameterf(gl_texture_2d, gl_texture_wrap_s, gl_repeat);
+	//gltexparameterf(gl_texture_2d, gl_texture_wrap_t, gl_repeat);
 
 
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
