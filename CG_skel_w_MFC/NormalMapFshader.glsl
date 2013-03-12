@@ -10,14 +10,14 @@ in float _shininess;
 
 uniform mat4 ModelView;
 uniform vec4 eye;
-uniform sampler2D texMap;
+uniform sampler2D normalMap;
 uniform sampler2D colorMap;
 out vec4 color;
 
 void main()
 {
 	vec4 tColor = texture2D(colorMap,st);
-	vec4 textureNormal = texture2D(texMap,st);
+	vec4 textureNormal = texture2D(normalMap,st);
 	vec3 n = normalize(2*textureNormal.xyz-1);
 	
 	vec4 intesity = vec4(1,1,1,1);

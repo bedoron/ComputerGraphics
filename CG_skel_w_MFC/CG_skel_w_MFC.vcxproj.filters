@@ -288,5 +288,11 @@
     <None Include="TextureVshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="EnviromentMapFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="EnviromentMapVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

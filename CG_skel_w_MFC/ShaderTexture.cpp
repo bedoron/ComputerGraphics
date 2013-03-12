@@ -16,6 +16,15 @@ ShaderTexture::~ShaderTexture(void) {
 
 void ShaderTexture::postBuildConversionTable() {
 	vars["vtexture"]		= "tCoor";
+
+
+	if(getName() == "EnviromentMap") { // sry
+		vars.erase("ambient");
+		vars.erase("diffuse");
+		vars.erase("specular");
+		vars.erase("shine");
+
+	}
 }
 
 void ShaderTexture::setTextures(Model* model) {

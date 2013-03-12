@@ -412,9 +412,9 @@ void CModelData::initColors()
 	_diffX.SetWindowTextA(_T("1"));
 	_diffY.SetWindowTextA(_T("1"));
 	_diffZ.SetWindowTextA(_T("1"));
-	_ambX.SetWindowTextA(_T("1"));
-	_ambY.SetWindowTextA(_T("1"));
-	_ambZ.SetWindowTextA(_T("1"));
+	_ambX.SetWindowTextA(_T("0"));
+	_ambY.SetWindowTextA(_T("0"));
+	_ambZ.SetWindowTextA(_T("0"));
 	_spcX.SetWindowTextA(_T("1"));
 	_spcY.SetWindowTextA(_T("1"));
 	_spcZ.SetWindowTextA(_T("1"));

@@ -5,7 +5,8 @@
 
 #define SHADER_DB \
 { SHADER_DB_ENTRY(Phong, false),	NO_TEX		},				\
-{ SHADER_DB_ENTRY(NormalMap, true), "texMap", "colorMap" },		\
+{ SHADER_DB_ENTRY(NormalMap, true), "normalMap", "colorMap" },		\
+{ SHADER_DB_ENTRY(EnviromentMap, true), "normalMap", "colorMap" },		\
 { SHADER_DB_ENTRY(Toon, false),		NO_TEX		}	
 
 // Last element ("") is terminator.
@@ -14,7 +15,7 @@
 "BorntoRule-NormalMap.png", "brick.png", "BubbleGrip-ColorMap.png", "BubbleGrip-NormalMap.png", \
 "BubblyBricks-ColorMap.png", "BubblyBricks-ColorMap.png", "CarvedSandstone-ColorMap.png", \
 "CarvedSandstone-NormalMap.png", "GraniteWall-ColorMap.png", "GraniteWall-NormalMap.png", \
-"tree.png", ""
+"tree.png","wallpaper.png" ,"white.png",""
 
 
 
