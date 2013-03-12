@@ -12,10 +12,12 @@ using std::cerr;
 using std::runtime_error;
 using std::vector;
 
-Texture::Texture(const string& file): name(file), handler(-1), width(0), height(0), textureUnit(-1)  {
+Texture::Texture(const string& file, const string& path): name(file), handler(-1), width(0), height(0), textureUnit(-1)  {
 	static int TEXTURE_UNIT = 0; // Texture unit enumerator
-	string texturesPath = "..\\Textures\\";
-	PngWrapper png((texturesPath + name).c_str());
+	string texturesPath = path; 
+	if(path == string())
+		texturesPath = string("..\\Textures\\") + name;
+	PngWrapper png((texturesPath).c_str());
 	if(!png.ReadPng()) // Gigiddy gigiddy allright!
 		throw runtime_error("Couldn't read PNG file");
 

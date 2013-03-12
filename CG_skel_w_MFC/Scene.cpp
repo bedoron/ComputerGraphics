@@ -103,6 +103,16 @@ void Scene::initTextures() {
 	updateModelWinTex();
 }
 
+void Scene::addTexture(const string &file, const string& path) {
+	Texture *texture = new Texture(file, path);
+	if(textures.find(texture->getName()) != textures.end()) {
+		Texture *old = textures[texture->getName()];
+		delete old;
+	}
+	textures[texture->getName()] = texture;
+	updateModelWinTex();
+}
+
 void Scene::updateModelWinTex() {
 	vector<const string> texNames;
 	for(map<string, Texture*>::const_iterator it = textures.begin(); it != textures.end(); ++it)

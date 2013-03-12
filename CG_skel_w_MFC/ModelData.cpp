@@ -59,6 +59,10 @@ void CModelData::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, ShadersList, shaders);
 	DDX_Control(pDX, SamplersList, samplers);
 	DDX_Control(pDX, TexturesList, textures);
+
+	DDX_Control(pDX, OVERRIDE_AMBIENT, override_ambient);
+	DDX_Control(pDX, OVERRIDE_SPECULAR, override_specular);
+	DDX_Control(pDX, OVERRIDE_DIFFUSE, override_diffuse);
 }
 
 
@@ -134,6 +138,10 @@ void CModelData::setModel(Model* model) {
 	UpdateData(false);
 	shaders.UpdateData(false);
 	shaders.SetCurSel(i);
+
+	override_ambient.SetCheck(BST_UNCHECKED);
+	override_diffuse.SetCheck(BST_UNCHECKED);
+	override_specular.SetCheck(BST_UNCHECKED);
 }
 
 void CModelData::refreshModelData() {
@@ -233,19 +241,27 @@ void CModelData::OnBnClickedOk()
 	_diffX.GetWindowTextA(colorBufferX, 5);
 	_diffY.GetWindowTextA(colorBufferY, 5);
 	_diffZ.GetWindowTextA(colorBufferZ, 5);
-	static_cast<Model*>(m_model)->setKDiffuze(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+	
+	if(override_diffuse.GetCheck() == BST_CHECKED) 
+		static_cast<Model*>(m_model)->setKDiffuze(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+
 	_ambX.GetWindowTextA(colorBufferX, 5);
 	_ambY.GetWindowTextA(colorBufferY, 5);
 	_ambZ.GetWindowTextA(colorBufferZ, 5);
-	static_cast<Model*>(m_model)->setKAbmbiant(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+
+	if(override_ambient.GetCheck() == BST_CHECKED) 
+		static_cast<Model*>(m_model)->setKAbmbiant(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+
 	_spcX.GetWindowTextA(colorBufferX, 5);
 	_spcY.GetWindowTextA(colorBufferY, 5);
 	_spcZ.GetWindowTextA(colorBufferZ, 5);
-	static_cast<Model*>(m_model)->setKspecular(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+	if(override_specular.GetCheck() == BST_CHECKED) 
+		static_cast<Model*>(m_model)->setKspecular(vec3(atof(colorBufferX),atof(colorBufferY),atof(colorBufferZ)));
+
 	_shine.GetWindowTextA(colorBufferX,5);
 	static_cast<Model*>(m_model)->setShininess(atof(colorBufferX));
 	static_cast<Model*>(m_model)->setVNormal(_calcNrml.GetCheck()==BST_CHECKED);
-//	static_cast<Model*>(m_model)->setCartoonize(_cartoonize.GetCheck()==BST_CHECKED);
+
 	_colors.GetWindowTextA(colorBufferX,5);
 	static_cast<Model*>(m_model)->setColor(atoi(colorBufferX));
 	static_cast<Model*>(m_model)->setRenderType(renderMode);
@@ -275,12 +291,6 @@ void CModelData::OnBnClickedOk()
 	mat4 moveModel;
 	if(!dontTranslate) // When rotating element the data from the input box is invalid
 		moveModel = Translate(objCenter); 
-
-
-//int index;
-//      CString strText;
-//      index = m_ctlListBox.GetCurSel();
-//      m_ctlListBox.GetText(index,strText);
 
 	m_scene->draw(moveModel);
 	//CDialogEx::OnOK();

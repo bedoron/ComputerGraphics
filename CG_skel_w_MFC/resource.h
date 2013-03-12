@@ -56,10 +56,14 @@
 #define DRAW_NORMAL                     1034
 #define DRAW_VNORMAL                    1035
 #define ID_left                         1036
+#define OVERRIDE_DIFFUSE                1036
 #define ID_right                        1037
 #define IDC_fovy                        1037
+#define OVERRIDE_AMBIENT                1037
 #define ID_up                           1038
 #define IDC_aspect                      1038
+#define DRAW_BOX4                       1038
+#define OVERRIDE_SPECULAR               1038
 #define ID_down                         1039
 #define IDC_znear                       1039
 #define ID_znear                        1040
@@ -109,7 +113,6 @@
 #define IDC_LIST1                       1078
 #define ShadersList                     1079
 #define SamplersList                    1080
-#define ShadersList3                    1081
 #define TexturesList                    1081
 
 // Next default values for new objects

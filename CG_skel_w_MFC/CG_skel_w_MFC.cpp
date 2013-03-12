@@ -55,7 +55,7 @@ OBJECTS_OVERFLOW_BUFFER = 2500, /* if you got here you suck */
 FILE_OPEN, MAIN_DEMO , MAIN_ABOUT , Main_BOUNDS 
 , Main_Clear , Main_selectM , Main_Move_Interval, MAIN_DEBUG, OBJECT_REMOVE_ACTIVE, 
 CAMERA_ADD, CAMERA_REMOVE_ACTIVE,CAMERA_SELECT_MODEL_AT, SELECT_OPERATION_FRAME,Main_Frustum,
-Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING
+Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING, ADD_TEXTURE
 };
 
 
@@ -390,9 +390,19 @@ void mainMenu(int id)
 			dlg_fog.ShowWindow(SW_SHOW);
 			break;
 		}
-	case MENU_ANTIALIASING:
+	case ADD_TEXTURE:
 		{
-			scene->setAntialiasing(!scene->getAntialiasing());
+
+			CFileDialog dlg(TRUE,_T(".png"),NULL,NULL,_T("*.png|*.*")); // WTF ?
+			if(dlg.DoModal()==IDOK) {
+				std::string p((LPCTSTR)dlg.GetPathName());
+				std::string f((LPCTSTR)dlg.GetFileName());
+				scene->addTexture(f, p);
+				//scene->loadOBJModel((LPCTSTR)dlg.GetPathName(), (LPCTSTR)dlg.GetFileName());
+			
+				scene->draw();			
+			}
+			//TODO: add file chooser
 			break;
 		}
 	}
@@ -576,11 +586,12 @@ int menuDraw(bool destroy) {
 	glutAddMenuEntry("Add Cube",AddCube);
 	glutAddMenuEntry("Add Light",addLight);
 	glutAddMenuEntry("Add Fog",addFog);
-	if(scene->getAntialiasing())
+	glutAddMenuEntry("Add Texture", ADD_TEXTURE);
+/*	if(scene->getAntialiasing())
 		glutAddMenuEntry("Disable antialiasing", MENU_ANTIALIASING);
 	else 
 		glutAddMenuEntry("Enable antialiasing", MENU_ANTIALIASING);
-
+		*/
 	glutAddMenuEntry("About",MAIN_ABOUT);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	
 

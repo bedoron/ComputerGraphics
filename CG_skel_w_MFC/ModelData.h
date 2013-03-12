@@ -91,4 +91,8 @@ public:
 	afx_msg void OnBnClickedRdflat();
 	afx_msg void OnBnClickedRdfrnch();
 	afx_msg void OnBnClickedRdpng();
+
+	CButton override_ambient;
+	CButton override_specular;
+	CButton override_diffuse;
 };

@@ -67,6 +67,7 @@ public:
 	void initDefaultLight();
 	void initShaders();
 	void initTextures();
+	void addTexture(const string &file, const string& path);
 
 	void initHook();
 	void loadOBJModel(string fileName,string id);

@@ -14,7 +14,8 @@ class Texture
 	GLuint textureUnit;
 	GLubyte *image;
 public:
-	Texture(const string& file);
+//	Texture(const string& file);
+	Texture(const string& file, const string& path = string());
 	~Texture(void);
 
 	void bind();
