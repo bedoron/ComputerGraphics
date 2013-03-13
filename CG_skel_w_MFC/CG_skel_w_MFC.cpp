@@ -752,9 +752,7 @@ int main( int argc, char **argv )
 		} catch (runtime_error& e) {
 			MessageBox(NULL, _T(e.what()), _T("Runtime error"), MB_OK);
 		} catch (exception& e) {
-			MessageBox(NULL, _T(e.what()), _T("Exception"), MB_OK);
-		} catch (...) {
-			MessageBox(NULL, _T("Bak Bak Bak"), _T("Funky chicken"), MB_OK);
+			MessageBox(NULL, _T(e.what()), _T("Runtime error"), MB_OK);
 		}
 	}
 	
