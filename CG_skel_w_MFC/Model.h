@@ -69,7 +69,7 @@ public:
 	Model(OBJItem item);
 	~Model(void);
 	void loadFile(string item);
-	void draw(Shader *shader = 0);
+	void draw(bool animate,Shader *shader = 0);
 	void setObjectTransform(mat4 worldTransform);
 	mat4 getObjectTransform();
 	vec3 getModelCenter();

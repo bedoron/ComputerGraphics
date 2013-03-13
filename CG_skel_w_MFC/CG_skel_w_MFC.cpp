@@ -55,7 +55,7 @@ OBJECTS_OVERFLOW_BUFFER = 2500, /* if you got here you suck */
 FILE_OPEN, MAIN_DEMO , MAIN_ABOUT , Main_BOUNDS 
 , Main_Clear , Main_selectM , Main_Move_Interval, MAIN_DEBUG, OBJECT_REMOVE_ACTIVE, 
 CAMERA_ADD, CAMERA_REMOVE_ACTIVE,CAMERA_SELECT_MODEL_AT, SELECT_OPERATION_FRAME,Main_Frustum,
-Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING, ADD_TEXTURE
+Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING, ADD_TEXTURE,Animation
 };
 
 
@@ -88,6 +88,13 @@ map<int, string> shader_id_to_name;
 void display( void )
 {
 	//Call the scene and ask it to draw itself
+	
+	if(scene->isAnimated())
+	{
+		scene->draw();
+		glutPostRedisplay();
+	}
+
 }
 
 void reshape( int width, int height )
@@ -233,13 +240,13 @@ void mouse(int button, int state, int x, int y)
 		}
 	case GLUT_WHEEL_DOWN:
 		{
-		if(glutGetModifiers()==GLUT_ACTIVE_ALT)
-		{
-			scene->draw(Scale(0.5));
-		}
-		else
-			scene->setZoom(-1);
-		break;
+			if(glutGetModifiers()==GLUT_ACTIVE_ALT)
+			{
+				scene->draw(Scale(0.5));
+			}
+			else
+				scene->setZoom(-1);
+			break;
 	}
 	}
 
@@ -404,6 +411,10 @@ void mainMenu(int id)
 			}
 			//TODO: add file chooser
 			break;
+		}
+	case Animation:
+		{
+			scene->setAnimate(!scene->isAnimated());
 		}
 	}
 	initMenu();
@@ -587,6 +598,7 @@ int menuDraw(bool destroy) {
 	glutAddMenuEntry("Add Light",addLight);
 	glutAddMenuEntry("Add Fog",addFog);
 	glutAddMenuEntry("Add Texture", ADD_TEXTURE);
+	glutAddMenuEntry("animation",Animation);
 /*	if(scene->getAntialiasing())
 		glutAddMenuEntry("Disable antialiasing", MENU_ANTIALIASING);
 	else 
@@ -752,7 +764,7 @@ int main( int argc, char **argv )
 		} catch (runtime_error& e) {
 			MessageBox(NULL, _T(e.what()), _T("Runtime error"), MB_OK);
 		} catch (exception& e) {
-			MessageBox(NULL, _T(e.what()), _T("Runtime error"), MB_OK);
+			MessageBox(NULL, _T(e.what()), _T("Exception error"), MB_OK);
 		}
 	}
 	

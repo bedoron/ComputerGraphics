@@ -8,7 +8,7 @@ in vec4 kdiffuse;
 in vec4 kspecular;
 in float shininess;
 
-
+uniform float time;
 uniform mat4 Projection;
 uniform mat4 CameraView;
 uniform mat4 ModelView;
@@ -22,7 +22,11 @@ out float _shininess;
 
 void main()
 {
-	gl_Position =  Projection * CameraView * ModelView * vPosition;
+	if(time>0)
+		gl_Position =  Projection * CameraView * ModelView * (vPosition + vNormal * sin(time));
+	else
+		gl_Position =  Projection * CameraView * ModelView * vPosition;
+	
 	vec4 vtransfromedVN = vPosition + vNormal;
 	vec4 vNormalOut = (ModelView * vtransfromedVN)-(ModelView * vPosition);
 	normal = normalize(vNormalOut.xyz/vNormalOut.w);

@@ -15,6 +15,6 @@ void main()
 {
 	vec3 n = normalize(normal + normalize(2*texture2D(normalMap,st).xyz-1));	
 	vec3 h = normalize(eye.xyz-vpos);
-	vec3 r = reflect(n,h);
-	color = texture2D(colorMap,r.xy);	
+	vec2 r = (vec3(0.5) + normalize(reflect(n,h))/1.41421).xy;
+	color = texture2D(colorMap,r);	
 }

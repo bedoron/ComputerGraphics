@@ -32,6 +32,7 @@ class Shader
 	void updateProjection();
 	void updateCamera();
 	void updateModelView();
+	void updateTime(bool);
 	void updateEye();
 	void bindTextures(const map<string, Texture*>& modelTexture);
 
@@ -82,6 +83,7 @@ public:
 	void kDiffusePointer(const GLvoid *data);
 	void kSpecularPointer(const GLvoid *data);
 	void shininessPointer(const GLvoid *data);
+	void timePointer(const GLvoid *data);
 
 	GLuint buildVAO(const map<string, GLuint>& VBOs);
 	
@@ -89,7 +91,7 @@ public:
 	void checkError(bool except = true);
 	~Shader(void);
 
-	void draw(Model* model);
+	void draw(Model* model,bool animate);
 
 	const string& getName() { return _name; }
 	const map<string, string>& getSamplerNames() const;

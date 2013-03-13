@@ -20,12 +20,14 @@ Shader::Shader(string name, string vertexShader, string fragmentShader, bool tex
 	vboElmSize["diffuse"]	= 4;
 	vboElmSize["specular"]	= 4;
 	vboElmSize["shine"]		= 1;
+
 	vboElmSize["vtexture"]	= 2;
 
 	vboElmSize["projection"]	= 16;
 	vboElmSize["camera"]		= 16;
 	vboElmSize["model"]			= 16;
 	vboElmSize["eye"]			= 4;
+	vboElmSize["time"]		= 1;
 }
 
 GLuint Shader::getProgram() {
@@ -43,11 +45,13 @@ void Shader::buildConversionTable() {
 	vars["diffuse"]		= "kdiffuse";
 	vars["specular"]	= "kspecular";
 	vars["shine"]		= "shininess";
+	
 
 	uniforms["projection"]	= "Projection";
 	uniforms["camera"]		= "CameraView";
 	uniforms["model"]		= "ModelView";
 	uniforms["eye"]			= "eye";
+	uniforms["time"]		= "time";
 
 	postBuildConversionTable();
 }
@@ -222,10 +226,18 @@ void Shader::updateModelView() {
 	glUniformMatrix4fv(	handlers["model"], 1, GL_TRUE, modelViewMatrix );
 	checkError();
 }
+void Shader::updateTime(bool t) 
+{
+	int curT = t?(float)GetTickCount()/10:0.0;
+	double final = ((double)(curT % 360))*(M_PI/180);
+	glUniform1f(handlers["time"],final);
+	checkError();
+}
 
-void Shader::draw(Model* model) {
+void Shader::draw(Model* model,bool animate) {
 	bind();
 	setModelView(model->getObjectTransform());
+	updateTime(animate);
 	setTextures(model); // Deal with defaults
 	bindTextures(model->getTextures());
 	glBindVertexArray(model->getVAO());

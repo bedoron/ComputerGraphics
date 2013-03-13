@@ -165,18 +165,18 @@ void Scene::initHook() {
 	moveInterval=1;
 }
 
-Scene::Scene():models(),cameras(), axes(0), activeEntity(WORLD_ACTIVE), model_win(0),lights(),_addFog(false)
+Scene::Scene():models(),cameras(), axes(0), activeEntity(WORLD_ACTIVE), model_win(0),lights(),_addFog(false),animate(false)
 {
 	initHook();
 }
 Scene::Scene(Renderer *renderer) : m_renderer(renderer),names(),m_activeModel(-1),size(0),models(),cameras(),
-	activeCamera(0), axes(0), activeEntity(WORLD_ACTIVE), model_win(0),lights(),_addFog(false)
+	activeCamera(0), axes(0), activeEntity(WORLD_ACTIVE), model_win(0),lights(),_addFog(false),animate(false)
 {
 	initHook();
 };
 
 Scene::Scene(/*Renderer *renderer, */ CModelData& win) : m_renderer(0),names(),m_activeModel(-1),size(0),models(),cameras(),
-	activeCamera(0), axes(0), activeEntity(WORLD_ACTIVE), model_win(&win),lights(),_addFog(false)
+	activeCamera(0), axes(0), activeEntity(WORLD_ACTIVE), model_win(&win),lights(),_addFog(false),animate(false)
 {
 	initHook();
 	model_win->setScene(this);
@@ -247,7 +247,7 @@ void Scene::draw(mat4 translation)
 	//shader->setCameraParams(m_activeCamera);
 	for(std::vector<Model*>::iterator it = models.begin(); it != models.end(); ++it)  //2
 	{
-		(*it)->draw();
+		(*it)->draw(animate);
 	}
 	glFinish();
 	refreshModelWindow(); // IMPORTANT HOOK !

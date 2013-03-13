@@ -294,5 +294,11 @@
     <None Include="EnviromentMapVshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="AnimationFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="AnimationVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

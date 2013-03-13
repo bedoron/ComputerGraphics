@@ -42,6 +42,7 @@ class Scene {
 	GLfloat _left,_right,_top,_bottom,_zfar,_znear,_fovy,_aspect;
 	bool _renderCamera;
 	bool _addFog;
+	bool animate;
 	int _width,_height;
 
 	map<string, Shader*> shaders;
@@ -60,7 +61,8 @@ public:
 	void updateModelSampler(Model *model, const string &samplerName, const string &textureName);
 	void updateModelSampler(const string &samplerName, const string &textureName);
 
-
+	void setAnimate(bool flag){animate = flag;}
+	bool isAnimated(){return animate;}
 	Scene(/*Renderer *renderer, */ CModelData& win);
 
 	void initDefaultCamera();

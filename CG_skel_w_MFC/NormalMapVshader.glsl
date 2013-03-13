@@ -8,6 +8,7 @@ in vec4 kspecular;
 in float shininess;
 in vec2 tCoor;
 
+uniform float time;
 uniform mat4 Projection;
 uniform mat4 CameraView;
 uniform mat4 ModelView;
@@ -22,8 +23,7 @@ out float _shininess;
 out vec2 st;
 void main()
 {
-
-	gl_Position =  Projection * CameraView * ModelView * vPosition;
+	gl_Position =  Projection * CameraView * ModelView * (vPosition + (vNormal * abs(sin(time))));	
 	vec4 vtransfromedVN = vPosition + vNormal;
 	vec4 vNormalOut = (ModelView * vtransfromedVN)-(ModelView * vPosition);
 	normal = normalize(vNormalOut.xyz/vNormalOut.w);

@@ -76,9 +76,9 @@ GLuint Model::getVAO() {
 	return _vao;
 }
 
-void Model::draw(Shader *shader) {
+void Model::draw(bool animate,Shader *shader) {
 	if(_shader == 0) throw exception();
-	_shader->draw(this);
+	_shader->draw(this, animate);
 }
 
 void Model::setObjectTransform(mat4 worldTransform)
