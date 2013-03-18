@@ -12,6 +12,24 @@ uniform vec4 eye;
 
 out vec4 color;
 
+struct LightSource {
+	vec4 position;
+	vec4 color;
+};
+
+layout(std140) uniform LightSourceBlock {
+	float		num_lights;
+	vec4		globalAmbient;
+	LightSource lightSources[12];
+};
+
+vec4 lightEffect(LightSource ls) {
+	
+
+	return vec4(1,1,1,1);
+}
+
+
 void main()
 {
 	vec4 intesity = vec4(1,1,1,1);

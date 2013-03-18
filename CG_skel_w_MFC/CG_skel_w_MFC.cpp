@@ -32,7 +32,6 @@ using std::cerr;
 #include "mat.h"
 #include "InitShader.h"
 #include "Scene.h"
-#include "Renderer.h"
 #include <string>
 #include "InputDialog.h"
 #include "AddCamera.h"
@@ -63,7 +62,6 @@ Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIA
 #define GLUT_WHEEL_DOWN 4
 void renderBitmapString(float x,float y, string text);
 Scene *scene;
-Renderer *renderer;
 int mouseMode = m_Model;
 CModelData model_win;
 Frustum dlg_frustum;
@@ -262,42 +260,10 @@ void motion(int x, int y)
 	// update last x,y
 	last_x=x;
 	last_y=y;
-	//// TODO: FOR DORON - this part should be revised
-	//vec4 mouse(y-pressedY,x-pressedX);
-	//float mouse_len = length(mouse);
-	//mouse = normalize(mouse);
 
 	Model *model = scene->getActiveModel();
 	if(0==model) return; /* Nothing to spin */
 	
-//	mat4 objBase = model->getObjectTransform(); // TODO - get Transform from renderer
-//	vec4 u = normalize(renderer->calculateTransformation(objBase[0]));
-//	vec4 v = normalize(renderer->calculateTransformation(objBase[1]));
-//	vec4 w = normalize(renderer->calculateTransformation(objBase[3]));
-//
-//	vec3 cu = cross(u, mouse);
-//	vec3 cv = cross(v, mouse);
-//	vec3 cw = cross(w, mouse);
-//
-//	float sinu = length(cu);
-//	float sinv = length(cv);
-//	float sinw = length(cw);
-//	
-//#define SIGN(a) (((a)<0)?(-1):(1))
-//	float zu = SIGN(cu.z);
-//	float zv = SIGN(cv.z);
-//	float zw = SIGN(cw.z);
-//#undef SIGN
-//
-//	//cout << "sinu " << sinu << ", sinv " << sinv << ", sinw " << sinw << "\n";
-//	//cout << "Zu " << cu.z << ", Zv "  << cv.z << ", Zw " << cw.z << "\n";
-//
-//
-//	// Find maximum
-//	float m = sinu;
-//    if (m < sinv) m = sinv;
-//    if (m < sinw) m = sinw;
-
 	float stepping = 10;
 
 	mat4 rotation(RotateX(dy)*RotateY(dx));
@@ -317,9 +283,6 @@ void motion(int x, int y)
 			newEye += scene->getActiveCamera()->getAt();
 			scene->getActiveCamera()->LookAt(newEye,scene->getActiveCamera()->getAt(),scene->getActiveCamera()->getUp());
 			scene->refreshActiveCamera(); // will also draw
-//			scene->draw();
-//			cerr << "dx is: " << dx/3 << "\n";
-//			cerr << "dy is: " << dy/3 << "\n";
 			break;
 		}
 	case m_light:
@@ -629,7 +592,7 @@ int my_main( int argc, char **argv )
 	//glutInitContextProfile( GLUT_CORE_PROFILE );
 	glutCreateWindow( "CG" );
 	glewExperimental = GL_TRUE;
-	//glewInit();
+	
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
@@ -649,68 +612,14 @@ int my_main( int argc, char **argv )
 		return -1;
 	}
 
-	//Camera camera(vec3(5,5,5));
-	//camera.Ortho(-1,1,-1,1,0,5);
-
 	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 	dlg_frustum.Create(Frustum::IDD);
 	model_win.Create(CModelData::IDD);
 	dlg_pres.Create(PresModel::IDD);
 	dlg_addcamera.Create(AddCamera::IDD);
 	
-//	//////////////////////////////////////////////////////
-//	//const char *shader_files[] = { "PhongVshader.glsl", "PhongFshader.glsl"};
-//	//const int total = 1;
-//	//Shader *shader;
-//	//for(int i=0; i<total; ++i) {
-//	//	shader = new Shader(shader_files[2*i], shader_files[2*i+1]);
-//	//}
-//	//shader->loadProgram();
-//
-//	//GLuint _vPosition = glGetAttribLocation(shader->getProgram(), "vPosition");
-//	//GLuint _vNormal = glGetAttribLocation(shader->getProgram(), "vNormal");
-//	//GLuint _projection =  glGetUniformLocation(shader->getProgram(), "Projection");
-//	//GLuint _cameraView = glGetUniformLocation(shader->getProgram(), "CameraView");
-//	//GLuint _modelView = glGetUniformLocation(shader->getProgram(), "ModelView");
-//
-//
-//	vec4 data[3];
-//	data[0] = vec4(0,0,0);
-//	data[1] = vec4(0,10,0);
-//	data[2] = vec4(0,0,10);
-//
-//	glEnableClientState(GL_VERTEX_ARRAY);
-//	glEnable(GL_DEPTH_TEST);
-//
-//	//GLuint vao;
-//	//glGenVertexArrays(1, &vao);
-//	//glBindVertexArray(vao);
-//	
-//	//GLuint buffers[1];
-//	GLuint buffer;
-//	glGenBuffers(1, &buffer);
-//
-//	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-//	glBufferData(GL_ARRAY_BUFFER, 4*sizeof(vec4), data, GL_STATIC_DRAW);
-//	glVertexPointer(4, GL_FLOAT, 0, 0);
-//	glEnableClientState(GL_VERTEX_ARRAY);
-//
-//	//glDrawElements(GL_TRIANGLES, 3, GL_FLOAT, 0);
-//	
-//	glutSwapBuffers();
-//
-//
-//	//glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-//	//glBufferData(GL_ARRAY_BUFFER, sizeof(vec4)*3, data, GL_STATIC_DRAW);
-//	//glVertexAttribPointer( _vPosition, 4, GL_FLOAT, GL_FALSE, 0, 0 );
-//	//glEnableVertexAttribArray(_vPosition);
-//
-//	//
-//
-////	return 0;
-	//////////////////////////////////////////////////////
-//	renderer = new Renderer(MAIN_WIDTH,MAIN_HEIGHT);
-	scene = new Scene(/*renderer,*/ model_win);
+
+	scene = new Scene(model_win);
 	model_win.initColors();
 	dlg_frustum.setScene(scene);
 	dlg_pres.setScene(scene);
@@ -721,10 +630,9 @@ int my_main( int argc, char **argv )
 	dlg_light.setScene(scene);
 	dlg_fog.Create(AddFog::IDD);
 	dlg_fog.setScene(scene);
-	//------------------------------------------------------
-	// Initialize Callbacks
-
 	
+	//------------------------------------------------------
+	// Initialize Callbacks	
 	glutDisplayFunc( display );
 	glutKeyboardFunc( keyboard );
 	glutSpecialFunc(keyboardSpecial);
@@ -737,7 +645,6 @@ int my_main( int argc, char **argv )
 
 	glutMainLoop();
 	delete scene;
-	delete renderer;
 	return 0;
 }
 

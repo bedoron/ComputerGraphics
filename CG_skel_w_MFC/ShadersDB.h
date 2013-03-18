@@ -3,12 +3,14 @@
 #define SHADER_DB_ENTRY(PREFIX, HAS_TEXTURE) #PREFIX, #PREFIX"Vshader.glsl", #PREFIX"Fshader.glsl", HAS_TEXTURE
 #define NO_TEX					NULL
 
-#define SHADER_DB \
-{ SHADER_DB_ENTRY(Phong, false),	NO_TEX		},				\
-{ SHADER_DB_ENTRY(NormalMap, true), "normalMap", "colorMap" },		\
-{ SHADER_DB_ENTRY(EnviromentMap, true), "normalMap", "colorMap" },		\
-{ SHADER_DB_ENTRY(Toon, false),		NO_TEX		}	
-
+#define SHADER_DB { SHADER_DB_ENTRY(Toon, false),		NO_TEX		}
+//
+//#define SHADER_DB \
+//{ SHADER_DB_ENTRY(Phong, false),	NO_TEX		},				\
+//{ SHADER_DB_ENTRY(NormalMap, true), "normalMap", "colorMap" },		\
+//{ SHADER_DB_ENTRY(EnviromentMap, true), "normalMap", "colorMap" },		\
+//{ SHADER_DB_ENTRY(Toon, false),		NO_TEX		}	
+//
 // Last element ("") is terminator.
 #define TEXTURE_DB \
 "cowUV.png", "giraffe.png", "normalMap.png", "5821-normal.png", "BorntoRule-ColorMap.png", \
