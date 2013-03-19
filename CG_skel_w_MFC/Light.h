@@ -3,8 +3,8 @@
 
 struct Light {
 public:
-	const vec4 position;
-	const vec4 color;
+	vec4 position;
+	vec4 color;
 
 	struct sLightSource {
 		vec4 position;

@@ -154,6 +154,22 @@ void Scene::updateModelSampler(const string &samplerName, const string &textureN
 	updateModelSampler(model, samplerName, textureName);
 }
 
+vector<string> Scene::getLights() {
+	vector<string> lnames;
+	char tmp_name[50];
+	for(int i = 0; i < lights.size(); ++i) {
+			
+		sprintf(tmp_name, "(%d,%d,%d,%d)c:(%.2f,%.2f,%.2f)", 
+			lights[i]->position.x, lights[i]->position.y, lights[i]->position.z, lights[i]->position.w, 
+			lights[i]->color.x, lights[i]->color.y, lights[i]->color.z);   
+
+		lnames.push_back(string(tmp_name));
+	}
+		
+	return lnames;
+
+}
+
 
 vector<string> Scene::listShaders() {
 	map<string,Shader*>::const_iterator it = shaders.begin();
@@ -553,20 +569,37 @@ Shader* Scene::getShader(const string& name) {
 	return shaders[name];
 }
 
-void Scene::addCube()
-{
-	throw string("Not implemented!");
-/*	Model* cube = new CubeModel(-1,1,-1,1,-1,1); -- Changed function in Model class. need to add it here too
-	models.push_back(cube);
-	names.push_back("Cube");
-	setActiveModel(models.size()-1);*/
+void Scene::addCube() {
+	throw exception("Not implemented!");
 }
+
 void Scene::addLight(Light* newLight)
 {
 	lights.push_back(newLight);
 	activeLight = newLight;
 	lightsUBO << lights;
 	draw();
+}
+
+void Scene::removeActiveLight() {
+	vector<Light*>::iterator it = lights.begin();
+	for(; it != lights.end(); ++it) {
+		if((*it) == activeLight) break;
+	}
+	if(it==lights.end()) {
+		cerr << "No active light to remove found, set one active\n";
+		return;
+	}
+	lights.erase(it);
+	lightsUBO << lights;
+	draw();
+}
+
+void Scene::setActiveLight(int index) {
+	if(index < 0 || index >= lights.size())
+		throw exception("Invalid set active light index");
+
+	activeLight = lights[index];
 }
 
 void Scene::changeLightDirection(mat4 rotation)

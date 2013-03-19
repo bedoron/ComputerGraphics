@@ -45,16 +45,18 @@ using std::map;
 enum Mouse_Mode{m_Model,m_camera,m_light, m_pixel_debug};
 enum MENU_ELEMENTS {
 OBJECTS_NAMESPACE_BEGIN = 0,
-OBJECTS_NAMESPACE_END = 999,
-CAMERAS_NAMESPACE_BEGIN = 1000,
-CAMERAS_NAMESPACE_END = 1100,
+OBJECTS_NAMESPACE_END = 500,
+CAMERAS_NAMESPACE_BEGIN = 501,
+CAMERAS_NAMESPACE_END = 1000,
+LIGHTS_NAMESPACE_BEGIN = 1001,
+LIGHTS_NAMESPACE_END = 1012,
 SHADERS_NAMESPACE_BEGIN = 1101,
 SHADERS_NAMESPACE_END = 1130,
 OBJECTS_OVERFLOW_BUFFER = 2500, /* if you got here you suck */
 FILE_OPEN, MAIN_DEMO , MAIN_ABOUT , Main_BOUNDS 
 , Main_Clear , Main_selectM , Main_Move_Interval, MAIN_DEBUG, OBJECT_REMOVE_ACTIVE, 
 CAMERA_ADD, CAMERA_REMOVE_ACTIVE,CAMERA_SELECT_MODEL_AT, SELECT_OPERATION_FRAME,Main_Frustum,
-Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING, ADD_TEXTURE,Animation, GLOBAL_AMBIENT
+Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING, ADD_TEXTURE,Animation, GLOBAL_AMBIENT, REMOVE_LIGHT
 };
 
 
@@ -349,30 +351,6 @@ void mainMenu(int id)
 			scene->draw();
 		break;
 		}
-	case addLight:
-		{
-			dlg_light.ShowWindow(SW_SHOW);
-
-			break;
-		}
-	case GLOBAL_AMBIENT: {
-		vec4 oldAmbient = scene->getGlobalAmbience() * 255;
-		CColorDialog	dlg;
-		dlg.m_cc.Flags |= CC_RGBINIT | CC_FULLOPEN;
-		dlg.m_cc.rgbResult = RGB(oldAmbient[0],oldAmbient[1],oldAmbient[2]);
-		COLORREF		color;
-		GLfloat r,g,b;
-		if(dlg.DoModal() == IDOK) {
-			color = dlg.GetColor();
-			r = GetRValue(color);
-			g = GetGValue(color);
-			b = GetBValue(color);
-
-			vec4 ambient(r/255, g/255, b/255, 1);
-			scene->setGlobalAmbience(ambient);
-		}
-		break;
-	}
 	case addFog:
 		{
 			dlg_fog.ShowWindow(SW_SHOW);
@@ -483,7 +461,7 @@ void cameraMenuHandler(int id) {
 		std::cerr << "Remove active camera - not implemented\n";
 		break;
 	default: // Camera # id - CAMERA_NAMESPACE_BEGIN was selected
-		int cameraSelected = id - CAMERAS_NAMESPACE_BEGIN + 1;
+		int cameraSelected = id - CAMERAS_NAMESPACE_BEGIN + 1; // The +1 is a fix!
 		cerr << "Trying to select camera " << cameraSelected << "\n";
 		scene->setActiveCamera(cameraSelected); // Camera indices begin with 1
 		scene->activateCamera();
@@ -493,6 +471,44 @@ void cameraMenuHandler(int id) {
 		
 		break;
 	}
+	initMenu();
+}
+
+void createLightsHandler(int id) {
+	initMenu(true);
+	switch(id) {
+	case addLight:
+		{
+			dlg_light.DoModal();
+			//dlg_light.ShowWindow(SW_SHOW);
+			break;
+		}
+	case GLOBAL_AMBIENT: {
+		vec4 oldAmbient = scene->getGlobalAmbience() * 255;
+		CColorDialog	dlg;
+		dlg.m_cc.Flags |= CC_RGBINIT | CC_FULLOPEN;
+		dlg.m_cc.rgbResult = RGB(oldAmbient[0],oldAmbient[1],oldAmbient[2]);
+		COLORREF		color;
+		GLfloat r,g,b;
+		if(dlg.DoModal() == IDOK) {
+			color = dlg.GetColor();
+			r = GetRValue(color);
+			g = GetGValue(color);
+			b = GetBValue(color);
+
+			vec4 ambient(r/255, g/255, b/255, 1);
+			scene->setGlobalAmbience(ambient);
+		}
+		break;
+	}
+	case REMOVE_LIGHT: {
+		scene->removeActiveLight();
+		break;
+	}
+	default:
+		int lightSelected = id - LIGHTS_NAMESPACE_BEGIN;
+		cerr << "Selected light " << lightSelected << "\n";
+	};
 	initMenu();
 }
 
@@ -542,6 +558,18 @@ int createViewMenu()
 	glutAddMenuEntry("Set Prespective",Main_prespective);
 	return viewMenu;
 }
+int createLightsMenu() {
+	int viewMenu = glutCreateMenu(createLightsHandler);
+	glutAddMenuEntry("Global ambience",GLOBAL_AMBIENT);
+	glutAddMenuEntry("Add Light",addLight);
+	glutAddMenuEntry("Remove Active", REMOVE_LIGHT);
+	vector<string> names = scene->getLights();
+	for(int i = 0; i < names.size(); ++i) {
+		glutAddMenuEntry(names[i].c_str(), LIGHTS_NAMESPACE_BEGIN + i);
+	}
+	return viewMenu;
+}
+
 
 int menuDraw(bool destroy) {
 	static int subMenus[MAXIMUM_MENUS] = { -1, -1, -1, -1, -1, -1, -1, -1 };
@@ -561,23 +589,19 @@ int menuDraw(bool destroy) {
 	subMenus[2] = createCamerasMenu();
 	// Create main menu
 	subMenus[3] = createViewMenu();
+	subMenus[4] = createLightsMenu();
 	subMenus[0] = glutCreateMenu(mainMenu);
 	// Attach sub menus
 	glutAddSubMenu("Object", subMenus[1]);
 	glutAddSubMenu("Camera", subMenus[2]);
+	glutAddSubMenu("Lights", subMenus[4]);
 	glutAddSubMenu("View",subMenus[3]);
 	// Add current menu elements
 	
 	glutAddMenuEntry("clear models",Main_Clear);
 	glutAddMenuEntry("Select Move Interval",Main_Move_Interval);
-	if(scene->getRenderCamera())
-		glutAddMenuEntry("Do not Render cameras",RenderCameras);
-	else
-		glutAddMenuEntry("Render cameras",RenderCameras);
 	glutAddMenuEntry("Look at active model (f)",CAMERA_SELECT_MODEL_AT);
-	glutAddMenuEntry("Add Cube",AddCube);
-	glutAddMenuEntry("Add Light",addLight);
-	glutAddMenuEntry("Global ambience",GLOBAL_AMBIENT);
+	//glutAddMenuEntry("Add Cube",AddCube);
 	glutAddMenuEntry("Add Fog",addFog);
 	glutAddMenuEntry("Add Texture", ADD_TEXTURE);
 	glutAddMenuEntry("animation",Animation);
@@ -645,7 +669,7 @@ int my_main( int argc, char **argv )
 	dlg_addcamera.setScene(scene);
 	dlg_interval.Create(MoveInterval::IDD);
 	dlg_interval.setScene(scene);
-	dlg_light.Create(AddLight::IDD);
+	//dlg_light.Create(AddLight::IDD); -- Modal windows can't live with create :(
 	dlg_light.setScene(scene);
 	dlg_fog.Create(AddFog::IDD);
 	dlg_fog.setScene(scene);

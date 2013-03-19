@@ -129,9 +129,14 @@ public:
 	void addCube();
 	void setMoveInterval(GLfloat val){moveInterval=val;}
 	GLfloat getMoveInterval(){return moveInterval;}
+
+	vector<string> getLights();
 	void addLight(Light* newLight);
+	void removeActiveLight();
+	void setActiveLight(int index);
 	void changeLightDirection(mat4 rotation);
 	void changeLightLocation(mat4 rotation);
+
 	void setFog(vec3 fogColor,GLfloat density);
 	Shader* getShader(const string& name);
 	void setGlobalAmbience(vec4 ambient);
