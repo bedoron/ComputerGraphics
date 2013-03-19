@@ -13,6 +13,20 @@ uniform vec4 eye;
 out vec4 color;
 
 
+struct LightSource {
+	vec4 position;
+	vec4 color;
+};
+
+layout(std140) uniform LightSourcesBlock  {
+	vec4		globalAmbient;
+	LightSource lightSources[12];
+	int		num_lights;
+};
+
+
+
+
 void main()
 {
 	color = vec4(0,1,0,0);
@@ -35,7 +49,7 @@ void main()
 // color = (diffuse + specular)*intesity;
 	specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
 	vec4 k = _kambiant;
-	color = (diffuse + specular)*intesity + ambiantIntesity * _kambiant;
+	color = (diffuse + specular)*intesity + ambiantIntesity * _kambiant + globalAmbient;
 	
 
 }

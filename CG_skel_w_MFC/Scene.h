@@ -7,6 +7,7 @@
 #include "Utils.h"
 #include "Camera.h"
 #include "Light.h"
+#include "LightsUBO.h"
 
 #include "Model.h"
 #include "Texture.h"
@@ -50,6 +51,7 @@ class Scene {
 
 	Shader* shader;
 	void updateCameraInAllShaders(Camera *camera);
+	LightsUBO lightsUBO;
 
 	Scene(Renderer *renderer); 
 	Scene();

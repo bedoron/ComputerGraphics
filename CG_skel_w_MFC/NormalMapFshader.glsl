@@ -14,6 +14,19 @@ uniform sampler2D normalMap;
 uniform sampler2D colorMap;
 out vec4 color;
 
+struct LightSource {
+	vec4 position;
+	vec4 color;
+};
+
+layout(std140) uniform LightSourcesBlock  {
+	vec4		globalAmbient;
+	LightSource lightSources[12];
+	int		num_lights;
+};
+
+
+
 void main()
 {
 	vec4 tColor = texture2D(colorMap,st);
@@ -38,6 +51,6 @@ void main()
 
 	specular= _kspecular * max(pow(dot(n,normalize(h)),_shininess),0);
 	
-	color = (diffuse+specular)*intesity*tColor + _kambiant;
+	color = (diffuse+specular)*intesity*tColor + _kambiant + globalAmbient;
 	
 }

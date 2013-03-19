@@ -56,111 +56,112 @@ END_MESSAGE_MAP()
 
 void AddLight::OnBnClickedRdAm()
 {
-	DirectionX.EnableWindow(false);
-	DirectionY.EnableWindow(false);
-	DirectionZ.EnableWindow(false);
-	locationX.EnableWindow(false);
-	locationY.EnableWindow(false);
-	locationZ.EnableWindow(false);
-	Angle.EnableWindow(false);
-	type= L_AMBIANT;
+	//DirectionX.EnableWindow(false);
+	//DirectionY.EnableWindow(false);
+	//DirectionZ.EnableWindow(false);
+	//locationX.EnableWindow(false);
+	//locationY.EnableWindow(false);
+	//locationZ.EnableWindow(false);
+	//Angle.EnableWindow(false);
+	//type= L_AMBIANT;
 }
 
 
 void AddLight::OnBnClickedRdPrl()
 {
-	locationX.EnableWindow(false);
-	locationY.EnableWindow(false);
-	locationZ.EnableWindow(false);
-	DirectionX.EnableWindow(true);
-	DirectionY.EnableWindow(true);
-	DirectionZ.EnableWindow(true);
-	Angle.EnableWindow(false);
-	type= L_PARALEL;
+	//locationX.EnableWindow(false);
+	//locationY.EnableWindow(false);
+	//locationZ.EnableWindow(false);
+	//DirectionX.EnableWindow(true);
+	//DirectionY.EnableWindow(true);
+	//DirectionZ.EnableWindow(true);
+	//Angle.EnableWindow(false);
+	//type= L_PARALEL;
 }
 
 
 void AddLight::OnBnClickedRdpnt()
 {
-	locationX.EnableWindow(true);
-	locationY.EnableWindow(true);
-	locationZ.EnableWindow(true);
-	DirectionX.EnableWindow(true);
-	DirectionY.EnableWindow(true);
-	DirectionZ.EnableWindow(true);
-	Angle.EnableWindow(true);
-	type= L_POINT;
+	//locationX.EnableWindow(true);
+	//locationY.EnableWindow(true);
+	//locationZ.EnableWindow(true);
+	//DirectionX.EnableWindow(true);
+	//DirectionY.EnableWindow(true);
+	//DirectionZ.EnableWindow(true);
+	//Angle.EnableWindow(true);
+	//type= L_POINT;
 }
 int AddLight::getLightType()
 {
-	switch(l_ambient.GetCheckedRadioButton(IDC_RD_AM,IDC_RD_PRL))
-	{
-	case IDC_RD_AM:
-	{
-		return L_AMBIANT;
-		break;
-	}
-	case IDC_RD_pnt:
-	{
-		return L_POINT;
-		break;
-	}
-	case IDC_RD_PRL:
-	{
-		return L_PARALEL;
-		break;
-	}
-	}
+	//switch(l_ambient.GetCheckedRadioButton(IDC_RD_AM,IDC_RD_PRL))
+	//{
+	//case IDC_RD_AM:
+	//{
+	//	return L_AMBIANT;
+	//	break;
+	//}
+	//case IDC_RD_pnt:
+	//{
+	//	return L_POINT;
+	//	break;
+	//}
+	//case IDC_RD_PRL:
+	//{
+	//	return L_PARALEL;
+	//	break;
+	//}
+	//}
+	return 0;
 }
 
 void AddLight::OnBnClickedOk()
 {
 	CDialogEx::OnOK();
-	Light* newLight = new Light();
-	newLight->setLightType(type);
-	char bufferX[5];
-	char bufferY[5];
-	char bufferZ[5];
-	IntencityX.GetWindowTextA(bufferX,5);
-	IntencityY.GetWindowTextA(bufferY,5);
-	IntencityZ.GetWindowTextA(bufferZ,5);
-	newLight->setIntencity(vec3(atof(bufferX),atof(bufferY),atof(bufferZ)));
-	switch (type)
-	{
-	case L_AMBIANT:
-	{
-		_scene->addLight(newLight);
-		break;
-	}
-	case L_POINT:
-	{
-		DirectionX.GetWindowTextA(bufferX,5);
-		DirectionY.GetWindowTextA(bufferY,5);
-		DirectionZ.GetWindowTextA(bufferZ,5);
-		newLight->setDirection(vec3(atof(bufferX),atof(bufferY),atof(bufferZ)));
-		locationX.GetWindowTextA(bufferX,5);
-		locationY.GetWindowTextA(bufferY,5);
-		locationZ.GetWindowTextA(bufferZ,5);
-		newLight->setLocation(vec3(atof(bufferX),atof(bufferY),atof(bufferZ)));
-		Angle.GetWindowTextA(bufferX,5);
-		newLight->setAngle(atof(bufferX));
-		_scene->addLight(newLight);
-		break;
-	}
-	case L_PARALEL:
-	{
-		DirectionX.GetWindowTextA(bufferX,5);
-		DirectionY.GetWindowTextA(bufferY,5);
-		DirectionZ.GetWindowTextA(bufferZ,5);
-		newLight->setDirection(vec3(atof(bufferX),atof(bufferY),atof(bufferZ)));
-		locationX.GetWindowTextA(bufferX,5);
-		locationY.GetWindowTextA(bufferY,5);
-		locationZ.GetWindowTextA(bufferZ,5);
-		newLight->setLocation(vec3(atof(bufferX),atof(bufferY),atof(bufferZ)));
-		_scene->addLight(newLight);
-		break;
-	}
-	}
+	//Light* newLight = new Light();
+	//newLight->setLightType(type);
+	//char bufferX[5];
+	//char bufferY[5];
+	//char bufferZ[5];
+	//IntencityX.GetWindowTextA(bufferX,5);
+	//IntencityY.GetWindowTextA(bufferY,5);
+	//IntencityZ.GetWindowTextA(bufferZ,5);
+	//newLight->setIntencity(vec3(atof(bufferX),atof(bufferY),atof(bufferZ)));
+	//switch (type)
+	//{
+	//case L_AMBIANT:
+	//{
+	//	_scene->addLight(newLight);
+	//	break;
+	//}
+	//case L_POINT:
+	//{
+	//	DirectionX.GetWindowTextA(bufferX,5);
+	//	DirectionY.GetWindowTextA(bufferY,5);
+	//	DirectionZ.GetWindowTextA(bufferZ,5);
+	//	newLight->setDirection(vec3(atof(bufferX),atof(bufferY),atof(bufferZ)));
+	//	locationX.GetWindowTextA(bufferX,5);
+	//	locationY.GetWindowTextA(bufferY,5);
+	//	locationZ.GetWindowTextA(bufferZ,5);
+	//	newLight->setLocation(vec3(atof(bufferX),atof(bufferY),atof(bufferZ)));
+	//	Angle.GetWindowTextA(bufferX,5);
+	//	newLight->setAngle(atof(bufferX));
+	//	_scene->addLight(newLight);
+	//	break;
+	//}
+	//case L_PARALEL:
+	//{
+	//	DirectionX.GetWindowTextA(bufferX,5);
+	//	DirectionY.GetWindowTextA(bufferY,5);
+	//	DirectionZ.GetWindowTextA(bufferZ,5);
+	//	newLight->setDirection(vec3(atof(bufferX),atof(bufferY),atof(bufferZ)));
+	//	locationX.GetWindowTextA(bufferX,5);
+	//	locationY.GetWindowTextA(bufferY,5);
+	//	locationZ.GetWindowTextA(bufferZ,5);
+	//	newLight->setLocation(vec3(atof(bufferX),atof(bufferY),atof(bufferZ)));
+	//	_scene->addLight(newLight);
+	//	break;
+	//}
+	//}
 }
 
 

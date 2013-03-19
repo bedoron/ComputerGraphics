@@ -8,6 +8,7 @@
 #include <iostream>
 #include <map>
 #include "Texture.h"
+#include "LightsUBO.h";
 
 class Model; // forward decleration
 
@@ -44,12 +45,15 @@ protected:
 	map<string, string> vars;		/* Mapping between application var names to shader var names, this can change between shaders*/
 	map<string, string> textures;	/* Mapping between application texture names to shader texture names */
 	map<string, string> uniforms;	/* Mapping between application uniform names to shader uniform names */
+	map<string, string> ublocks;	/* Mapping between application uniform blocks names to shader uniform names */
 
 	virtual void buildConversionTable(); /* Populate the above */
 	virtual void postBuildConversionTable(); /* Post population hook */
 	virtual void setTextures(Model* model);  /* Activate Texture units from model, use defaults if they don't exist */
 
 public:
+	static const GLuint UNIFORM_BINDING_POINT = 5;
+
 	Shader(string name, string vertexShader, string fragmentShader, bool textures = false);
 	void loadProgram();
 
@@ -96,5 +100,7 @@ public:
 	const string& getName() { return _name; }
 	const map<string, string>& getSamplerNames() const;
 	const string translateSamplerName(const string& shader_name) const; // translate from shader file to app name
+
+	void updateHandler(GLuint shader_handle, GLuint buffer);
 };
 

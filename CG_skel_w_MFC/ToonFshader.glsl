@@ -17,10 +17,10 @@ struct LightSource {
 	vec4 color;
 };
 
-layout(std140) uniform LightSourceBlock {
-	float		num_lights;
+layout(std140) uniform LightSourcesBlock  {
 	vec4		globalAmbient;
 	LightSource lightSources[12];
+	int		num_lights;
 };
 
 vec4 lightEffect(LightSource ls) {
@@ -48,7 +48,7 @@ void main()
 	specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
 
 
-	color = (diffuse + specular)*intesity + _kambiant;
+	color = (diffuse + specular)*intesity + _kambiant + globalAmbient;
 	
 	if(color.x > 0.95)
 		color.x = 1;

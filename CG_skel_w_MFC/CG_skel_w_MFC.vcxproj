@@ -116,7 +116,7 @@
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="InitShader.cpp" />
     <ClCompile Include="InputDialog.cpp" />
-    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightsUBO.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -154,6 +154,7 @@
     <ClInclude Include="InitShader.h" />
     <ClInclude Include="InputDialog.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LightsUBO.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="mat.h" />
     <ClInclude Include="Material.h" />

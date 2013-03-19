@@ -11,6 +11,20 @@ uniform sampler2D normalMap;
 uniform sampler2D colorMap;
 out vec4 color;
 
+struct LightSource {
+	vec4 position;
+	vec4 color;
+};
+
+layout(std140) uniform LightSourcesBlock  {
+	vec4		globalAmbient;
+	LightSource lightSources[12];
+	int		num_lights;
+};
+
+
+
+
 void main()
 {
 	vec3 n = normalize(normal + normalize(2*texture2D(normalMap,st).xyz-1));	

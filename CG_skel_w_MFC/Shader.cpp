@@ -53,6 +53,8 @@ void Shader::buildConversionTable() {
 	uniforms["eye"]			= "eye";
 	uniforms["time"]		= "time";
 
+	ublocks["LightSourcesBlock"]  = "LightSourcesBlock";
+
 	postBuildConversionTable();
 }
 
@@ -62,11 +64,11 @@ void Shader::postBuildConversionTable() {
 
 void Shader::checkHandler(const string& var, const GLuint handle) {
 	if(handle == -1)
-		throw runtime_error(var + " Initialization failed, handler is -1");
+		throw runtime_error(_name + ": " + var + " Initialization failed, handler is -1");
 	try {
 		checkError();
 	} catch(exception &e) {
-		throw runtime_error(var + " Initialization failed, OPENGL died with " + e.what());
+		throw runtime_error(_name + ": " + var + " Initialization failed, OPENGL died with " + e.what());
 	}
 }
 
@@ -75,7 +77,7 @@ void Shader::loadProgram() {
 	_programHandle = InitShader(_vertexShader.c_str(), _fragmentShader.c_str()); /* this WILL load the shader as active */
 	GLenum error = glGetError();
 	if(error != GL_NO_ERROR) {
-		throw exception();
+		throw exception(_name.c_str());
 	}
 	buildConversionTable();
 
@@ -95,11 +97,20 @@ void Shader::loadProgram() {
 		handlers[it->first] = handle; 
 	}
 
+	int index = UNIFORM_BINDING_POINT;
+	for(it=ublocks.begin(); it != ublocks.end(); ++it) {
+		GLuint handle = glGetUniformBlockIndex(_programHandle, it->second.c_str());
+		checkHandler(it->second,  handle);
+		handlers[it->first] = handle;
+		glUniformBlockBinding(_programHandle, handle, index++);
+	}
+
 	for(it=textures.begin(); it != textures.end(); ++it) {
 		GLuint handle = glGetUniformLocation(_programHandle, it->second.c_str());
 		checkHandler(it->second, handle);
 		handlers[it->first] = handle;
 	}
+
 	glUseProgram(0); // unload
 }
 
@@ -111,7 +122,7 @@ void Shader::checkError(bool except) {
 	GLenum error = glGetError();
 	if(error != GL_NO_ERROR) {
 		stringstream errstr; 
-		errstr << "GLError " << error;
+		errstr << "GLError: " << _name << ": " <<error;
 		cerr <<  errstr.str() << "\n";
 		if(except)
 			throw exception(errstr.str().c_str());
