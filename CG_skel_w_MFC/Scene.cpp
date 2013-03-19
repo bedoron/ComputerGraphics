@@ -562,7 +562,7 @@ vector<string> Scene::getLights() {
 	char tmp_name[50];
 	for(int i = 0; i < lights.size(); ++i) {
 		
-		sprintf(tmp_name, "(%d,%d,%d,%d)c:(%.2f,%.2f,%.2f)", 
+		sprintf(tmp_name, "(%.0f,%.0f,%.0f,%.0f)c:(%.2f,%.2f,%.2f)", 
 			lights[i]->position.x, lights[i]->position.y, lights[i]->position.z, lights[i]->position.w, 
 			lights[i]->color.x, lights[i]->color.y, lights[i]->color.z);   
 

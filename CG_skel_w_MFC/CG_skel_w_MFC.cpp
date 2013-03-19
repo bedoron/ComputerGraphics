@@ -561,9 +561,9 @@ int createViewMenu()
 }
 int createLightsMenu() {
 	int viewMenu = glutCreateMenu(createLightsHandler);
-	glutAddMenuEntry("Global ambience",GLOBAL_AMBIENT);
 	glutAddMenuEntry("Add Light",addLight);
 	glutAddMenuEntry("Remove Active", REMOVE_LIGHT);
+	glutAddMenuEntry("Global ambience",GLOBAL_AMBIENT);
 	vector<string> names = scene->getLights();
 	for(int i = 0; i < names.size(); ++i) {
 		glutAddMenuEntry(names[i].c_str(), LIGHTS_NAMESPACE_BEGIN + i);

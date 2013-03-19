@@ -108,7 +108,7 @@ void Camera::draw(Renderer& renderer)
 
 const string& Camera::getName() {
 	char tmp_name[50];
-	sprintf(tmp_name, "(%d,%d,%d)", _eye.x,_eye.y,_eye.z);
+	sprintf(tmp_name, "(%.0f,%.0f,%.0f)", _eye.x,_eye.y,_eye.z);
 	name = string(tmp_name);
 	return name;
 }

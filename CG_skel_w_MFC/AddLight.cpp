@@ -33,9 +33,9 @@ void AddLight::DoDataExchange(CDataExchange* pDX)
 	//DDX_Control(pDX, IDC_LocationX, locationX);
 	//DDX_Control(pDX, IDC_LocationY, locationY);
 	//DDX_Control(pDX, IDC_LocationZ, locationZ);
-	DDX_Control(pDX, IDC_IntencityB, IntencityX);
+	DDX_Control(pDX, IDC_IntencityR, IntencityX);
 	DDX_Control(pDX, IDC_IntencityG, IntencityY);
-	DDX_Control(pDX, IDC_IntencityR, IntencityZ);
+	DDX_Control(pDX, IDC_IntencityB, IntencityZ);
 	//DDX_Control(pDX, IDC_angle, Angle);
 
 	DDX_Control(pDX, DIR_LOC, dir_loc);
@@ -82,7 +82,8 @@ int AddLight::getLightType()
 void AddLight::OnBnClickedOk()
 {
 	CDialogEx::OnOK();
-	
+	float r,g,b;
+
 	char bufferX[5];
 	char bufferY[5];
 	char bufferZ[5];
@@ -91,7 +92,12 @@ void AddLight::OnBnClickedOk()
 	IntencityY.GetWindowTextA(bufferY,5);
 	IntencityZ.GetWindowTextA(bufferZ,5);
 
-	vec4 color(atof(bufferX),atof(bufferY),atof(bufferZ));
+	r = atof(bufferX); 
+	g = atof(bufferY);
+	b = atof(bufferZ);
+
+	vec4 color(r, g, b, 0);
+	
 
 	DirectionX.GetWindowTextA(bufferX,5);
 	DirectionY.GetWindowTextA(bufferY,5);
