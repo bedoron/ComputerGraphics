@@ -9,7 +9,7 @@ in vec4 _kspecular;
 in float _shininess;
 
 uniform vec4 eye;
-
+uniform mat4 ModelView;
 out vec4 color;
 
 struct LightSource {
@@ -38,21 +38,36 @@ float turbulence(float p_location)
 }
 void main()
 {
-	vec4 intesity = vec4(1,1,1,1);
 	vec3 n = normalize(normal);
-	vec4 diffuse = vec4(0.0);
-	vec4 specular = vec4(0.0);
+	color = vec4(0,0,0,0);
+	int i=0;
+	for(;i < 12 ; i++)
+	{
+		vec4 intesity = lightSources[i].color;
+		vec4 position = ModelView * lightSources[i].position;
+		vec3 lightDir = vec3(0);
+		if(position.w==0)
+		{
+			lightDir = position.xyz;
+		}
+		else
+		{
+			lightDir = (position.xyz-vpos);
+		}
+		vec4 diffuse = vec4(0.0);
+		vec4 specular = vec4(0.0);
 		
-	// diffuse term
-	vec3 lightDir = normalize(vec3(1,0.1,-0.8));
-	float NdotL = dot(n, lightDir);
+		// diffuse term
+		float NdotL = dot(n, lightDir);
 	
-	if (NdotL > 0.0)
-		diffuse = _kdiffuse * NdotL;
+		if (NdotL > 0.0)
+			diffuse = _kdiffuse * NdotL;
 		
-	vec3 h = normalize(eye.xyz-vpos)+normalize(lightDir);
-	specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
-	float noise = turbulence(vpos.x )+ sqrt(vpos.x * vpos.x + vpos.y * vpos.y);
-	vec3 marColor =noise * vec3(139,69,15)/255.0+(1-noise)*vec3(10*sin(vpos/4))/255	;
-	color = vec4(marColor,1) + globalAmbient;
+		vec3 h = normalize(eye.xyz-vpos)+normalize(lightDir);
+		specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
+		float noise = turbulence(vpos.x )+ sqrt(vpos.x * vpos.x + vpos.y * vpos.y);
+		vec3 marColor =noise * vec3(139,69,15)/255.0+(1-noise)*vec3(10*sin(vpos/4))/255	;
+		color += vec4(marColor,1) 
+	}
+	color+= _kambiant * globalAmbient;
 }

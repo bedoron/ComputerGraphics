@@ -29,12 +29,13 @@ layout(std140) uniform LightSourcesBlock  {
 
 void main()
 {
+	vec3 n = normalize(normal);
 	color = vec4(0,0,0,0);
 	int i=0;
 	for(;i < 12 ; i++)
 	{
 		vec4 intesity = lightSources[i].color;
-		vec4 position = ModelView * lightSources[i].position;
+		vec4 position =  lightSources[i].position;
 		vec3 lightDir = vec3(0);
 		if(position.w==0)
 		{
@@ -44,7 +45,7 @@ void main()
 		{
 			lightDir = (position.xyz-vpos);
 		}
-		vec3 n = normalize(normal);
+		
 		vec4 diffuse = vec4(0.0);
 		vec4 specular = vec4(0.0);
 		

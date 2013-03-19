@@ -22,6 +22,10 @@ out float _shininess;
 
 void main()
 {
+	mat4 NormalTranform = ModelView;
+	NormalTranform[3][0] = 0;
+	NormalTranform[3][1] = 0;
+	NormalTranform[3][2] = 0;
 	if(time>0)
 		gl_Position =  Projection * CameraView * ModelView * (vPosition + vNormal * sin(time));
 	else
