@@ -17,6 +17,13 @@ LightsUBO::LightsUBO(void)
 
 void LightsUBO::setGlobalAmbient(vec4 ambient) {
 	globalAmbient = ambient;
+	bind();
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(vec4), globalAmbient);
+	unbind();
+}
+
+vec4 LightsUBO::getGlobalAmbient() {
+	return globalAmbient;
 }
 
 LightsUBO::~LightsUBO(void)

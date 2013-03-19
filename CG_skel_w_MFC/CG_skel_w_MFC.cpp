@@ -54,7 +54,7 @@ OBJECTS_OVERFLOW_BUFFER = 2500, /* if you got here you suck */
 FILE_OPEN, MAIN_DEMO , MAIN_ABOUT , Main_BOUNDS 
 , Main_Clear , Main_selectM , Main_Move_Interval, MAIN_DEBUG, OBJECT_REMOVE_ACTIVE, 
 CAMERA_ADD, CAMERA_REMOVE_ACTIVE,CAMERA_SELECT_MODEL_AT, SELECT_OPERATION_FRAME,Main_Frustum,
-Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING, ADD_TEXTURE,Animation
+Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING, ADD_TEXTURE,Animation, GLOBAL_AMBIENT
 };
 
 
@@ -355,6 +355,24 @@ void mainMenu(int id)
 
 			break;
 		}
+	case GLOBAL_AMBIENT: {
+		vec4 oldAmbient = scene->getGlobalAmbience() * 255;
+		CColorDialog	dlg;
+		dlg.m_cc.Flags |= CC_RGBINIT | CC_FULLOPEN;
+		dlg.m_cc.rgbResult = RGB(oldAmbient[0],oldAmbient[1],oldAmbient[2]);
+		COLORREF		color;
+		GLfloat r,g,b;
+		if(dlg.DoModal() == IDOK) {
+			color = dlg.GetColor();
+			r = GetRValue(color);
+			g = GetGValue(color);
+			b = GetBValue(color);
+
+			vec4 ambient(r/255, g/255, b/255, 1);
+			scene->setGlobalAmbience(ambient);
+		}
+		break;
+	}
 	case addFog:
 		{
 			dlg_fog.ShowWindow(SW_SHOW);
@@ -559,6 +577,7 @@ int menuDraw(bool destroy) {
 	glutAddMenuEntry("Look at active model (f)",CAMERA_SELECT_MODEL_AT);
 	glutAddMenuEntry("Add Cube",AddCube);
 	glutAddMenuEntry("Add Light",addLight);
+	glutAddMenuEntry("Global ambience",GLOBAL_AMBIENT);
 	glutAddMenuEntry("Add Fog",addFog);
 	glutAddMenuEntry("Add Texture", ADD_TEXTURE);
 	glutAddMenuEntry("animation",Animation);

@@ -49,19 +49,28 @@ void Scene::initDefaultCamera() {
 void Scene::initDefaultLight()
 {
 	m_activeLight = new Light(vec4(1,1,1,0), vec4(1,0,0,1));
-	
-	//m_activeLight->setDirection(vec3(1,1,1));
-	//m_activeLight->setLightType(L_PARALEL);
-	//m_activeLight->setIntencity(vec3(255,255,255));
-	lights.push_back(new Light(vec4(-1,1,1,0),vec4(0,1,0,1)));
+	activeLight=m_activeLight; // W00t ?!
 	lights.push_back(m_activeLight);
+
+//	lights.push_back(new Light(vec4(-1,1,1,0),vec4(0,1,0,1)));
 	
-	activeLight=m_activeLight;
+	
+	
 	
 	lightsUBO.setGlobalAmbient(vec4(0,0,0,0));
 	lightsUBO.bindToPoint(Shader::UNIFORM_BINDING_POINT);
 
 	lightsUBO << lights; // this should be called everytime we update lights
+}
+
+
+void Scene::setGlobalAmbience(vec4 ambient) {
+	lightsUBO.setGlobalAmbient(ambient);
+	draw();
+}
+
+vec4 Scene::getGlobalAmbience() {
+	return lightsUBO.getGlobalAmbient();
 }
 
 void Scene::initShaders() {
@@ -554,11 +563,12 @@ void Scene::addCube()
 }
 void Scene::addLight(Light* newLight)
 {
-	//lights.push_back(newLight);
-	//m_renderer->addLights(lights);
-	//activeLight = newLight;
-	//draw();
+	lights.push_back(newLight);
+	activeLight = newLight;
+	lightsUBO << lights;
+	draw();
 }
+
 void Scene::changeLightDirection(mat4 rotation)
 {
 	//vec4 newDirection = rotation*activeLight->getDirection();

@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "afxwin.h"
 
 // AddLight dialog
 
@@ -33,6 +34,7 @@ protected:
 	CEdit IntencityZ;
 	CEdit Angle;
 	int type;
+	bool isPoint;
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -40,6 +42,7 @@ public:
 	afx_msg void OnBnClickedRdPrl();
 	afx_msg void OnBnClickedRdpnt();
 	afx_msg void OnBnClickedOk();
-	void setScene(Scene* scene){_scene=scene;}
+	void setScene(Scene* scene){ _scene=scene; }
 	afx_msg void OnBnClickedButton1();
+	CStatic dir_loc;
 };

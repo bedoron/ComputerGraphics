@@ -134,5 +134,7 @@ public:
 	void changeLightLocation(mat4 rotation);
 	void setFog(vec3 fogColor,GLfloat density);
 	Shader* getShader(const string& name);
+	void setGlobalAmbience(vec4 ambient);
+	vec4 getGlobalAmbience();
 	
 };

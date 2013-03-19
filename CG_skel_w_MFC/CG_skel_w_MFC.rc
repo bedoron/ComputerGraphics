@@ -204,7 +204,7 @@ BEGIN
     GROUPBOX        "Light Type",IDC_STATIC,10,7,97,39
     CONTROL         "Paralel",IDC_RD_PRL,"Button",BS_AUTORADIOBUTTON,17,19,37,10
     CONTROL         "Point",IDC_RD_pnt,"Button",BS_AUTORADIOBUTTON,17,31,32,10
-    GROUPBOX        "Direction/Location",IDC_STATIC,110,7,66,77
+    GROUPBOX        "Direction/Location",DIR_LOC,110,7,66,77
     EDITTEXT        IDC_DirectionX,131,23,40,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_DirectionY,131,42,40,14,ES_AUTOHSCROLL
     LTEXT           "Y",IDC_STATIC,117,43,8,8,SS_CENTERIMAGE

@@ -113,6 +113,7 @@
 #define IDC_LIST1                       1078
 #define ShadersList                     1079
 #define SamplersList                    1080
+#define DIR_LOC                         1080
 #define TexturesList                    1081
 
 // Next default values for new objects
@@ -121,7 +122,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        112
 #define _APS_NEXT_COMMAND_VALUE         40002
-#define _APS_NEXT_CONTROL_VALUE         1080
+#define _APS_NEXT_CONTROL_VALUE         1081
 #define _APS_NEXT_SYMED_VALUE           115
 #endif
 #endif

@@ -27,6 +27,7 @@ public:
 
 	LightsUBO& operator<<(vector<Light*>);
 	void setGlobalAmbient(vec4 ambient);
+	vec4 getGlobalAmbient();
 	void bind();
 	void unbind();
 	void bindToPoint(GLuint point);
