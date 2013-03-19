@@ -21,7 +21,7 @@ out float _shininess;
 
 void main()
 {
-	gl_Position =  Projection * CameraView * ModelView * (vPosition + (0.1 * vNormal * sin(time*(1 + 2*vPosition.x + 2*vPosition.y + vPosition.z))));
+	gl_Position =  Projection * CameraView * ModelView * (vPosition + (0.1 * vNormal * sin(time*(1 + 10*vPosition.x + 7*vPosition.y + 6*vPosition.z))));
 	vec4 vtransfromedVN = vPosition + vNormal;
 	vec4 vNormalOut = (ModelView * vtransfromedVN)-(ModelView * vPosition);
 	normal = normalize(vNormalOut.xyz/vNormalOut.w);

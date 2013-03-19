@@ -14,7 +14,10 @@ out vec4 color;
 void main()
 {
 	vec3 n = normalize(normal + normalize(2*texture2D(normalMap,st).xyz-1));	
-	vec3 h = normalize(eye.xyz-vpos);
-	vec2 r = (vec3(0.5) + normalize(reflect(n,h))/1.41421).xy;
-	color = texture2D(colorMap,r);	
+
+	vec3 u = normalize(eye.xyz-vpos);
+//	vec2 r = (vec3(0.5) + normalize(reflect(n,u))/1.41421).xy;
+	vec3 r = reflect( n, u );
+	float m = 2.0 * sqrt( r.x*r.x + r.y*r.y + (r.z+1.0)*(r.z+1.0) );
+	color = texture2D(colorMap,vec2(r.x/m + 0.5,r.y/m + 0.5))	;
 }
