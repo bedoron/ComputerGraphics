@@ -2,8 +2,8 @@
 
 in vec4 vPosition;
 in vec4 vNormal;
-in vec4 kambiant;
 in vec4 kdiffuse;
+in vec4 kambiant;
 in vec4 kspecular;
 in float shininess;
 
@@ -21,6 +21,8 @@ out float _shininess;
 
 void main()
 {
+	_kdiffuse = kdiffuse;
+
 	mat4 NormalTranform = ModelView;
 	NormalTranform[3][0] = 0;
 	NormalTranform[3][1] = 0;
@@ -32,7 +34,6 @@ void main()
 	vpos = (ModelView * vPosition).xyz/(ModelView * vPosition).w;
 
 	_kambiant = kambiant;
-	_kdiffuse = kdiffuse;
 	_kspecular = kspecular;
 	_shininess = shininess;
 
