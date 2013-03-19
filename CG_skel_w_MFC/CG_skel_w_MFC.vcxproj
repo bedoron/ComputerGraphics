@@ -193,6 +193,8 @@
     <None Include="EnviromentMapFshader.glsl" />
     <None Include="EnviromentMapVshader.glsl" />
     <None Include="fshader.glsl" />
+    <None Include="MarbleFshader.glsl" />
+    <None Include="MarbleVshader.glsl" />
     <None Include="NormalMapFshader.glsl" />
     <None Include="NormalMapVshader.glsl" />
     <None Include="PhongFshader.glsl" />

@@ -303,5 +303,11 @@
     <None Include="AnimationVshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="MarbleFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="MarbleVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
