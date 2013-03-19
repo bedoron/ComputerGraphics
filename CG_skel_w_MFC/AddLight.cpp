@@ -24,25 +24,25 @@ AddLight::~AddLight()
 void AddLight::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_RD_AM, l_ambient);
+	//DDX_Control(pDX, IDC_RD_AM, l_ambient);
 	DDX_Control(pDX, IDC_RD_PRL, l_Parelel);
 	DDX_Control(pDX, IDC_RD_pnt, l_point);
 	DDX_Control(pDX, IDC_DirectionX, DirectionX);
 	DDX_Control(pDX, IDC_DirectionY, DirectionY);
 	DDX_Control(pDX, IDC_DirectionZ, DirectionZ);
-	DDX_Control(pDX, IDC_LocationX, locationX);
-	DDX_Control(pDX, IDC_LocationY, locationY);
-	DDX_Control(pDX, IDC_LocationZ, locationZ);
+	//DDX_Control(pDX, IDC_LocationX, locationX);
+	//DDX_Control(pDX, IDC_LocationY, locationY);
+	//DDX_Control(pDX, IDC_LocationZ, locationZ);
 	DDX_Control(pDX, IDC_IntencityB, IntencityX);
 	DDX_Control(pDX, IDC_IntencityG, IntencityY);
 	DDX_Control(pDX, IDC_IntencityR, IntencityZ);
-	DDX_Control(pDX, IDC_angle, Angle);
+	//DDX_Control(pDX, IDC_angle, Angle);
 
 }
 
 
 BEGIN_MESSAGE_MAP(AddLight, CDialogEx)
-	ON_BN_CLICKED(IDC_RD_AM, &AddLight::OnBnClickedRdAm)
+	//ON_BN_CLICKED(IDC_RD_AM, &AddLight::OnBnClickedRdAm)
 	ON_BN_CLICKED(IDC_RD_PRL, &AddLight::OnBnClickedRdPrl)
 	ON_BN_CLICKED(IDC_RD_pnt, &AddLight::OnBnClickedRdpnt)
 	ON_BN_CLICKED(IDOK, &AddLight::OnBnClickedOk)
