@@ -29,27 +29,36 @@ layout(std140) uniform LightSourcesBlock  {
 
 void main()
 {
-	color = vec4(0,1,0,0);
-	vec4 ambiantIntesity = vec4(0,0,0,1);
-	
-	vec4 intesity = vec4(1,1,1,1);
-	vec3 n = normalize(normal);
-	vec4 diffuse = vec4(0.0);
-	vec4 specular = vec4(0.0);
+	color = vec4(0,0,0,0);
+	int i=0;
+	for(;i < 12 ; i++)
+	{
+		vec4 intesity = lightSources[i].color;
+		vec4 position = lightSources[i].position;
+		vec3 lightDir = vec3(0);
+		if(position.w==0)
+		{
+			lightDir = position.xyz;
+		}
+		else
+		{
+			lightDir = (position.xyz-vpos);
+		}
+		vec3 n = normalize(normal);
+		vec4 diffuse = vec4(0.0);
+		vec4 specular = vec4(0.0);
 		
-	// diffuse term
-	vec3 lightDir = normalize(vec3(1,0.1,-0.8));
-	float NdotL = dot(n, lightDir);
-	
-	if (NdotL > 0.0)
-		diffuse = _kdiffuse * NdotL;
+		// diffuse term
 		
-	vec3 h = normalize(eye.xyz-vpos)+normalize(lightDir);
-//	specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
-// color = (diffuse + specular)*intesity;
-	specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
-	vec4 k = _kambiant;
-	color = (diffuse + specular)*intesity + ambiantIntesity * _kambiant + globalAmbient;
+		float NdotL = dot(n, lightDir);
 	
-
+		if (NdotL > 0.0)
+			diffuse = _kdiffuse * NdotL;
+		
+		vec3 h = normalize(eye.xyz-vpos)+normalize(lightDir);
+		specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
+		vec4 k = _kambiant;
+		color += (diffuse + specular)*intesity ;
+	}
+	color+= _kambiant * globalAmbient;
 }
