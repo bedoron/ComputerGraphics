@@ -6,11 +6,10 @@
 //#define SHADER_DB { SHADER_DB_ENTRY(Toon, false),		NO_TEX		}
 
 #define SHADER_DB \
-{ SHADER_DB_ENTRY(Phong, false),	NO_TEX		},				\
 { SHADER_DB_ENTRY(NormalMap, true), "normalMap", "colorMap" },		\
 { SHADER_DB_ENTRY(EnviromentMap, true), "normalMap", "colorMap" },		\
 { SHADER_DB_ENTRY(Toon, false),		NO_TEX		},	\
-{ SHADER_DB_ENTRY(Marble, false),		NO_TEX		}
+{ SHADER_DB_ENTRY(Phong, false),	NO_TEX		}
 
 // Last element ("") is terminator.
 #define TEXTURE_DB \

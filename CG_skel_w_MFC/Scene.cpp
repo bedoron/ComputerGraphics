@@ -48,16 +48,17 @@ void Scene::initDefaultCamera() {
 }
 void Scene::initDefaultLight()
 {
-	m_activeLight = new Light(vec4(1,1,1), vec4(0.5,0.5,0.5,1));
+	m_activeLight = new Light(vec4(1,1,1,0), vec4(1,0,0,1));
 	
 	//m_activeLight->setDirection(vec3(1,1,1));
 	//m_activeLight->setLightType(L_PARALEL);
 	//m_activeLight->setIntencity(vec3(255,255,255));
+	lights.push_back(new Light(vec4(-1,1,1,0),vec4(0,1,0,1)));
 	lights.push_back(m_activeLight);
 	
 	activeLight=m_activeLight;
 	
-	lightsUBO.setGlobalAmbient(vec4(1,0,0,0));
+	lightsUBO.setGlobalAmbient(vec4(0,0,0,0));
 	lightsUBO.bindToPoint(Shader::UNIFORM_BINDING_POINT);
 
 	lightsUBO << lights; // this should be called everytime we update lights
