@@ -154,23 +154,6 @@ void Scene::updateModelSampler(const string &samplerName, const string &textureN
 	updateModelSampler(model, samplerName, textureName);
 }
 
-vector<string> Scene::getLights() {
-	vector<string> lnames;
-	char tmp_name[50];
-	for(int i = 0; i < lights.size(); ++i) {
-			
-		sprintf(tmp_name, "(%d,%d,%d,%d)c:(%.2f,%.2f,%.2f)", 
-			lights[i]->position.x, lights[i]->position.y, lights[i]->position.z, lights[i]->position.w, 
-			lights[i]->color.x, lights[i]->color.y, lights[i]->color.z);   
-
-		lnames.push_back(string(tmp_name));
-	}
-		
-	return lnames;
-
-}
-
-
 vector<string> Scene::listShaders() {
 	map<string,Shader*>::const_iterator it = shaders.begin();
 	vector<string> shadersQ;
@@ -573,6 +556,30 @@ void Scene::addCube() {
 	throw exception("Not implemented!");
 }
 
+
+vector<string> Scene::getLights() {
+	vector<string> lnames;
+	char tmp_name[50];
+	for(int i = 0; i < lights.size(); ++i) {
+		
+		sprintf(tmp_name, "(%d,%d,%d,%d)c:(%.2f,%.2f,%.2f)", 
+			lights[i]->position.x, lights[i]->position.y, lights[i]->position.z, lights[i]->position.w, 
+			lights[i]->color.x, lights[i]->color.y, lights[i]->color.z);   
+
+		string strName(tmp_name);
+
+		if(lights[i] == activeLight) 
+			strName = "*" + strName;
+		else 
+			strName = " " + strName;
+
+		lnames.push_back(strName);
+	}
+		
+	return lnames;
+
+}
+
 void Scene::addLight(Light* newLight)
 {
 	lights.push_back(newLight);
@@ -591,6 +598,8 @@ void Scene::removeActiveLight() {
 		return;
 	}
 	lights.erase(it);
+	activeLight = NULL;
+
 	lightsUBO << lights;
 	draw();
 }
@@ -604,17 +613,21 @@ void Scene::setActiveLight(int index) {
 
 void Scene::changeLightDirection(mat4 rotation)
 {
-	//vec4 newDirection = rotation*activeLight->getDirection();
-	//activeLight->setDirection(vec3(newDirection.x,newDirection.y,newDirection.z));
-	//cerr << " light direction is " << activeLight->getDirection() << "\n";
-	//draw();
+	if(activeLight == NULL) return;
+	activeLight->position = rotation * activeLight->position;
+	lightsUBO << lights;
+	draw();
+	cerr << " light direction is " << activeLight->position << "\n";
 }
 void Scene::changeLightLocation(mat4 rotation)
 {
-	//vec4 newLocation = rotation*activeLight->getLocation();
-	//activeLight->setLocation(vec3(newLocation.x,newLocation.y,newLocation.z));
-	//cerr << " light location is " << activeLight->getLocation() << "\n";
+	if(activeLight == NULL) return;
+	activeLight->position = rotation * activeLight->position;
+	lightsUBO << lights;
+	draw();
+	cerr << " light location is " << activeLight->position << "\n";
 }
+
 void Scene::setFog(vec3 fogColor,GLfloat density)
 {
 	//if(density)

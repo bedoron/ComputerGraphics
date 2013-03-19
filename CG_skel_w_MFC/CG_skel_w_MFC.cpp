@@ -507,6 +507,7 @@ void createLightsHandler(int id) {
 	}
 	default:
 		int lightSelected = id - LIGHTS_NAMESPACE_BEGIN;
+		scene->setActiveLight(lightSelected);
 		cerr << "Selected light " << lightSelected << "\n";
 	};
 	initMenu();
