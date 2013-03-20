@@ -48,7 +48,7 @@ void Scene::initDefaultCamera() {
 }
 void Scene::initDefaultLight()
 {
-	m_activeLight = new Light(vec4(1,1,1,0), vec4(1,0,0,1));
+	m_activeLight = new Light(vec4(1,1,1,0), vec4(0.5,0.5,0.5,1));
 	
 	//m_activeLight->setDirection(vec3(1,1,1));
 	//m_activeLight->setLightType(L_PARALEL);
