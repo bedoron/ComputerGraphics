@@ -6,9 +6,11 @@
 #include "ModelData.h"
 #include "ShadersDB.h"
 #include <cstring>
+#include "resource.h"
+
 using namespace std;
 
-void Scene::loadOBJModel(string fileName,string id)
+Model* Scene::loadOBJModel(string fileName,string id)
 {
 	try
 	{
@@ -17,6 +19,7 @@ void Scene::loadOBJModel(string fileName,string id)
 	catch(ObjParserFileNotFound &err)
 	{
 		cerr << err.what()<<endl;
+		throw err;
 	}
 	names.push_back(id);
 	Model *model = new Model(item);
@@ -25,6 +28,7 @@ void Scene::loadOBJModel(string fileName,string id)
 	models.push_back(model);
 	model->setName(id);
 	setActiveModel(models.size()-1);
+	return model;
 }
 
 

@@ -149,8 +149,39 @@ void keyboard( unsigned char key, int x, int y )
 	case 'r':
 		scene->reloadShaders();
 		break;
+	case 't':
+		try {
+			scene->loadOBJModel("..\\Models\\withTex\\teapot.obj", "teapot with tex");
+		} catch(ObjParserFileNotFound &err) {
+			try {
+				cout << "Couldn't find ..\\Models\\withTex\\teapot.obj, trying inside Models instead\n";
+				scene->loadOBJModel("..\\Models\\withTex\\teapot.obj", "teapot regular");
+			}catch(ObjParserFileNotFound &err) {
+			cout << "Couldn't find ..\\Models\\teapot.obj, doing nothing :( \n";
+			}
+		}  
+		initMenu(true);	// Destroy menu
+		initMenu();	// Destroy menu
+		scene->draw();
+		break;
+	case '\b':
+		try {
+			Model *teapot = scene->loadOBJModel("..\\Models\\withTex\\teapot.obj", "teapot trio");
+			Model *ball = scene->loadOBJModel("..\\Models\\withTex\\ball.obj", "ball trio");
+			Model *cow = scene->loadOBJModel("..\\Models\\withTex\\cowUV.obj", "cow trio");
+			ball->setObjectTransform(ball->getObjectTransform() * Translate(vec4(0,0,4,1)));
+			cow->setObjectTransform(Translate(vec4(4,0,0,1)) * cow->getObjectTransform() * Scale(vec3(0.03)) );
+			initMenu(true);	// Destroy menu
+			initMenu();	// Destroy menu
+			scene->draw();
+		} catch (ObjParserFileNotFound &err) {
+			cerr << "cow, teapot and ball are not in Models\\withTex!\n";
+		}
+
+
 	}
-	
+
+
 	if(key>='1' && key <= '9')
 	{
 		int number = key - '0';

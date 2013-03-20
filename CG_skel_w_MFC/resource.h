@@ -9,6 +9,7 @@
 #define IDD_MODELDIALOG                 104
 #define IDS_STRING104                   104
 #define IDD_DIALOG1                     105
+#define IDS_TEAPOT                      105
 #define IDR_ACCELERATOR1                106
 #define IDD_frustum                     107
 #define IDD_Prespective                 108

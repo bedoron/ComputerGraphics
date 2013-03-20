@@ -82,7 +82,7 @@ void Shader::reload() {
 
 void Shader::loadProgram() {
 	cerr << "loading " << _vertexShader << " & " << _fragmentShader << "\n";
-	_programHandle = InitShader(_vertexShader.c_str(), _fragmentShader.c_str()); /* this WILL load the shader as active */
+	_programHandle = InitShader(("..\\Shaders\\" + _vertexShader).c_str(), ("..\\Shaders\\" + _fragmentShader).c_str()); /* this WILL load the shader as active */
 	GLenum error = glGetError();
 	if(error != GL_NO_ERROR) {
 		throw exception(_name.c_str());

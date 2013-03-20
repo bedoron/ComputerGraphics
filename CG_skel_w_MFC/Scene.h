@@ -76,7 +76,8 @@ public:
 	void addTexture(const string &file, const string& path);
 
 	void initHook();
-	void loadOBJModel(string fileName,string id);
+	
+	Model* loadOBJModel(string fileName,string id);
 
 	void setAntialiasing(bool val) { 
 		/*if(val == m_renderer->getAntialiasing()) return;

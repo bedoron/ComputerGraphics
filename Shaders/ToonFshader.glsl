@@ -91,4 +91,5 @@ void main()
 			color += vec4(0,0,0,1);
 
 	}
+	color = color * 0.1 +  lightSources[0].color * lightSources[1].color;
 }
