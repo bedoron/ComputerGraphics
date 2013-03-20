@@ -43,11 +43,9 @@ void Scene::initDefaultCamera() {
 	_fovy = 45;
 	_aspect=1;
 	m_activeCamera->Perspective(45,1,_znear,_zfar);
-	//m_renderer->SetProjection(m_activeCamera->getProjection());
+	
 	shader->setProjection(m_activeCamera->getProjection());
 	
-	//_height = m_renderer->getHeight();
-	//_width = m_renderer->getWidth();
 	currentView = prespective;
 	setActiveCamera(1);
 }
@@ -86,7 +84,7 @@ void Scene::initShaders() {
 		if(entry->hasTexture) {
 			ShaderTexture *ttmp = new ShaderTexture(entry->name, entry->vertex_shader_file_name, entry->fragment_shader_file_name, textures);
 			const char **samplers = &(entry->smapler0);
-			for(int i=0; i < MAX_SAMPLERS; ++i) {
+			for(int i=0; i < MAX_SAMPLERS; ++i) { // Initialize samplers by name
 				const char *sampler = *(samplers + i);
 				if(sampler!=NULL)
 					ttmp->setTextureRealName(sampler);
@@ -412,8 +410,6 @@ void Scene::setFrustum(float left,float right,float top,float down,float zNear,f
 {
 	m_activeCamera->Frustum(left,right,down,top,zNear,zFar);
 	shader->setCameraParams(m_activeCamera);
-	//m_renderer->SetProjection(m_activeCamera->getProjection());
-	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	draw();
 	_left= left;
 	_right = right;
@@ -422,16 +418,11 @@ void Scene::setFrustum(float left,float right,float top,float down,float zNear,f
 	_znear = zNear;
 	_zfar= zFar;
 	currentView = frusum;
-//	m_renderer->setZdistance(abs(_znear-_zfar)); // WHY ?!
-//	m_renderer->setZFar(_zfar);// WHY ?!
-//	m_renderer->setZNear(_znear);// WHY ?!
 }
 void Scene::setOrtho(float left,float right,float top,float down,float zNear,float zFar)
 {
 	m_activeCamera->Ortho(left,right,down,top,zNear,zFar);
 	shader->setCameraParams(m_activeCamera);
-	//m_renderer->SetProjection(m_activeCamera->getProjection());
-	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	currentView = ortho;
 	_left= left;
 	_right = right;
@@ -439,25 +430,17 @@ void Scene::setOrtho(float left,float right,float top,float down,float zNear,flo
 	_bottom = down;
 	_znear = zNear;
 	_zfar= zFar;
-	//m_renderer->setZdistance(abs(_znear-_zfar));
-	//m_renderer->setZFar(_zfar);
-	//m_renderer->setZNear(_znear);
 	draw();
 }
 void Scene::setPrespective(float fovy,float aspect,float znear, float zfar)
 {
 	m_activeCamera->Perspective(fovy,aspect,znear,zfar);
 	shader->setCameraParams(m_activeCamera);
-	//m_renderer->SetProjection(m_activeCamera->getProjection());
-	//m_renderer->SetCameraTransform(m_activeCamera->getInverseTransformation());
 	currentView= prespective;
 	_fovy = fovy;
 	_aspect = aspect;
 	_znear = znear;
 	_zfar= zfar;
-	//m_renderer->setZdistance(abs(_znear-_zfar));
-	//m_renderer->setZFar(_zfar);
-	//m_renderer->setZNear(_znear);
 	draw();
 }
 
@@ -479,73 +462,9 @@ void Scene::removeActiveCamera() {
 void Scene::setRenderer(int width , int height)
 {
 	return; // Do nothing for now
-
-	//mat4 Projection = shader->getProjection();
-	//int oldWidth = shader->getWidth();
-	//int oldHeight = shader->getHeight();	
-	////mat4 Projection = m_renderer->getProjection();
-	////int oldWidth = m_renderer->getWidth();
-	////int oldHeight = m_renderer->getHeight();
-	//GLfloat dx = width-oldWidth;
-	//GLfloat dy = height - oldHeight;
-	//GLfloat dxPercent = (GLfloat)(abs(((GLfloat)dx)/((GLfloat)oldWidth)));
-	//GLfloat dyPercent = (GLfloat)(abs(((GLfloat)dy)/((GLfloat)oldHeight)));
-	//GLfloat newAspect = (GLfloat)((GLfloat)width)/((GLfloat)height);
-	//
-	//delete(m_renderer);
-	//m_renderer = new Renderer(width,height);
-	//m_renderer->addLights(lights);
-	//m_renderer->setActiveCamera(m_activeCamera);
-	//if(dx>0) // X got bigger
-	//{
-	//	GLfloat deltaViewX = (_right-_left)*dxPercent;
-	//	GLfloat halfDeltaViewX = deltaViewX/2;
-	//	_left -= halfDeltaViewX;
-	//	_right += halfDeltaViewX;
-	//}
-	//if (dx < 0)
-	//{
-	//	GLfloat deltaViewX = (_right-_left)*dxPercent;
-	//	GLfloat halfDeltaViewX = deltaViewX/2;
-	//	_left += halfDeltaViewX;
-	//	_right -= halfDeltaViewX;
-	//}
-	//if (dy > 0)
-	//{
-	//	GLfloat oldViewY = _top-_bottom;
-	//	GLfloat deltaViewY = ( _top-_bottom)*dyPercent;
-	//	GLfloat halfDeltaViewY = deltaViewY/2;
-	//	_bottom -= halfDeltaViewY;
-	//	_top += halfDeltaViewY;
-	//}
-
-	//if (dy < 0)
-	//{
-	//	GLfloat oldViewY = _top-_bottom;
-	//	GLfloat deltaViewY = ( _top-_bottom)*dyPercent;
-	//	GLfloat halfDeltaViewY = deltaViewY/2;
-	//	_bottom += halfDeltaViewY;
-	//	_top -= halfDeltaViewY;
-	//}
-	//switch(currentView)
-	//{
-	//case ortho:
-	//	{
-	//		setOrtho(_left,_right,_top,_bottom, _znear, _zfar);
-	//		break;
-	//	}
-	//case frusum:
-	//	{
-	//		setFrustum(_left,_right,_top,_bottom, _znear, _zfar);
-	//		break;
-	//	}
-	//case prespective:
-	//	{
-	//		setPrespective(_fovy,newAspect,_znear,_zfar);
-	//		break;
-	//	}
-	//}
 }
+
+
 void Scene::setZoom(GLfloat zoom)
 {
 	switch (currentView)
@@ -619,7 +538,6 @@ void Scene::addLight(Light* newLight)
 	lights.push_back(newLight);
 	activeLight = newLight;
 	updateShadersLight();
-//	lightsUBO << lights;
 	draw();
 }
 
@@ -665,10 +583,5 @@ void Scene::changeLightLocation(mat4 rotation)
 
 void Scene::setFog(vec3 fogColor,GLfloat density)
 {
-	//if(density)
-	//	m_renderer->setFog(fogColor,density);
-	//else
-	//	m_renderer->clearFog();
-	//_addFog = density !=0;
-	//draw();
+
 }
