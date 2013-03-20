@@ -751,16 +751,16 @@ int main( int argc, char **argv )
 	}
 	else
 	{
-		my_main(argc, argv );
-		//try {
-		//	my_main(argc, argv );
-		//} catch (runtime_error& e) {
-		//	MessageBox(NULL, _T(e.what()), _T("Runtime error"), MB_OK);
-		//	throw e;
-		//} catch (exception& e) {
-		//	MessageBox(NULL, _T(e.what()), _T("Exception error"), MB_OK);
-		//	throw e;
-		//}
+		//my_main(argc, argv );
+		try {
+			my_main(argc, argv );
+		} catch (runtime_error& e) {
+			MessageBox(NULL, _T(e.what()), _T("Runtime error"), MB_OK);
+			throw e;
+		} catch (exception& e) {
+			MessageBox(NULL, _T(e.what()), _T("Exception error"), MB_OK);
+			throw e;
+		}
 	}
 	
 	

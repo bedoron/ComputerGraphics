@@ -17,14 +17,14 @@
 { SHADER_DB_ENTRY(Marble, false),		NO_TEX		},	\
 { SHADER_DB_ENTRY(Phong, false),	NO_TEX		}
 
-// Last element ("") is terminator.
+// Last element ("") is terminator. Also - only 16 are supported !
 #define TEXTURE_DB \
-"cowUV.png", "giraffe.png", "normalMap.png", "5821-normal.png", "BorntoRule-ColorMap.png", \
-"BorntoRule-NormalMap.png", "brick.png", "BubbleGrip-ColorMap.png", "BubbleGrip-NormalMap.png", \
+"wallpaper.png" ,"white.png","cowUV.png", "giraffe.png", "normalMap.png", "5821-normal.png", "BorntoRule-ColorMap.png", \
+"BorntoRule-NormalMap.png", "brick.png", \
 "BubblyBricks-ColorMap.png", "BubblyBricks-ColorMap.png", "CarvedSandstone-ColorMap.png", \
 "CarvedSandstone-NormalMap.png", "GraniteWall-ColorMap.png", "GraniteWall-NormalMap.png", \
-"tree.png","wallpaper.png" ,"white.png",""
-
+""
+//  "BubbleGrip-ColorMap.png", "BubbleGrip-NormalMap.png",
 
 
 // Database entry defs ---------------------------------------------------
