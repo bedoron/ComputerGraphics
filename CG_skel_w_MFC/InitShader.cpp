@@ -4,12 +4,24 @@
 #include "GL/freeglut_ext.h"
 #include "InitShader.h"
 #include <iostream>
+#include <string>
+using std::string;
 // Create a NULL-terminated string by reading the provided file
 static char*
 readShaderSource(const char* shaderFile)
 {
+<<<<<<< HEAD
     FILE* fp = fopen(shaderFile, "r");
 
+=======
+	TCHAR pwd[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH,pwd);
+	string tmp_name(pwd);
+	tmp_name += string("\\") + shaderFile;
+
+    FILE* fp = fopen(shaderFile, "r");
+	
+>>>>>>> refs/heads/final-hw3
     if ( fp == NULL ) { return NULL; }
 
     fseek(fp, 0L, SEEK_END);
@@ -90,7 +102,7 @@ InitShader(const char* vShaderFile, const char* fShaderFile)
     }
 
     /* use program object */
-    glUseProgram(program);
+    
 
     return program;
 }

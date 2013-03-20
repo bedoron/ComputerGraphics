@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/heads/final-hw3
 #include "stdafx.h"
 #include <iostream>
 #include <assert.h>

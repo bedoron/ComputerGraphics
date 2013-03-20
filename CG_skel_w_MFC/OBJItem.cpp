@@ -69,6 +69,7 @@ vec3& OBJItem::getNormalByNumber(int id)
 	return normals.at(id); // will throw out of bound
 }
 vec2& OBJItem::getVTByNumber(int id)
+<<<<<<< HEAD
 {
 	return vTex.at(id); // will throw out of bound
 }
@@ -146,7 +147,86 @@ void OBJItem::draw(Renderer& renderer)
 	//	}
 	//	
 	//}
+=======
+{
+	return vTex.at(id); // will throw out of bound
+>>>>>>> refs/heads/final-hw3
 }
+//
+//void OBJItem::draw(Renderer& renderer)
+//{
+//	//draw bounding box
+//	/*if(drawBox) {
+//		CubeModel stupidCube = CubeModel(minX,maxX,minY,maxY,minZ,maxZ);
+//		stupidCube.setObjectTransform(renderer.getObjectMatrices());
+//		stupidCube.draw(renderer);
+//	}*/
+//
+//			
+//
+//	//for(std::vector<Face>::iterator it = faces.begin() ;it != faces.end(); ++it) 
+//	//{
+//	//	try
+//	//	{
+//	//		Face curentface(*it);
+//	//		vec3 currentVerticies = curentface.getVertices();
+//	//		if(!calcNormals)
+//	//		{
+//	//			curentface.setVN1(getCalculatedNormal(currentVerticies.x));
+//	//			curentface.setVN2(getCalculatedNormal(currentVerticies.y));
+//	//			curentface.setVN3(getCalculatedNormal(currentVerticies.z));
+//	//		}
+//	//		//draw triangle
+//	//		if(!curentface.isMaterial())
+//	//		{
+//	//			renderer.setKAbmbiant(curentface.getKAmbiant());
+//	//			renderer.setKDiffuze(curentface.getKDiffuze());
+//	//			renderer.setKspecular(curentface.getKSpecular());
+//	//			renderer.setShine(curentface.getNS());
+//	//		}
+//	//		switch(renderMode)
+//	//		{
+//	//		case Flat:
+//	//			{
+//	//				renderer.DrawTriangle(curentface,_color,true);
+//	//				break;
+//	//			}
+//	//		case french:
+//	//			{
+//	//				renderer.DrawTriangleFrech(curentface,_color);
+//	//				break;
+//	//			}
+//	//		case Phong:
+//	//			{
+//	//				renderer.DrawTriangle(curentface,_color);
+//	//				break;
+//	//			}
+//
+//	//		}
+//	//		
+//	//		renderer.DrawTriangle(curentface,_color);
+//	//		/*{
+//	//		renderer.drawLineByVectors((*it).getVecX() ,(*it).getVecY() ,(unsigned int) RED);
+//	//		renderer.drawLineByVectors((*it).getVecY() ,(*it).getVecZ() ,(unsigned int) RED);
+//	//		renderer.drawLineByVectors((*it).getVecZ() ,(*it).getVecX() ,(unsigned int) RED);
+//	//		}*/
+//	//		//draw normal
+//	//		if(drawNormal)
+//	//			renderer.drawLineByVectors((*it).getNormalLine()[0] ,(*it).getNormalLine()[1] ,(unsigned int)BLUE);
+//	//		if(drawVertexNormal)
+//	//		{
+//	//			renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecX()+curentface.getVnX(),(unsigned int)GREEN);
+//	//			renderer.drawLineByVectors(curentface.getVecY(),curentface.getVecY()+curentface.getVnY(),(unsigned int)GREEN);
+//	//			renderer.drawLineByVectors(curentface.getVecX(),curentface.getVecZ()+curentface.getVnZ(),(unsigned int)GREEN);
+//	//		}
+//	//	}
+//	//	catch(exception& e)
+//	//	{
+//	//		e.what();
+//	//	}
+//	//	
+//	//}
+//}
 vec3 OBJItem::getMidPoint()
 {
 	return vec3((maxX+minX)/2,(maxY+minY)/2,(maxZ+minZ)/2);
@@ -250,6 +330,7 @@ void OBJItem::copyData()
 		verticesArray4[k++]=vec4(tmp.getVecZ());
 	}
 }
+<<<<<<< HEAD
 
 void OBJItem::draw(GLuint program)
 {
@@ -512,3 +593,273 @@ void OBJItem::drawEnviroment(GLuint program,GLuint enviroment,GLuint textureid)
 
 	glDrawArrays(GL_TRIANGLES,0,NumVertices);
 }
+=======
+//
+//void OBJItem::draw(GLuint program)
+//{
+//	
+//	vec4* points = verticesArray4;
+//	vec4* normals = normalsArray4;
+//
+//	int NumVertices = getFacesSize()*3;
+//	GLuint buffer[7];
+//	glGenBuffers(7, buffer);
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), points, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), normals, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[2]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), _kAmbiantArray, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[3]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), _kDifuseArray, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[4]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), _kSpecularArray, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[5]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(float), _shineArray, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[6]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec2), _vtArray, GL_STATIC_DRAW);
+//
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+//	GLuint vPosition = glGetAttribLocation( program, "vPosition");
+//	glEnableVertexAttribArray(vPosition);
+//
+//
+//	glVertexAttribPointer( vPosition/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+//	GLuint vColor= glGetAttribLocation( program, "vNormal");
+//	glEnableVertexAttribArray(vColor);
+//
+//	glVertexAttribPointer( vColor/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[2]);
+//	GLuint kambiant= glGetAttribLocation( program, "kambiant");
+//	glEnableVertexAttribArray(kambiant);
+//
+//	glVertexAttribPointer( kambiant/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[3]);
+//	GLuint kdiffuse= glGetAttribLocation( program, "kdiffuse");
+//	glEnableVertexAttribArray(kdiffuse);
+//
+//	glVertexAttribPointer( kdiffuse/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[4]);
+//	GLuint kspecular= glGetAttribLocation( program, "kspecular");
+//	glEnableVertexAttribArray(kspecular);
+//
+//	glVertexAttribPointer( kspecular/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[5]);
+//	GLuint shine= glGetAttribLocation( program, "shininess");
+//	glEnableVertexAttribArray(shine);
+//
+//	glVertexAttribPointer( shine/*atrib*/, 1/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[6]);
+//	GLuint vtex= glGetAttribLocation( program, "tCoor");
+//	glEnableVertexAttribArray(vtex);
+//
+//	glVertexAttribPointer( vtex/*atrib*/, 2/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//
+//}
+////
+////void OBJItem::reDraw(GLuint program,int type)
+////{
+////	programType type1 = (programType)type;
+////	GLuint model_view = glGetUniformLocation( program, "ModelView");
+////	glUniformMatrix4fv(model_view, 1, GL_TRUE, _world_transform);
+////	
+////	glDrawArrays( GL_TRIANGLES, 0, faces.size()*3);
+////	
+////	
+////}
+//void OBJItem::drawSilhoette()
+//{
+//	
+//}
+//
+//void OBJItem::drawTexture(GLuint program,GLuint textureID,GLint textid)
+//{
+//	GLuint a= glGetError();
+//
+//	glBindVertexArray(_vao);
+//	glUseProgram( program );
+//
+//	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+//	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+//	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+//	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+//	glGenerateMipmap( GL_TEXTURE_2D );
+//	int NumVertices = getFacesSize()*3;
+//	GLuint buffer[7];
+//	glGenBuffers(7, buffer);
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), verticesArray4, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), normalsArray4, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[2]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), _kAmbiantArray, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[3]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), _kDifuseArray, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[4]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), _kSpecularArray, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[5]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(float), _shineArray, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[6]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec2), _vtArray, GL_STATIC_DRAW);
+//
+//
+//
+//	
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+//	GLuint vPosition = glGetAttribLocation( program, "vPosition");
+//	glEnableVertexAttribArray(vPosition);
+//
+//
+//	glVertexAttribPointer( vPosition/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+//	GLuint vColor= glGetAttribLocation( program, "vNormal");
+//	glEnableVertexAttribArray(vColor);
+//
+//	glVertexAttribPointer( vColor/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[2]);
+//	GLuint kambiant= glGetAttribLocation( program, "kambiant");
+//	glEnableVertexAttribArray(kambiant);
+//
+//	glVertexAttribPointer( kambiant/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[3]);
+//	GLuint kdiffuse= glGetAttribLocation( program, "kdiffuse");
+//	glEnableVertexAttribArray(kdiffuse);
+//
+//	glVertexAttribPointer( kdiffuse/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[4]);
+//	GLuint kspecular= glGetAttribLocation( program, "kspecular");
+//	glEnableVertexAttribArray(kspecular);
+//
+//	glVertexAttribPointer( kspecular/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[5]);
+//	GLuint shine= glGetAttribLocation( program, "shininess");
+//	glEnableVertexAttribArray(shine);
+//	glVertexAttribPointer( shine/*atrib*/, 1/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[6]);
+//	GLuint tCoor = glGetAttribLocation( program, "tCoor");	
+//	glEnableVertexAttribArray(tCoor);
+//	glVertexAttribPointer( tCoor/*atrib*/, 2/*size*/, GL_FLOAT/*type*/,
+//		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//	/*glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S, GL_REPEAT);
+//	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_REPEAT);
+//	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);*/
+//	glActiveTexture(GL_TEXTURE0);
+//	glGenerateMipmap(GL_TEXTURE_2D);
+//	glBindTexture(GL_TEXTURE_2D,textureID);
+//	GLuint tex_loc = glGetUniformLocation(program,"colorMap"); 
+//	glUniform1i(tex_loc,0);
+//	
+//	glActiveTexture(GL_TEXTURE2);
+//	glGenerateMipmap(GL_TEXTURE_2D);
+//	glBindTexture(GL_TEXTURE_2D,textid);
+//	GLuint normal_loc = glGetUniformLocation(program,"texMap"); 
+//	glUniform1i(normal_loc,2);
+//
+//	glDrawArrays(GL_TRIANGLES,0,NumVertices);
+//}
+//void OBJItem::drawEnviroment(GLuint program,GLuint enviroment,GLuint textureid)
+//{
+//	glBindVertexArray(_vao);
+//	glUseProgram( program );
+//
+//	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+//	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+//	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+//	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+//	glGenerateMipmap( GL_TEXTURE_2D );
+//	int NumVertices = getFacesSize()*3;
+//	GLuint buffer[7];
+//	glGenBuffers(7, buffer);
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), verticesArray4, GL_STATIC_DRAW);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec4), normalsArray4, GL_STATIC_DRAW);
+//
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[2]);
+//	glBufferData( GL_ARRAY_BUFFER,NumVertices* sizeof(vec2), _vtArray, GL_STATIC_DRAW);
+//
+//
+//
+//	
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[0]);
+//	GLuint vPosition = glGetAttribLocation( program, "vPosition");
+//	glEnableVertexAttribArray(vPosition);
+//
+//
+//	glVertexAttribPointer( vPosition/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[1]);
+//	GLuint vColor= glGetAttribLocation( program, "vNormal");
+//	glEnableVertexAttribArray(vColor);
+//
+//	glVertexAttribPointer( vColor/*atrib*/, 4/*size*/, GL_FLOAT/*type*/,
+//	GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//
+//	
+//	glBindBuffer( GL_ARRAY_BUFFER, buffer[2]);
+//	GLuint tCoor = glGetAttribLocation( program, "tCoor");	
+//	glEnableVertexAttribArray(tCoor);
+//	glVertexAttribPointer( tCoor/*atrib*/, 2/*size*/, GL_FLOAT/*type*/,
+//		GL_FALSE/*normalized*/, 0/*stride*/, 0/*pointer*/);
+//	
+//	glActiveTexture(GL_TEXTURE0);
+//	glGenerateMipmap(GL_TEXTURE_2D);
+//	glBindTexture(GL_TEXTURE_2D,textureid);
+//	GLuint tex_loc = glGetUniformLocation(program,"texMap"); 
+//	glUniform1i(tex_loc,0);
+//	
+//	glActiveTexture(GL_TEXTURE2);
+//	glGenerateMipmap(GL_TEXTURE_2D);
+//	glBindTexture(GL_TEXTURE_2D,enviroment);
+//	GLuint env_loc = glGetUniformLocation(program,"envMap"); 
+//	glUniform1i(env_loc,2);
+//
+//	glDrawArrays(GL_TRIANGLES,0,NumVertices);
+//}
+>>>>>>> refs/heads/final-hw3

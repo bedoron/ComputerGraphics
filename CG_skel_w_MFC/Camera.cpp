@@ -91,8 +91,15 @@ void Camera::Perspective( const float fovy, const float aspect,
 }
 void Camera::draw(Renderer& renderer)
 {
+<<<<<<< HEAD
 	vec3 eye3(_eye.x,_eye.y,_eye.z);
 
+=======
+	//vec3 eye3(_eye.x,_eye.y,_eye.z);
+	//renderer.drawLineByVectors(eye3+vec3(-0.05,0,0),eye3+vec3(0.05,0,0),(unsigned int)MAGENTA);
+	//renderer.drawLineByVectors(eye3+vec3(0,-0.05,0),eye3+vec3(0,0.05,0),(unsigned int)MAGENTA);
+	//renderer.drawLineByVectors(eye3+vec3(0,0,-0.05),eye3+vec3(0,0,0.05),(unsigned int)MAGENTA);
+>>>>>>> refs/heads/final-hw3
 	//vec4 tmp= _eye-_at;
 	//vec3 direction=normalize(vec3(tmp.x,tmp.y,tmp.z));
 	//mat4 objectTransfor(1);
@@ -101,13 +108,20 @@ void Camera::draw(Renderer& renderer)
 	//objectTransfor *= RotateEuler(0,0,dot(direction,vec3(0,0,1)));
 	//objectTransfor *= Translate(eye3);
 	//renderer.SetObjectMatrices(objectTransfor);
-	arrow.draw(renderer);
+	//arrow.draw(renderer);
 }
 
 
 const string& Camera::getName() {
+<<<<<<< HEAD
 	//stringstream os;
 	//os << "(" << _eye.x << "," << _eye.y << "," << _eye.z << ")";
 	//name = os.str();
 	return "";
+=======
+	char tmp_name[50];
+	sprintf(tmp_name, "(%.0f,%.0f,%.0f)", _eye.x,_eye.y,_eye.z);
+	name = string(tmp_name);
+	return name;
+>>>>>>> refs/heads/final-hw3
 }

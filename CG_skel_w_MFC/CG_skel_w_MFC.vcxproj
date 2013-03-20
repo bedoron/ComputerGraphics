@@ -55,7 +55,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../glew/include; ../freeglut/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./pngLib/;../glew/include; ../freeglut/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>FREEGLUT_STATIC;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -65,7 +65,11 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
+<<<<<<< HEAD
       <AdditionalDependencies>$(TargetDir)\freeglut_static.lib;$(TargetDir)/glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
+=======
+      <AdditionalDependencies>$(ProjectDir)pngLib\libpng.lib;$(ProjectDir)pngLib\zlib.lib;$(TargetDir)\freeglut_static.lib;$(TargetDir)\glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
+>>>>>>> refs/heads/final-hw3
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -76,7 +80,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>../glew/include; ../freeglut/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./pngLib;../glew/include; ../freeglut/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>FREEGLUT_STATIC;GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -85,7 +89,11 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
+<<<<<<< HEAD
       <AdditionalDependencies>../freeglut/lib/freeglut_static.lib;../glew/lib/glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
+=======
+      <AdditionalDependencies>$(ProjectDir)pngLib\libpng.lib;$(ProjectDir)pngLib\zlib.lib;$(TargetDir)\freeglut_static.lib;$(TargetDir)\glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
+>>>>>>> refs/heads/final-hw3
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -95,18 +103,44 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="CGApp.cpp" />
+    <ClCompile Include="CG_skel_w_MFC.cpp" />
+    <ClCompile Include="CubeModel.cpp" />
+>>>>>>> refs/heads/final-hw3
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="InitShader.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MeshModel.cpp" />
     <ClCompile Include="OBJItem.cpp" />
+=======
+    <ClCompile Include="InputDialog.cpp" />
+    <ClCompile Include="LightsUBO.cpp" />
+    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelData.cpp" />
+    <ClCompile Include="MoveInterval.cpp" />
+    <ClCompile Include="OBJItem.cpp" />
+    <ClCompile Include="pngLib\PngWrapper.cpp" />
+    <ClCompile Include="PresModel.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+>>>>>>> refs/heads/final-hw3
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderTexture.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="testing.cpp" />
+=======
+    <ClCompile Include="Texture.cpp" />
+>>>>>>> refs/heads/final-hw3
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VNormal.cpp" />
@@ -114,16 +148,52 @@
   <ItemGroup>
     <ClInclude Include="AvlTree.h" />
     <ClInclude Include="Camera.h" />
+<<<<<<< HEAD
+=======
+    <ClInclude Include="CGApp.h" />
+    <ClInclude Include="CG_skel_w_MFC.h" />
+    <ClInclude Include="CompositeElement.h" />
+    <ClInclude Include="CubeModel.h" />
+>>>>>>> refs/heads/final-hw3
     <ClInclude Include="Face.h" />
     <ClInclude Include="InitShader.h" />
     <ClInclude Include="Light.h" />
+<<<<<<< HEAD
     <ClInclude Include="mat.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MeshModel.h" />
     <ClInclude Include="OBJItem.h" />
+=======
+    <ClInclude Include="LightsUBO.h" />
+    <ClInclude Include="Line.h" />
+    <ClInclude Include="mat.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelData.h" />
+    <ClInclude Include="MoveInterval.h" />
+    <ClInclude Include="OBJItem.h" />
+    <ClInclude Include="pngLib\png.h" />
+    <ClInclude Include="pngLib\pngasmrd.h" />
+    <ClInclude Include="pngLib\pngconf.h" />
+    <ClInclude Include="pngLib\PngWrapper.h" />
+    <ClInclude Include="pngLib\zconf.h" />
+    <ClInclude Include="pngLib\zlib.h" />
+    <ClInclude Include="PresModel.h" />
+    <ClInclude Include="Renderable.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Resource.h" />
+>>>>>>> refs/heads/final-hw3
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShadersDB.h" />
+    <ClInclude Include="ShaderTexture.h" />
     <ClInclude Include="stdafx.h" />
+<<<<<<< HEAD
     <ClInclude Include="testing.h" />
+=======
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Texture.h" />
+>>>>>>> refs/heads/final-hw3
     <ClInclude Include="Utils.h" />
     <ClInclude Include="vec.h" />
     <ClInclude Include="Vertex.h" />
@@ -133,8 +203,27 @@
     <ResourceCompile Include="CG_skel_w_MFC.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AnimationFshader.glsl" />
+    <None Include="AnimationVshader.glsl" />
+    <None Include="EnviromentMapFshader.glsl" />
+    <None Include="EnviromentMapVshader.glsl" />
     <None Include="fshader.glsl" />
+<<<<<<< HEAD
     <None Include="tmp.glsl" />
+=======
+    <None Include="MarbleFshader.glsl" />
+    <None Include="MarbleVshader.glsl" />
+    <None Include="NormalMapFshader.glsl" />
+    <None Include="NormalMapVshader.glsl" />
+    <None Include="PhongFshader.glsl" />
+    <None Include="PhongVshader.glsl" />
+    <None Include="SilhouetteShaderF.glsl" />
+    <None Include="SilhouetteShaderV.glsl" />
+    <None Include="TextureFshader.glsl" />
+    <None Include="TextureVshader.glsl" />
+    <None Include="ToonFshader.glsl" />
+    <None Include="ToonVshader.glsl" />
+>>>>>>> refs/heads/final-hw3
     <None Include="vshader.glsl" />
   </ItemGroup>
   <ItemGroup>

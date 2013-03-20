@@ -10,7 +10,7 @@ using namespace std;
 
 class OBJItem
 {
-private:
+public:
 	GLfloat minX;
 	GLfloat minY;
 	GLfloat minZ;
@@ -53,8 +53,11 @@ private:
 	GLuint GLkSpecular;
 	GLuint GLShininess;
 
+<<<<<<< HEAD
 
 public:
+=======
+>>>>>>> refs/heads/final-hw3
 	OBJItem(void);
 	OBJItem(const OBJItem& item);
 	~OBJItem(void);
@@ -65,8 +68,13 @@ public:
 	vec3& getVertexByNumber(int id);
 	vec3& getNormalByNumber(int id);
 	vec2& getVTByNumber(int id);
+<<<<<<< HEAD
 	void draw(Renderer& renderer);
 	void draw(GLuint program);
+=======
+	//void draw(Renderer& renderer);
+	//void draw(GLuint program);
+>>>>>>> refs/heads/final-hw3
 	GLfloat getMinX();
 	GLfloat getMinY();
 	GLfloat getMinZ();
@@ -118,9 +126,17 @@ public:
 		_shine = shine;
 		_world_transform = world;
 	}
+<<<<<<< HEAD
 	void reDraw(GLuint program,int type);
 	void drawSilhoette();
 	void drawTexture(GLuint program,GLuint textureID,GLint textid);
 	void drawEnviroment(GLuint program,GLuint enviroment,GLuint textureid);
+=======
+/*
+	void reDraw(GLuint program,int type);
+	void drawSilhoette();
+	void drawTexture(GLuint program,GLuint textureID,GLint textid);
+	void drawEnviroment(GLuint program,GLuint enviroment,GLuint textureid);*/
+>>>>>>> refs/heads/final-hw3
 };
 

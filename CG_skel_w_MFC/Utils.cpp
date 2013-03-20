@@ -308,6 +308,7 @@ void Utils::generateNoise()
 }
 double Utils::smoothNoise(double x, double y)
 {  
+<<<<<<< HEAD
    //get fractional part of x and y
    double fractX = x - int(x);
    double fractY = y - int(y);
@@ -328,6 +329,28 @@ double Utils::smoothNoise(double x, double y)
    value += (1 - fractX) * (1 - fractY) * noise[x2][y2];
 
    return value;
+=======
+	   //get fractional part of x and y
+	   double fractX = x - int(x);
+	   double fractY = y - int(y);
+	
+	   //wrap around
+	   int x1 = (int(x) + noiseWidth) % noiseWidth;
+	   int y1 = (int(y) + noiseHeight) % noiseHeight;
+   
+	   //neighbor values
+	   int x2 = (x1 + noiseWidth - 1) % noiseWidth;
+	   int y2 = (y1 + noiseHeight - 1) % noiseHeight;
+
+	   //smooth the noise with bilinear interpolation
+	   double value = 0.0;
+	   value += fractX       * fractY       * noise[x1][y1];
+	   value += fractX       * (1 - fractY) * noise[x1][y2];
+	   value += (1 - fractX) * fractY       * noise[x2][y1];
+	   value += (1 - fractX) * (1 - fractY) * noise[x2][y2];
+
+	   return value;
+>>>>>>> refs/heads/final-hw3
 }
 double Utils::turbulence(double x, double y, double size)
 {

@@ -24,10 +24,14 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Face.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InitShader.cpp">
+=======
+    <ClCompile Include="Renderer.cpp">
+>>>>>>> refs/heads/final-hw3
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
@@ -51,10 +55,56 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Vertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VNormal.cpp">
+=======
+    <ClCompile Include="ModelData.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
+    <ClCompile Include="PresModel.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
+    <ClCompile Include="AddCamera.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveInterval.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
+    <ClCompile Include="AddLight.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
+    <ClCompile Include="AddFog.cpp">
+      <Filter>MFC</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+>>>>>>> refs/heads/final-hw3
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CGApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pngLib\PngWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LightsUBO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,10 +112,14 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="AvlTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+=======
+    <ClInclude Include="Renderer.h">
+>>>>>>> refs/heads/final-hw3
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Face.h">
@@ -107,6 +161,45 @@
     <ClInclude Include="VNormal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CGApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\png.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\pngasmrd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\pngconf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\PngWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\zconf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pngLib\zlib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadersDB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LightsUBO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CG_skel_w_MFC.rc">
@@ -120,9 +213,60 @@
     <None Include="vshader.glsl">
       <Filter>Shaders</Filter>
     </None>
+<<<<<<< HEAD
     <None Include="tmp.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+=======
+    <None Include="ToonFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="ToonVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="PhongFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="PhongVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="NormalMapFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="NormalMapVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="SilhouetteShaderF.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="SilhouetteShaderV.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="TextureFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="TextureVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="EnviromentMapFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="EnviromentMapVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="AnimationFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="AnimationVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="MarbleFshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="MarbleVshader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+>>>>>>> refs/heads/final-hw3
   </ItemGroup>
 </Project>
