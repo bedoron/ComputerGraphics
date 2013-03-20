@@ -56,6 +56,7 @@ public:
 
 	Shader(string name, string vertexShader, string fragmentShader, bool textures = false);
 	void loadProgram();
+	void reload();
 
 	void enableDataPointers();
 	void disableDataPointers();

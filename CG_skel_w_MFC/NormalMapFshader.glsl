@@ -35,7 +35,7 @@ void main()
 	vec4 tColor = texture2D(colorMap,st);
 	vec4 textureNormal = texture2D(normalMap,st);
 	vec3 n = normalize(2*textureNormal.xyz-1);
-	for(;i < 12 ; i++)
+	for(;i < num_lights ; i++)
 	{
 		vec4 intesity = lightSources[i].color;
 		vec4 position =  lightSources[i].position;
@@ -65,4 +65,5 @@ void main()
 		color += (diffuse+specular)*intesity*tColor;
 	}
 	color+= _kambiant + globalAmbient;
+	color = color * 0.01 + lightSources[0].color;
 }

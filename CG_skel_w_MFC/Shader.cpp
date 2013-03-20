@@ -72,6 +72,14 @@ void Shader::checkHandler(const string& var, const GLuint handle) {
 	}
 }
 
+void Shader::reload() {
+	handlers.clear();
+	glDeleteProgram(_programHandle);
+	loadProgram();
+//	updateProjection();
+//	updateCamera();
+}
+
 void Shader::loadProgram() {
 	cerr << "loading " << _vertexShader << " & " << _fragmentShader << "\n";
 	_programHandle = InitShader(_vertexShader.c_str(), _fragmentShader.c_str()); /* this WILL load the shader as active */

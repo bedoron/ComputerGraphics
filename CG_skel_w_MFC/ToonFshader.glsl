@@ -35,7 +35,7 @@ void main()
 	vec3 n = normalize(normal);
 	color = vec4(0,0,0,0);
 	int i=0;
-	for(;i < 12 ; i++)
+	for(;i < num_lights ; i++)
 	{
 		vec4 intesity = lightSources[i].color;
 		vec4 position = lightSources[i].position;
@@ -89,6 +89,6 @@ void main()
 			color.z += 0.2;
 		if(dot(normal,normalize(eye.xyz-vpos))<0.25)
 			color += vec4(0,0,0,1);
+
 	}
-		
 }

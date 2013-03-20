@@ -27,6 +27,7 @@ void Scene::loadOBJModel(string fileName,string id)
 	setActiveModel(models.size()-1);
 }
 
+
 void Scene::initDefaultCamera() {
 	_renderCamera=FALSE	;
 	m_activeCamera = new Camera();
@@ -100,6 +101,30 @@ void Scene::initShaders() {
 	shader->bind();
 	shader->checkError();
 }
+
+void Scene::reloadShaders() {
+	map<string, Shader*>::iterator sit = shaders.begin();
+	vector<Model*>::iterator mit = models.begin();
+
+	/*for(;mit != models.end(); ++mit) {
+		(*mit)->invalidateVAOs();
+	}*/
+
+	for(;sit != shaders.end(); ++sit) {
+		sit->second->reload();
+		sit->second->setCameraParams(m_activeCamera);
+	}
+	mit = models.begin();
+	for(;mit != models.end(); ++mit) {
+		//(*mit)->setShader((*mit)->getShader()); // Reboot shader
+		(*mit)->restoreDefaults(); // Reboot shader
+	}
+
+
+
+	draw();
+}
+
 
 void Scene::initTextures() {
 	INIT_TEXTURES_DB(database); // if you are Arik, Dont touch this !

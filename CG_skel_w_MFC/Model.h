@@ -55,10 +55,11 @@ protected :
 
 	void loadBuffers();
 	void bindBuffers();
-	void invalidateVAOs();
+	
 	void buildVAO();
 	void changeVec4Buffer(const char* name, vec4 param);
 public:
+	void invalidateVAOs();
 	const string& getName() const { return name; };
 	const string& setName(const string &newName) { name = newName; return name; };
 

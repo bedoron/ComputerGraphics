@@ -63,6 +63,8 @@ public:
 	void updateModelSampler(Model *model, const string &samplerName, const string &textureName);
 	void updateModelSampler(const string &samplerName, const string &textureName);
 
+	void reloadShaders();
+
 	void setAnimate(bool flag){animate = flag;}
 	bool isAnimated(){return animate;}
 	Scene(/*Renderer *renderer, */ CModelData& win);

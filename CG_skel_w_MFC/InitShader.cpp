@@ -47,7 +47,7 @@ InitShader(const char* vShaderFile, const char* fShaderFile)
     };
 
     GLuint program = glCreateProgram();
-    
+    GLuint shaders_obj[2];
     for ( int i = 0; i < 2; ++i ) {
 	Shader& s = shaders[i];
 	s.source = readShaderSource( s.filename );
@@ -57,6 +57,8 @@ InitShader(const char* vShaderFile, const char* fShaderFile)
 	}
 	
 	GLuint shader = glCreateShader( s.type );
+	shaders_obj[i] = shader;
+
 	glShaderSource( shader, 1, (const GLchar**) &s.source, NULL );
 	glCompileShader( shader );
 
@@ -98,7 +100,8 @@ InitShader(const char* vShaderFile, const char* fShaderFile)
     }
 
     /* use program object */
-    
+	glDeleteShader(shaders_obj[0]);
+	glDeleteShader(shaders_obj[1]);
 
     return program;
 }

@@ -56,7 +56,8 @@ OBJECTS_OVERFLOW_BUFFER = 2500, /* if you got here you suck */
 FILE_OPEN, MAIN_DEMO , MAIN_ABOUT , Main_BOUNDS 
 , Main_Clear , Main_selectM , Main_Move_Interval, MAIN_DEBUG, OBJECT_REMOVE_ACTIVE, 
 CAMERA_ADD, CAMERA_REMOVE_ACTIVE,CAMERA_SELECT_MODEL_AT, SELECT_OPERATION_FRAME,Main_Frustum,
-Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING, ADD_TEXTURE,Animation, GLOBAL_AMBIENT, REMOVE_LIGHT
+Main_Ortho,Main_prespective,RenderCameras,AddCube,addLight,addFog, MENU_ANTIALIASING, ADD_TEXTURE,Animation, GLOBAL_AMBIENT, 
+REMOVE_LIGHT, RELOAD_SHADERS
 };
 
 
@@ -138,6 +139,15 @@ void keyboard( unsigned char key, int x, int y )
 	case 'd':
 		mouseMode = m_pixel_debug;
 		cerr << "Pixel debug mode, click anywhere to get pixel values\n";
+		break;
+	case '-':
+		scene->draw(Scale(0.7));
+		break;
+	case '=':
+		scene->draw(Scale(1.5));
+		break;
+	case 'r':
+		scene->reloadShaders();
 		break;
 	}
 	
@@ -375,6 +385,10 @@ void mainMenu(int id)
 		{
 			scene->setAnimate(!scene->isAnimated());
 		}
+	case RELOAD_SHADERS:
+		{
+			scene->reloadShaders();
+		}
 	}
 	initMenu();
 }
@@ -602,15 +616,11 @@ int menuDraw(bool destroy) {
 	glutAddMenuEntry("clear models",Main_Clear);
 	glutAddMenuEntry("Select Move Interval",Main_Move_Interval);
 	glutAddMenuEntry("Look at active model (f)",CAMERA_SELECT_MODEL_AT);
+	glutAddMenuEntry("Reload shaders (r)",RELOAD_SHADERS);
 	//glutAddMenuEntry("Add Cube",AddCube);
-	glutAddMenuEntry("Add Fog",addFog);
+	//glutAddMenuEntry("Add Fog",addFog);
 	glutAddMenuEntry("Add Texture", ADD_TEXTURE);
 	glutAddMenuEntry("animation",Animation);
-/*	if(scene->getAntialiasing())
-		glutAddMenuEntry("Disable antialiasing", MENU_ANTIALIASING);
-	else 
-		glutAddMenuEntry("Enable antialiasing", MENU_ANTIALIASING);
-		*/
 	glutAddMenuEntry("About",MAIN_ABOUT);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);	
 
