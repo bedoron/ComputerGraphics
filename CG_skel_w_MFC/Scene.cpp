@@ -53,7 +53,7 @@ void Scene::initDefaultLight()
 	//m_activeLight->setDirection(vec3(1,1,1));
 	//m_activeLight->setLightType(L_PARALEL);
 	//m_activeLight->setIntencity(vec3(255,255,255));
-	lights.push_back(new Light(vec4(-1,1,1,0),vec4(0,1,0,1)));
+	//lights.push_back(new Light(vec4(-1,1,1,0),vec4(0,1,0,1)));
 	lights.push_back(m_activeLight);
 	
 	activeLight=m_activeLight;

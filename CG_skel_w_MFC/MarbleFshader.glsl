@@ -44,7 +44,7 @@ void main()
 	for(;i < 12 ; i++)
 	{
 		vec4 intesity = lightSources[i].color;
-		vec4 position = ModelView * lightSources[i].position;
+		vec4 position = lightSources[i].position;
 		vec3 lightDir = vec3(0);
 		if(position.w==0)
 		{
@@ -64,7 +64,7 @@ void main()
 			diffuse = _kdiffuse * NdotL;
 		
 		vec3 h = normalize(eye.xyz-vpos)+normalize(lightDir);
-		specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
+		specular= _kspecular * max(pow(dot(n,normalize(h)),_shininess),0);
 		float noise = turbulence(vpos.x )+ sqrt(vpos.x * vpos.x + vpos.y * vpos.y);
 		vec3 marColor =noise * vec3(139,69,15)/255.0+(1-noise)*vec3(10*sin(vpos/4))/255	;
 		color += vec4(marColor,1) 
