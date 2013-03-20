@@ -27,7 +27,11 @@ Shader::Shader(string name, string vertexShader, string fragmentShader, bool tex
 	vboElmSize["camera"]		= 16;
 	vboElmSize["model"]			= 16;
 	vboElmSize["eye"]			= 4;
-	vboElmSize["time"]		= 1;
+	vboElmSize["time"]			= 1;
+	vboElmSize["colors"]		= 4;
+	vboElmSize["positions"]		= 1;
+	vboElmSize["num_lights"]	= 1;
+	vboElmSize["globalAmbient"] = 4;
 }
 
 GLuint Shader::getProgram() {
@@ -38,6 +42,49 @@ bool Shader::hasTextures() {
 	return _has_textures;
 }
 
+
+void Shader::setGlobalAmbience(vec4 globalAmbience) {
+	bind();
+	glUniform4fv( handlers["globalAmbient"], 1, globalAmbience);
+	checkError();
+	_globalAmbience = globalAmbience;
+	unbind();
+}
+
+
+Shader& Shader::operator<<(vector<Light*> &lights) {
+	GLuint num_lights = lights.size();
+	bind();
+	glUniform1i(handlers["num_lights"], num_lights);
+	
+
+	GLfloat *colors = new GLfloat[4*lights.size()];
+	GLfloat *positions = new GLfloat[4*lights.size()];
+
+	for(int i=0; i < lights.size(); ++i) {
+		colors[4*i+0] = lights[i]->color.x;
+		colors[4*i+1] = lights[i]->color.y;
+		colors[4*i+2] = lights[i]->color.z;
+		colors[4*i+3] = lights[i]->color.w;
+
+		positions[4*i + 0] = lights[i]->position.x;
+		positions[4*i + 1] = lights[i]->position.y;
+		positions[4*i + 2] = lights[i]->position.z;
+		positions[4*i + 3] = lights[i]->position.w;
+	}
+
+	glUniform4fv(handlers["colors"], num_lights, colors);
+	checkError();
+	glUniform4fv(handlers["positions"], num_lights, positions);
+	checkError();
+
+	delete[] colors;
+	delete[] positions;
+
+	unbind();
+	return *this;
+}
+
 void Shader::buildConversionTable() {
 	vars["vertices"]	= "vPosition";
 	vars["normals"]		= "vNormal";
@@ -46,14 +93,17 @@ void Shader::buildConversionTable() {
 	vars["specular"]	= "kspecular";
 	vars["shine"]		= "shininess";
 	
-
 	uniforms["projection"]	= "Projection";
 	uniforms["camera"]		= "CameraView";
 	uniforms["model"]		= "ModelView";
 	uniforms["eye"]			= "eye";
 	uniforms["time"]		= "time";
 
-	ublocks["LightSourcesBlock"]  = "LightSourcesBlock";
+	// Build lights uniform
+	uniforms["globalAmbient"]	="globalAmbient";
+	uniforms["num_lights"]		="num_lights";
+	uniforms["positions"]		="positions";
+	uniforms["colors"]			="colors";
 
 	postBuildConversionTable();
 }
@@ -87,6 +137,9 @@ void Shader::loadProgram() {
 	if(error != GL_NO_ERROR) {
 		throw exception(_name.c_str());
 	}
+	lightColors.clear();
+	lightPositions.clear();
+	handlers.clear();
 	buildConversionTable();
 
 	glUseProgram(_programHandle);
@@ -110,7 +163,9 @@ void Shader::loadProgram() {
 		GLuint handle = glGetUniformBlockIndex(_programHandle, it->second.c_str());
 		checkHandler(it->second,  handle);
 		handlers[it->first] = handle;
-		glUniformBlockBinding(_programHandle, handle, index++);
+		glUniformBlockBinding(_programHandle, handle, index);
+		checkError();
+		index++;
 	}
 
 	for(it=textures.begin(); it != textures.end(); ++it) {
@@ -126,15 +181,19 @@ void Shader::swapBuffers() {
 	glutSwapBuffers();
 }
 
-void Shader::checkError(bool except) {
+void Shader::checkError(string name, bool except) {
 	GLenum error = glGetError();
 	if(error != GL_NO_ERROR) {
 		stringstream errstr; 
-		errstr << "GLError: " << _name << ": " <<error;
+		errstr << "GLError: " << name << ": " <<error;
 		cerr <<  errstr.str() << "\n";
 		if(except)
 			throw exception(errstr.str().c_str());
 	}
+}
+
+void Shader::checkError(bool except) {
+	Shader::checkError(_name, except);
 }
 
 void Shader::bind() {

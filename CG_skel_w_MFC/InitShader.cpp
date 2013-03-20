@@ -37,23 +37,23 @@ readShaderSource(const char* shaderFile)
 GLuint
 InitShader(const char* vShaderFile, const char* fShaderFile)
 {
-    struct Shader {
+	struct Shader {
 	const char*  filename;
 	GLenum       type;
 	GLchar*      source;
-    }  shaders[2] = {
+	}  shaders[2] = {
 	{ vShaderFile, GL_VERTEX_SHADER, NULL },
 	{ fShaderFile, GL_FRAGMENT_SHADER, NULL }
-    };
+	};
 
-    GLuint program = glCreateProgram();
-    GLuint shaders_obj[2];
-    for ( int i = 0; i < 2; ++i ) {
+	GLuint program = glCreateProgram();
+	GLuint shaders_obj[2];
+	for ( int i = 0; i < 2; ++i ) {
 	Shader& s = shaders[i];
 	s.source = readShaderSource( s.filename );
 	if ( shaders[i].source == NULL ) {
-	    std::cerr << "Failed to read " << s.filename << std::endl;
-	    exit( EXIT_FAILURE );
+		std::cerr << "Failed to read " << s.filename << std::endl;
+		exit( EXIT_FAILURE );
 	}
 	
 	GLuint shader = glCreateShader( s.type );
@@ -66,28 +66,28 @@ InitShader(const char* vShaderFile, const char* fShaderFile)
 	
 	glGetShaderiv( shader, GL_COMPILE_STATUS, &compiled );
 	if ( !compiled ) {
-	    std::cerr << s.filename << " failed to compile:" << std::endl;
-	    GLint  logSize;
-	    glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &logSize );
-	    char* logMsg = new char[logSize];
-	    glGetShaderInfoLog( shader, logSize, NULL, logMsg );
-	    std::cerr << logMsg << std::endl;
-	    delete [] logMsg;
+		std::cerr << s.filename << " failed to compile:" << std::endl;
+		GLint  logSize;
+		glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &logSize );
+		char* logMsg = new char[logSize];
+		glGetShaderInfoLog( shader, logSize, NULL, logMsg );
+		std::cerr << logMsg << std::endl;
+		delete [] logMsg;
 
-	    exit( EXIT_FAILURE );
+		exit( EXIT_FAILURE );
 	}
 
 	delete [] s.source;
 
 	glAttachShader( program, shader );
-    }
+	}
 
-    /* link  and error check */
-    glLinkProgram(program);
+	/* link  and error check */
+	glLinkProgram(program);
 
-    GLint  linked;
-    glGetProgramiv( program, GL_LINK_STATUS, &linked );
-    if ( !linked ) {
+	GLint  linked;
+	glGetProgramiv( program, GL_LINK_STATUS, &linked );
+	if ( !linked ) {
 	std::cerr << "Shader program failed to link" << std::endl;
 	GLint  logSize;
 	glGetProgramiv( program, GL_INFO_LOG_LENGTH, &logSize);
@@ -97,11 +97,11 @@ InitShader(const char* vShaderFile, const char* fShaderFile)
 	delete [] logMsg;
 
 	exit( EXIT_FAILURE );
-    }
+	}
 
-    /* use program object */
+	/* use program object */
 	glDeleteShader(shaders_obj[0]);
 	glDeleteShader(shaders_obj[1]);
 
-    return program;
+	return program;
 }

@@ -53,29 +53,29 @@ void Scene::initDefaultCamera() {
 }
 void Scene::initDefaultLight()
 {
-	m_activeLight = new Light(vec4(1,1,1,0), vec4(1,0,0,1));
+	m_activeLight = new Light(vec4(1,1,1,0), vec4(0.2,0.2,0.2,1));
 	activeLight=m_activeLight; // W00t ?!
 	lights.push_back(m_activeLight);
-
-//	lights.push_back(new Light(vec4(-1,1,1,0),vec4(0,1,0,1)));
-	
-	
-	
-	
-	lightsUBO.setGlobalAmbient(vec4(0,0,0,0));
-	lightsUBO.bindToPoint(Shader::UNIFORM_BINDING_POINT);
-
-	lightsUBO << lights; // this should be called everytime we update lights
+	updateShadersLight();
 }
 
 
+void Scene::updateShadersLight() {
+	map<string, Shader*>::iterator sit = shaders.begin();
+	for(;sit != shaders.end(); ++sit) {
+		*(sit->second) << lights;
+		sit->second->setGlobalAmbience(globalAmbience);
+	}
+}
+
 void Scene::setGlobalAmbience(vec4 ambient) {
-	lightsUBO.setGlobalAmbient(ambient);
+	globalAmbience = ambient;
+	updateShadersLight();
 	draw();
 }
 
 vec4 Scene::getGlobalAmbience() {
-	return lightsUBO.getGlobalAmbient();
+	return globalAmbience;
 }
 
 void Scene::initShaders() {
@@ -102,6 +102,9 @@ void Scene::initShaders() {
 	}
 	// Create default shader
 	shader = tmp;
+
+	updateShadersLight();
+
 	shader->bind();
 	shader->checkError();
 }
@@ -117,7 +120,9 @@ void Scene::reloadShaders() {
 	for(;sit != shaders.end(); ++sit) {
 		sit->second->reload();
 		sit->second->setCameraParams(m_activeCamera);
+		updateShadersLight();
 	}
+
 	mit = models.begin();
 	for(;mit != models.end(); ++mit) {
 		//(*mit)->setShader((*mit)->getShader()); // Reboot shader
@@ -613,7 +618,8 @@ void Scene::addLight(Light* newLight)
 {
 	lights.push_back(newLight);
 	activeLight = newLight;
-	lightsUBO << lights;
+	updateShadersLight();
+//	lightsUBO << lights;
 	draw();
 }
 
@@ -628,8 +634,8 @@ void Scene::removeActiveLight() {
 	}
 	lights.erase(it);
 	activeLight = NULL;
+	updateShadersLight();
 
-	lightsUBO << lights;
 	draw();
 }
 
@@ -644,7 +650,7 @@ void Scene::changeLightDirection(mat4 rotation)
 {
 	if(activeLight == NULL) return;
 	activeLight->position = rotation * activeLight->position;
-	lightsUBO << lights;
+	updateShadersLight();
 	draw();
 	cerr << " light direction is " << activeLight->position << "\n";
 }
@@ -652,7 +658,7 @@ void Scene::changeLightLocation(mat4 rotation)
 {
 	if(activeLight == NULL) return;
 	activeLight->position = rotation * activeLight->position;
-	lightsUBO << lights;
+	updateShadersLight();
 	draw();
 	cerr << " light location is " << activeLight->position << "\n";
 }

@@ -24,7 +24,10 @@ void ShaderTexture::postBuildConversionTable() {
 		vars.erase("specular");
 		vars.erase("shine");
 
-		ublocks.erase("LightSourcesBlock");
+		uniforms.erase("globalAmbient");
+		uniforms.erase("num_lights");
+		uniforms.erase("positions");
+		uniforms.erase("colors");
 	}
 }
 

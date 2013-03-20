@@ -52,6 +52,8 @@ class Scene {
 	Shader* shader;
 	void updateCameraInAllShaders(Camera *camera);
 	LightsUBO lightsUBO;
+	vec4 globalAmbience;
+
 
 	Scene(Renderer *renderer); 
 	Scene();
@@ -144,5 +146,7 @@ public:
 	Shader* getShader(const string& name);
 	void setGlobalAmbience(vec4 ambient);
 	vec4 getGlobalAmbience();
+
+	void updateShadersLight();
 	
 };

@@ -96,7 +96,7 @@ void Texture::checkError(bool except) {
 
 Texture::~Texture(void)
 {
-	glDeleteTextures(1, &handler);
+	//glDeleteTextures(1, &handler);
 	delete[] image;
 }
 

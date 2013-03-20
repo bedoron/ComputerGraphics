@@ -673,7 +673,7 @@ int my_main( int argc, char **argv )
 	glutInit( &argc, argv );
 	//glutInitDisplayMode( GLUT_RGBA| GLUT_DOUBLE);
 	glutInitWindowSize( MAIN_WIDTH, MAIN_HEIGHT);
-	//glutInitContextVersion( 3,1 );
+	glutInitContextVersion( 3,1 );
 	//glutInitContextProfile( GLUT_CORE_PROFILE );
 	glutCreateWindow( "CG" );
 	glewExperimental = GL_TRUE;
@@ -751,13 +751,16 @@ int main( int argc, char **argv )
 	}
 	else
 	{
-		try {
-			my_main(argc, argv );
-		} catch (runtime_error& e) {
-			MessageBox(NULL, _T(e.what()), _T("Runtime error"), MB_OK);
-		} catch (exception& e) {
-			MessageBox(NULL, _T(e.what()), _T("Exception error"), MB_OK);
-		}
+		my_main(argc, argv );
+		//try {
+		//	my_main(argc, argv );
+		//} catch (runtime_error& e) {
+		//	MessageBox(NULL, _T(e.what()), _T("Runtime error"), MB_OK);
+		//	throw e;
+		//} catch (exception& e) {
+		//	MessageBox(NULL, _T(e.what()), _T("Exception error"), MB_OK);
+		//	throw e;
+		//}
 	}
 	
 	

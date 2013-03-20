@@ -1,4 +1,4 @@
-#version 150 
+#version 140 
 
 in vec4 vPosition;
 in vec4 vNormal;

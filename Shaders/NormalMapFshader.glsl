@@ -1,4 +1,9 @@
-#version 150
+#version 140
+
+uniform vec4 globalAmbient;
+uniform vec4 positions[12];
+uniform vec4 colors[12];
+uniform int num_lights;
 
 in vec3 vpos;
 in vec3 normal;
@@ -14,19 +19,6 @@ uniform sampler2D normalMap;
 uniform sampler2D colorMap;
 out vec4 color;
 
-struct LightSource {
-	vec4 position;
-	vec4 color;
-};
-
-layout(std140) uniform LightSourcesBlock  {
-	vec4		globalAmbient;
-	LightSource lightSources[12];
-	int		num_lights;
-};
-
-
-
 void main()
 {
 	color = vec4(0,0,0,0);
@@ -37,8 +29,8 @@ void main()
 	vec3 n = normalize(2*textureNormal.xyz-1);
 	for(;i < num_lights ; i++)
 	{
-		vec4 intesity = lightSources[i].color;
-		vec4 position =  lightSources[i].position;
+		vec4 intesity = colors[i];
+		vec4 position =  positions[i];
 		vec3 lightDir = vec3(0);
 		if(position.w==0)
 		{
@@ -53,7 +45,7 @@ void main()
 		vec4 specular = vec4(0.0);
 		
 		// diffuse term
-		float NdotL = dot(n, lightDir);
+		float NdotL = dot(n, normalize(lightDir));
 
 		if (NdotL > 0.0)
 			diffuse = _kdiffuse * NdotL;
@@ -65,5 +57,5 @@ void main()
 		color += (diffuse+specular)*intesity*tColor;
 	}
 	color+= _kambiant + globalAmbient;
-	color = color * 0.01 + lightSources[0].color;
+	//color = color * 0.01 +positions[0];
 }

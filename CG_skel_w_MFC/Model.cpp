@@ -105,6 +105,7 @@ void Model::rotate(const vec3& rotors) {
 void Model::invalidateVAOs() {
 	map<string, pair<Shader*, GLuint>>::iterator it;
 	for(it = vaos.begin(); it != vaos.end(); ++it) {
+		if((it->second.second)==0) continue;
 		glDeleteVertexArrays(1, &(it->second.second));
 	}
 	vaos.clear();

@@ -28,7 +28,7 @@ vec4 LightsUBO::getGlobalAmbient() {
 
 LightsUBO::~LightsUBO(void)
 {
-	glDeleteBuffers(1, &_bufferHandle);
+	//glDeleteBuffers(1, &_bufferHandle);
 }
 
 LightsUBO& LightsUBO::operator<<(vector<Light*> lights) {
@@ -56,4 +56,6 @@ void LightsUBO::unbind() {
 
 void LightsUBO::bindToPoint(GLuint point) {
 	glBindBufferRange(GL_UNIFORM_BUFFER, point, _bufferHandle, 0, sizeof(LightSourcesBlock));
+	std::cout << point << "\n";
+	//glBindBufferBase(GL_UNIFORM_BUFFER, point, _bufferHandle);
 }

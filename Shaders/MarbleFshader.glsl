@@ -12,18 +12,10 @@ uniform vec4 eye;
 uniform mat4 ModelView;
 out vec4 color;
 
-struct LightSource {
-	vec4 position;
-	vec4 color;
-};
-
-layout(std140) uniform LightSourcesBlock  {
-	vec4		globalAmbient;
-	LightSource lightSources[12];
-	int		num_lights;
-};
-
-
+uniform vec4 globalAmbient;
+uniform vec4 positions[12];
+uniform vec4 colors[12];
+uniform int num_lights;
 
 float turbulence(float p_location)
 {
@@ -43,8 +35,8 @@ void main()
 	int i=0;
 	for(;i < num_lights ; i++)
 	{
-		vec4 intesity = lightSources[i].color;
-		vec4 position = lightSources[i].position;
+		vec4 intesity = colors[i];
+		vec4 position = positions[i];
 		vec3 lightDir = vec3(0);
 		if(position.w==0)
 		{

@@ -3,6 +3,7 @@
 #include "GL/freeglut.h"
 #include <string>
 #include "vec.h"
+#include "Light.h"
 #include "mat.h"
 #include "Camera.h"
 #include <iostream>
@@ -28,6 +29,7 @@ class Shader
 	mat4 modelViewMatrix;
 	vec4 cameraEye;
 
+	vec4 _globalAmbience;
 	bool _has_textures;
 
 	void updateProjection();
@@ -47,12 +49,16 @@ protected:
 	map<string, string> uniforms;	/* Mapping between application uniform names to shader uniform names */
 	map<string, string> ublocks;	/* Mapping between application uniform blocks names to shader uniform names */
 
+	vector<string>	lightPositions; // Book keeping
+	vector<string>	lightColors;	// Book keeping
+
 	virtual void buildConversionTable(); /* Populate the above */
 	virtual void postBuildConversionTable(); /* Post population hook */
 	virtual void setTextures(Model* model);  /* Activate Texture units from model, use defaults if they don't exist */
 
 public:
-	static const GLuint UNIFORM_BINDING_POINT = 5;
+	static const GLuint UNIFORM_BINDING_POINT = 20;
+	static const GLuint MAX_LIGHTS = 12;
 
 	Shader(string name, string vertexShader, string fragmentShader, bool textures = false);
 	void loadProgram();
@@ -91,9 +97,10 @@ public:
 	void timePointer(const GLvoid *data);
 
 	GLuint buildVAO(const map<string, GLuint>& VBOs);
-	
+	Shader& operator<<(vector<Light*> &lights); // Setup lights
 
 	void checkError(bool except = true);
+	static void checkError(string name, bool except = true);
 	~Shader(void);
 
 	void draw(Model* model,bool animate);
@@ -101,7 +108,9 @@ public:
 	const string& getName() { return _name; }
 	const map<string, string>& getSamplerNames() const;
 	const string translateSamplerName(const string& shader_name) const; // translate from shader file to app name
-
+	
 	void updateHandler(GLuint shader_handle, GLuint buffer);
+
+	void setGlobalAmbience(vec4 globalAmbience);
 };
 

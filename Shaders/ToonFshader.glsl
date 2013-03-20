@@ -1,4 +1,10 @@
-#version 150
+#version 140
+
+uniform vec4 globalAmbient;
+uniform vec4 positions[12];
+uniform vec4 colors[12];
+uniform int num_lights;
+
 
 in vec3 vpos;
 in vec3 normal;
@@ -12,24 +18,6 @@ uniform vec4 eye;
 uniform mat4 ModelView;
 out vec4 color;
 
-struct LightSource {
-	vec4 position;
-	vec4 color;
-};
-
-layout(std140) uniform LightSourcesBlock  {
-	vec4		globalAmbient;
-	LightSource lightSources[12];
-	int		num_lights;
-};
-
-vec4 lightEffect(LightSource ls) {
-	
-
-	return vec4(1,1,1,1);
-}
-
-
 void main()
 {
 	vec3 n = normalize(normal);
@@ -37,8 +25,8 @@ void main()
 	int i=0;
 	for(;i < num_lights ; i++)
 	{
-		vec4 intesity = lightSources[i].color;
-		vec4 position = lightSources[i].position;
+		vec4 intesity = colors[0];
+		vec4 position = positions[i];
 		vec3 lightDir = vec3(0);
 		vec4 diffuse = vec4(0.0);
 		vec4 specular = vec4(0.0);
@@ -52,7 +40,7 @@ void main()
 		}
 		
 		// diffuse term
-		float NdotL = dot(n, lightDir);
+		float NdotL = dot(n, normalize(lightDir));
 	
 		if (NdotL > 0.0)
 			diffuse = _kdiffuse * NdotL;
@@ -62,7 +50,8 @@ void main()
 
 
 		color = (diffuse + specular)*intesity + _kambiant + globalAmbient;
-	
+		vec4 oldColor = color;
+		
 		if(color.x > 0.95)
 			color.x += 1;
 		else if (color.x > 0.5)
@@ -89,7 +78,16 @@ void main()
 			color.z += 0.2;
 		if(dot(normal,normalize(eye.xyz-vpos))<0.25)
 			color += vec4(0,0,0,1);
-
+	
+		vec4 newcolor;
+		
+		
+		if(specular.z<0.5) {
+			newcolor = vec4(0,0,1,0); // Blue
+		} else {
+			newcolor = vec4(0,1,0,0); // Gree
+		}
+		
 	}
-	color = color * 0.1 +  lightSources[0].color * lightSources[1].color;
+	//color = color * 0.01 + lightSources[0].position + lightSources[0].color;
 }
