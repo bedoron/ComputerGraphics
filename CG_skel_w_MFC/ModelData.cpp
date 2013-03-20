@@ -38,9 +38,9 @@ void CModelData::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, XSCALE, xscale);
 	DDX_Control(pDX, YSCALE, yscale);
 	DDX_Control(pDX, ZSCALE, zscale);
-	DDX_Control(pDX, DRAW_BOX, draw_box);
-	DDX_Control(pDX, DRAW_NORMAL, draw_normals);
-	DDX_Control(pDX, DRAW_VNORMAL, draw_vnormals);
+	//DDX_Control(pDX, DRAW_BOX, draw_box);
+	//DDX_Control(pDX, DRAW_NORMAL, draw_normals);
+	//DDX_Control(pDX, DRAW_VNORMAL, draw_vnormals);
 	DDX_Control(pDX, IDC_color_Blue, _colorX);
 	DDX_Control(pDX, IDC_color_green, _colorY);
 	DDX_Control(pDX, IDC_color_red, _colorZ);
@@ -157,9 +157,9 @@ void CModelData::refreshModelData() {
 	// Set Default values
 	readAndClearRotation();
 	readAndClearScale();
-	draw_box.SetCheck((static_cast<Model*>(m_model)->getDrawBox())?BST_CHECKED:BST_UNCHECKED);
-	draw_normals.SetCheck((static_cast<Model*>(m_model)->getNormal())?BST_CHECKED:BST_UNCHECKED);
-	draw_vnormals.SetCheck((static_cast<Model*>(m_model)->getVertexNormal())?BST_CHECKED:BST_UNCHECKED);
+	//draw_box.SetCheck((static_cast<Model*>(m_model)->getDrawBox())?BST_CHECKED:BST_UNCHECKED);
+	//draw_normals.SetCheck((static_cast<Model*>(m_model)->getNormal())?BST_CHECKED:BST_UNCHECKED);
+	//draw_vnormals.SetCheck((static_cast<Model*>(m_model)->getVertexNormal())?BST_CHECKED:BST_UNCHECKED);
 	// Get center Coords
 	updateCenter();
 	UpdateData(true);
@@ -227,9 +227,9 @@ void CModelData::OnBnClickedOk()
 	float newXRot, newYRot, newZRot;
 	float newScale;
 	// Deal with Checkboxes
-	static_cast<Model*>(m_model)->setDrawBox(draw_box.GetCheck()==BST_CHECKED);
-	static_cast<Model*>(m_model)->setVertexNormal(draw_vnormals.GetCheck()==BST_CHECKED);
-	static_cast<Model*>(m_model)->setNormal(draw_normals.GetCheck()==BST_CHECKED);
+	//static_cast<Model*>(m_model)->setDrawBox(draw_box.GetCheck()==BST_CHECKED);
+	//static_cast<Model*>(m_model)->setVertexNormal(draw_vnormals.GetCheck()==BST_CHECKED);
+	//static_cast<Model*>(m_model)->setNormal(draw_normals.GetCheck()==BST_CHECKED);
 
 	char colorBufferX[5];
 	_colorX.GetWindowTextA(colorBufferX, 5);
