@@ -7,9 +7,8 @@ in vec4 _kambiant;
 in vec4 _kdiffuse;
 in vec4 _kspecular;
 in float _shininess;
-
+in float zpoint;
 uniform vec4 eye;
-uniform mat4 ModelView;
 out vec4 color;
 
 
@@ -35,7 +34,7 @@ void main()
 	for(;i < 12 ; i++)
 	{
 		vec4 intesity = lightSources[i].color;
-		vec4 position =  lightSources[i].position;
+		vec4 position = lightSources[i].position;
 		vec3 lightDir = vec3(0);
 		if(position.w==0)
 		{
@@ -57,9 +56,11 @@ void main()
 			diffuse = _kdiffuse * NdotL;
 		
 		vec3 h = normalize(eye.xyz-vpos)+normalize(lightDir);
-		specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
+		specular= _kspecular * max(pow(dot(n,normalize(h)),_shininess),0);
 		vec4 k = _kambiant;
 		color += (diffuse + specular)*intesity ;
 	}
 	color+= _kambiant + globalAmbient;
+	
+	//color = ((zpoint +1) /2) * color + (1-((zpoint +1) /2))*vec4(0.2,0.2,0.2,1);
 }

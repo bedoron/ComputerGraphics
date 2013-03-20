@@ -38,7 +38,7 @@ void main()
 	for(;i < 12 ; i++)
 	{
 		vec4 intesity = lightSources[i].color;
-		vec4 position = ModelView * lightSources[i].position;
+		vec4 position = lightSources[i].position;
 		vec3 lightDir = vec3(0);
 		vec4 diffuse = vec4(0.0);
 		vec4 specular = vec4(0.0);
@@ -58,7 +58,7 @@ void main()
 			diffuse = _kdiffuse * NdotL;
 		
 		vec3 h = normalize(eye.xyz-vpos)+normalize(lightDir);
-		specular= _kspecular * max(pow(dot(normal,normalize(h)),_shininess),0);
+		specular= _kspecular * max(pow(dot(n,normalize(h)),_shininess),0);
 
 
 		color = (diffuse + specular)*intesity + _kambiant + globalAmbient;
