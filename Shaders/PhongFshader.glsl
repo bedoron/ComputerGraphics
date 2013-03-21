@@ -51,6 +51,6 @@ void main()
 		color += (diffuse + specular)*intesity ;
 	}
 	color+= _kambiant + globalAmbient;
-
+	color += color;// * 0.01 + vec4(1, 0, 0,0);
 	//color = ((zpoint +1) /2) * color + (1-((zpoint +1) /2))*vec4(0.2,0.2,0.2,1);
 }

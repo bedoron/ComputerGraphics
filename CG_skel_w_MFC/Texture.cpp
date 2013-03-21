@@ -5,12 +5,16 @@
 #include <vector>
 #include <exception>
 #include <iostream>
+#include <sstream>
 #include <string>
+#include "Shader.h"
 
 using std::string;
 using std::cerr;
 using std::runtime_error;
 using std::vector;
+using std::stringstream;
+
 #define INDEX_PNG(width,x,y,c) (((y)+(x)*(width))*3+(c))
 Texture::Texture(const string& file, const string& path): name(file), handler(-1), width(0), height(0), textureUnit(-1)  {
 	static int TEXTURE_UNIT = 0; // Texture unit enumerator
@@ -54,58 +58,32 @@ Texture::Texture(const string& file, const string& path): name(file), handler(-1
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 
-	checkError();
-//
-////	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//	checkError();
-//	
-//	checkError();
-//	
-//	checkError();
-//	
-//	checkError();
-//	
-//	checkError();
+	Shader::checkError(name + "::Texture image loading failed");
+
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Allow texture to coexist with fragments
-//	checkError();
-
 	glGenerateMipmap(GL_TEXTURE_2D);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
-	
-	checkError();
-	//glBindTexture(GL_TEXTURE_2D, 0);
-	// p
+	Shader::checkError(name + "::Texture mipmap gen failed");
+
 	textureUnit = TEXTURE_UNIT++; 
-	// v
-	//glActiveTexture( GL_TEXTURE0 + textureUnit);
-	//checkError();
-	//glBindTexture(GL_TEXTURE_2D, handler);
-	//checkError();
-}
 
-void Texture::checkError(bool except) {
-	GLenum error = glGetError();
-	if(error != GL_NO_ERROR) {
-		cerr << "GLError " << error << "\n";
-		if(except)
-			throw runtime_error("Error GL");
-	}
 }
-
 
 Texture::~Texture(void)
 {
-	//glDeleteTextures(1, &handler);
+	glDeleteTextures(1, &handler); // delete buffer
 	delete[] image;
 }
 
-void Texture::bind() {
-	glActiveTexture( GL_TEXTURE0 + textureUnit);
+void Texture::bind(GLuint texUnit) {
+	GLuint bindTo = GL_TEXTURE0 + textureUnit;
+	if(texUnit!=-1) bindTo = texUnit;
+	stringstream buff;
+	buff << name <<"::Texture binding to texunit " << bindTo << " failed";
+	glActiveTexture( bindTo );
 	glBindTexture(GL_TEXTURE_2D, handler);
-	checkError();
+	Shader::checkError(buff.str());
 }
 
 void Texture::unbind() {
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0); -- Might cause a bug
 }

@@ -35,15 +35,26 @@ Model* Scene::loadOBJModel(string fileName,string id)
 void Scene::initDefaultCamera() {
 	_renderCamera=FALSE	;
 	m_activeCamera = new Camera();
+	Camera *camera2 = new Camera();
+	Camera *camera3 = new Camera();
+	Camera *camera4 = new Camera();
 	cameras.push_back(m_activeCamera); // Default camera for debug
+	cameras.push_back(camera2);
+	cameras.push_back(camera3);
+	cameras.push_back(camera4);
 	m_activeCamera->LookAt(vec4(5,5,5,1),vec4(0,0,0,1),vec4(0,1,0,1));	
+	camera2->LookAt(vec4(-5,5,5,0), vec4(0,0,0,1), vec4(0,1,0,1));
+	camera3->LookAt(vec4(-5,5,-5,0), vec4(0,0,0,1), vec4(0,1,0,1));
+	camera4->LookAt(vec4(5,5,-5,0), vec4(0,0,0,1), vec4(0,1,0,1));
 	_left = _bottom = _znear = 1;
 	_right = _top = -5;
 	_zfar = 50;
 	_fovy = 45;
 	_aspect=1;
 	m_activeCamera->Perspective(45,1,_znear,_zfar);
-	
+	camera2->Perspective(45,1,_znear,_zfar);
+	camera3->Perspective(45,1,_znear,_zfar);
+	camera4->Perspective(45,1,_znear,_zfar);
 	shader->setProjection(m_activeCamera->getProjection());
 	
 	currentView = prespective;

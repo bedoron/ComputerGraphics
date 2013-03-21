@@ -18,12 +18,12 @@ public:
 	Texture(const string& file, const string& path = string());
 	~Texture(void);
 
-	void bind();
+	void bind(GLuint texUnit = -1); // -1 means to use self asigned TEXUNIT, might crash your puny GPU
 	void unbind();
 
 	GLuint getTextureUnit() { return textureUnit; }
 	const string& getName() const { return name; }
 
-	void checkError(bool except = true);
+
 };
 

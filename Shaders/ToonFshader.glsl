@@ -89,5 +89,7 @@ void main()
 		}
 		
 	}
-	//color = color * 0.01 + lightSources[0].position + lightSources[0].color;
+	//color = color * 0.01 + lightSources[0].position + 
+	color += vec4(0,1,0,0);
+	//lightSources[0].color;
 }
