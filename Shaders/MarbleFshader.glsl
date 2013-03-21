@@ -61,5 +61,6 @@ void main()
 		vec3 marColor =noise * vec3(139,69,15)/255.0+(1-noise)*vec3(10*sin(vpos/4))/255	;
 		color += vec4(marColor,1)*(diffuse + specular);
 	}
-	color+= _kambiant * globalAmbient;
+	//color+= _kambiant * globalAmbient;
+	color+= _kambiant + globalAmbient;
 }
