@@ -1,0 +1,39 @@
+#
+# gargoyle.mtl
+#
+
+newmtl gargoyle_eyel
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd gargoyle_eyel_d.png
+
+newmtl gargoyle_eyer
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd gargoyle_eyer_d.png
+
+newmtl gargoyle_skin
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd gargoyle_skin_d.png
+
+newmtl gargoyle_mouth
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ns 1.000000
+map_Kd gargoyle_mouth_d.png
