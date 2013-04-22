@@ -12,6 +12,7 @@ class Texture
 	int width;
 	int height;
 	GLuint textureUnit;
+	GLuint sampler;
 	GLubyte *image;
 public:
 //	Texture(const string& file);

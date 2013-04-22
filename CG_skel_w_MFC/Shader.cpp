@@ -168,10 +168,14 @@ void Shader::loadProgram() {
 		index++;
 	}
 
+	GLuint tex_unit= GL_TEXTURE0;
 	for(it=textures.begin(); it != textures.end(); ++it) {
-		GLuint handle = glGetUniformLocation(_programHandle, it->second.c_str());
-		checkHandler(it->second, handle);
-		handlers[it->first] = handle;
+		GLuint uniform_handle = glGetUniformLocation(_programHandle, it->second.c_str());
+		checkHandler(it->second, uniform_handle);
+		glUniform1i(uniform_handle, tex_unit);
+		checkError();
+		handlers[it->first] = tex_unit;
+		tex_unit++;
 	}
 
 	glUseProgram(0); // unload
@@ -334,10 +338,12 @@ void Shader::bindTextures(const map<string, Texture*>& modelTexture) {
 	// iterate modelTexture (it should be updated now) and bind their uniform variables
 	for(textureIterator = modelTexture.begin(); textureIterator != modelTexture.end(); ++textureIterator) {
 		if(handlers.find(textureIterator->first)==handlers.end()) continue; // Skip samplers which are not supported
-		GLuint samplerHandle = handlers[textureIterator->first];
-		GLuint texUnit = textureIterator->second->getTextureUnit();
-		glUniform1i(samplerHandle, texUnit);
-		textureIterator->second->bind();
+		GLuint tex_unit = handlers[textureIterator->first];
+
+		//GLuint texUnit = textureIterator->second->getTextureUnit();
+		//glUniform1i(samplerHandle, texUnit);
+		textureIterator->second->bind(tex_unit);
+		
 		checkError();
 	}
 
