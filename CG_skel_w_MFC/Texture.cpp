@@ -61,19 +61,10 @@ Texture::Texture(const string& file, const string& path): name(file), handler(-1
 	Shader::checkError(name + "::Texture image loading failed");
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // Allow texture to coexist with fragments
-
 	glGenerateMipmap(GL_TEXTURE_2D);
 	Shader::checkError(name + "::Texture mipmap gen failed");
 
-
 	textureUnit = TEXTURE_UNIT++; 
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glGenSamplers(1, &sampler);
-	glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 
 }
 
@@ -89,8 +80,6 @@ void Texture::bind(GLuint texUnit) {
 	stringstream buff;
 	buff << name <<"::Texture binding to texunit " << bindTo << " failed";
 	glActiveTexture( bindTo );
-
-	glBindSampler(texUnit, sampler);
 	glBindTexture(GL_TEXTURE_2D, handler);
 	Shader::checkError(buff.str());
 }
